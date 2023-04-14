@@ -31,11 +31,13 @@
 void troca(int *A, int *B);
 void copia(int *A, int *v, int size); //copia o vetor original (A) para outro (v)
 void imprimeVet(int *V, int size);
+void intercalaMerge(int *A, int inicio, int meio, int fim);
+void MergeSort(int *A, int inicio, int fim);
+
 void bubbleSort(int *A, int size);
 void selectionSort(int *A, int size);
 void insertionSort(int *A, int size);
-void intercala(int *A, int inicio, int meio, int fim);
-void mergeSort(int *A, int inicio, int fim);
+void mergeSort(int *A, int fim);
 // void quickSort(int *A, int size);
 // void heapSort(int *A, int size);
 // void countingSort(int *A, int size);
@@ -78,7 +80,7 @@ int main(){
     // merge sort
     int mergeVec[tamanhoVetor];
     copia(vetor, mergeVec, tamanhoVetor);
-    insertionSort(mergeVec, tamanhoVetor);
+    mergeSort(mergeVec, tamanhoVetor);
     printf("\nMerge sort: ");
     imprimeVet(mergeVec, tamanhoVetor);
 
@@ -153,7 +155,7 @@ void insertionSort(int *A, int size) {
     }
 }
 
-void intercala(int *A, int inicio, int meio, int fim){
+void intercalaMerge(int *A, int inicio, int meio, int fim){
 
     int auxiliar[fim-inicio+1];
     int i = inicio; /* i: posição atual no vetor da esquerda */
@@ -193,12 +195,17 @@ void intercala(int *A, int inicio, int meio, int fim){
     }
 }
 
-void mergeSort(int *A, int inicio, int fim){
+void mergeSort(int *A, int fim){
+    MergeSort(A, 0, fim);
+}
+
+void MergeSort(int *A, int inicio, int fim){
     int meio; 
-    if (inicio < fim){                      //impede que a recurcividade continue infinitamente
-        meio = (inicio + fim) / 2;          //salva onde vai ser feita a separação do vetor principal
-        mergeSort(A, inicio, meio);         //chama a função para a metade da esquerda
-        mergeSort(A, meio+1, fim);          //chama a função para a metade da direita
-        intercala(A, inicio, meio, fim);    //efetua a ordenação em cada chamada recursiva, do micro ao macro
+    if (inicio < fim){                          //impede que a recurcividade continue infinitamente
+        meio = (inicio + fim) / 2;              //salva onde vai ser feita a separação do vetor principal
+        MergeSort(A, inicio, meio);             //chama a função para a metade da esquerda
+        MergeSort(A, meio+1, fim);              //chama a função para a metade da direita
+        intercalaMerge(A, inicio, meio, fim);   //efetua a ordenação em cada chamada recursiva, do micro ao macro
     }
 }
+
