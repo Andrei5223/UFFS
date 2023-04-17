@@ -41,5 +41,4 @@ public class portaMala {
     public void setLimpador(boolean estado) {
         limpador = estado;
     }
-
 }
