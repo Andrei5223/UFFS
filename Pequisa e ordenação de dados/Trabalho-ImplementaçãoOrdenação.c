@@ -33,12 +33,14 @@ void copia(int *A, int *v, int size); //copia o vetor original (A) para outro (v
 void imprimeVet(int *V, int size);
 void intercalaMerge(int *A, int inicio, int meio, int fim);
 void MergeSort(int *A, int inicio, int fim);
+int particiona(int *A, int inicio, int fim);
+void QuickSort(int *A, int inicio, int fim);
 
 void bubbleSort(int *A, int size);
 void selectionSort(int *A, int size);
 void insertionSort(int *A, int size);
 void mergeSort(int *A, int fim);
-// void quickSort(int *A, int size);
+void quickSort(int *A, int size);
 // void heapSort(int *A, int size);
 // void countingSort(int *A, int size);
 // void radixSort(int *A, int size);
@@ -85,6 +87,11 @@ int main(){
     imprimeVet(mergeVec, tamanhoVetor);
 
     // quick sort
+    int quickVec[tamanhoVetor];
+    copia(vetor, quickVec, tamanhoVetor);
+    mergeSort(quickVec, tamanhoVetor);
+    printf("\nQuick sort: ");
+    imprimeVet(quickVec, tamanhoVetor);
 
     // heap sort
 
@@ -209,3 +216,30 @@ void MergeSort(int *A, int inicio, int fim){
     }
 }
 
+int particiona(int *A, int inicio, int fim){
+    int posPivo = fim;
+    int k = inicio, i = inicio;
+    for (i = inicio; i < fim; i++){
+        if (A[i] <= A[posPivo]){
+            troca(&A[i], &A[k]);
+            k++;
+        }
+    }
+    if (A[k]>A[posPivo]){
+        troca(&A[i], &A[posPivo]);
+    }
+    return posPivo;
+}
+
+void QuickSort(int *A, int inicio, int fim){
+    int posPivo;
+    if (inicio < fim){
+        posPivo = particiona(A, inicio, fim);
+        QuickSort(A, inicio, posPivo+1);
+        QuickSort(A, posPivo+1, fim);
+    }
+}
+
+void quickSort(int *A, int size){
+    QuickSort(A, 0, size);
+}
