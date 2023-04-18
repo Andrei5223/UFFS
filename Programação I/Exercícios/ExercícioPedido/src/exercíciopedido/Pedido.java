@@ -3,44 +3,29 @@ package exercíciopedido;
 
 public class Pedido {
     private ItemPedido itens[];
-    double valorTotal;
-    //declarar quantiadade e implementar
+    private double valorTotal;
+    private int qntdItens;
 
     public Pedido() {
         this.itens = new ItemPedido[100];
+        this.qntdItens = 0;
+        this.valorTotal = 0;
     }
 
-    //Como verificar se o item atual está vazio?
     public void adicionarItem(ItemPedido item){
-        for (int i=0 ; i<this.itens.length ; i++){
-            if (this.itens[i]==null){
-                this.itens[i] = item;
-            }
-        }
+        this.itens[this.qntdItens] = item;
+        this.qntdItens++;
     }
     
-    public void obterTotal() {
-        double soma = 0; //não funciona?
-        for (int i=0 ; i<this.itens.length ; i++){
-            soma += itens[i].getQtde() * itens[i].getProd().getValor();
+    public double getvalorTotal() {
+        for (int i=0; i<qntdItens; i++){
+            this.valorTotal += itens[i].getQtde() * itens[i].getProd().getValor();
         }
-        System.out.println("Valor total do pedido: " + soma);
-    }
-    
-    public ItemPedido[] getItens() {
-        return itens;
-    }
-
-    public double getValorTotal() {
         return valorTotal;
     }
 
-    public void setItens(ItemPedido[] itens) {
-        this.itens = itens;
-    }
-
-    public void setValorTotal(double valorTotal) {
-        this.valorTotal = valorTotal;
+    public int getQntdItens() {
+        return qntdItens;
     }
     
     

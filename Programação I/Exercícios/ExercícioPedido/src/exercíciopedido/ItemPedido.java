@@ -8,6 +8,9 @@ public class ItemPedido {
         this.prod = prod;
         this.qtde = qtde;
     }
+    
+    public ItemPedido() {
+    }
 
     public Produto getProd() {
         return prod;
