@@ -9,12 +9,19 @@ package listaderevisãoex10;
  * @author andre
  */
 public class ListaDeRevisãoEx10 {
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+        MemoriaRam Ram1 = new MemoriaRam();
+        MemoriaHD HD1 = new MemoriaHD(1024);
+        PlacaMae PL = new PlacaMae("AM4", "ATX");
+        
+        Ram1.setConsumo(50);
+        Ram1.setTam(8);
+        
+        System.out.println("Consumo: " + Ram1.getConsumo());
+        System.out.println("Capacidade Ram: " + Ram1.getTam());
+        
+        System.out.println("Capacidade HD: " + HD1.getCapacidade());
+        System.out.println(PL.toString());
     }
     
 }
