@@ -35,14 +35,16 @@ void intercalaMerge(int *A, int inicio, int meio, int fim);
 void MergeSort(int *A, int inicio, int fim);
 int particiona(int *A, int inicio, int fim);
 void QuickSort(int *A, int inicio, int fim);
+void criaHeap(int *A, int i, int size);
+int maiorElemento(int *A, int size);
 
 void bubbleSort(int *A, int size);
 void selectionSort(int *A, int size);
 void insertionSort(int *A, int size);
 void mergeSort(int *A, int fim);
 void quickSort(int *A, int size);
-// void heapSort(int *A, int size);
-// void countingSort(int *A, int size);
+void heapSort(int *A, int size);
+void countingSort(int *A, int size);
 // void radixSort(int *A, int size);
 
 
@@ -94,8 +96,18 @@ int main(){
     imprimeVet(quickVec, tamanhoVetor);
 
     // heap sort
+    int heapVec[tamanhoVetor];
+    copia(vetor, heapVec, tamanhoVetor);
+    mergeSort(heapVec, tamanhoVetor);
+    printf("\nHeap sort: ");
+    imprimeVet(heapVec, tamanhoVetor);
 
     // counting sort
+    int countingVec[tamanhoVetor];
+    copia(vetor, countingVec, tamanhoVetor);
+    countingSort(countingVec, tamanhoVetor);
+    printf("\nCounting sort: ");
+    imprimeVet(countingVec, tamanhoVetor);
 
     // radix sort
 
@@ -225,6 +237,7 @@ int particiona(int *A, int inicio, int fim){
             k++;
         }
     }
+
     if (A[k]>A[posPivo]){
         troca(&A[i], &A[posPivo]);
     }
@@ -242,4 +255,80 @@ void QuickSort(int *A, int inicio, int fim){
 
 void quickSort(int *A, int size){
     QuickSort(A, 0, size);
+}
+
+void criaHeap(int *A, int i, int size){
+    int maior = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < size && A[left] > A[i]){
+        maior = left;
+    }
+    if (right < size && A[right] > A[maior]){
+        maior = right;
+    }
+
+    if (maior != i){
+        troca(&A[i], &A[maior]);
+        criaHeap(A, maior, size);
+    }
+}
+
+void heapSort(int *A, int size){
+    int k;
+    for (k = size/2-1; k == 0; k--){
+        criaHeap(A, k, size);
+    }
+
+    for (k = size-1; k==1; k--){
+        troca(&A[0], &A[k]);
+        criaHeap(A, 0, k);
+    }
+}
+
+int maiorElemento(int *A, int size){
+    int maior = A[0];
+
+    for (int i = 0; i < size; i++){
+        if (A[i] > maior){
+            maior = A[i];
+        }
+        if (A[i] < 0){
+            return maior = -1;
+        }
+    }
+    return maior;
+}
+
+void countingSort(int *A, int size){
+    int k = maiorElemento(A, size);
+    int count[k+1];
+    int aux[size];
+
+    if (k < 0){
+        printf("\nNão é possível ordenar usando Counting Sort (valor menor do que zero)");
+        return;
+    }
+
+    for (int i = 0; i <= k; i++){
+        count[i] = 0;
+    }
+
+    for (int i = 0; i < size; i++){
+        count[A[i]]++;
+    }
+
+    for (int i = 1; i <= k; i++){
+        count[i] += count[i-1];
+    }
+
+    for (int i = size-1; i >= 0; i--){
+        count[A[i]] = count[A[i]] - 1;
+        aux[count[A[i]]] = A[i];
+    }
+
+    for (int i = 0; i < size; i++){
+        A[i] = aux[i];
+    }
 }
