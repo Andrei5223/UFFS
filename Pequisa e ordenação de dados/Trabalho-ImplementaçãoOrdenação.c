@@ -30,7 +30,7 @@
 
 void troca(int *A, int *B);
 void copia(int *A, int *v, int size); //copia o vetor original (A) para outro (v)
-void imprimeVet(int *V, int size, int *sucesso);
+void imprimeVet(int *V, int size);
 void intercalaMerge(int *A, int inicio, int meio, int fim);
 void MergeSort(int *A, int inicio, int fim);
 int particiona(int *A, int inicio, int fim);
@@ -49,8 +49,8 @@ void countingSort(int *A, int size);
 // void radixSort(int *A, int size);
 
 int sucesso = 1; 
-//Como não é possível mudar a tipagem das funções declaradas eu n posso fazer elas retornarem um valor de flag
-//então utilizarei uma variável global (a contra gosto) para passar como referencia dentro da função secundaria que criei para verificar se houve sucesso na ordenação.
+//Como não é permitido mudar a tipagem das funções declaradas eu n posso fazer elas retornarem um valor de flag mesmo que eu crie uma outra função,
+//então utilizarei uma variável global (a contra gosto) para verificar se a ordenação foi concluida.
 
 int main(){
 
@@ -70,58 +70,58 @@ int main(){
     copia(vetor, bubbleVec, tamanhoVetor);
     bubbleSort(bubbleVec, tamanhoVetor);
     printf("\nBubble sort: ");
-    imprimeVet(bubbleVec, tamanhoVetor, &sucesso);
+    imprimeVet(bubbleVec, tamanhoVetor);
 
     // selection sort
     int selectionVec[tamanhoVetor];
     copia(vetor, selectionVec, tamanhoVetor);
     selectionSort(selectionVec, tamanhoVetor);
     printf("\nSelection sort: ");
-    imprimeVet(selectionVec, tamanhoVetor, &sucesso);
+    imprimeVet(selectionVec, tamanhoVetor);
 
     // insertion sort
     int insertionVec[tamanhoVetor];
     copia(vetor, insertionVec, tamanhoVetor);
     insertionSort(insertionVec, tamanhoVetor);
     printf("\nInsertion sort: ");
-    imprimeVet(insertionVec, tamanhoVetor, &sucesso);
+    imprimeVet(insertionVec, tamanhoVetor);
 
     // merge sort
     int mergeVec[tamanhoVetor];
     copia(vetor, mergeVec, tamanhoVetor);
     mergeSort(mergeVec, tamanhoVetor);
     printf("\nMerge sort: ");
-    imprimeVet(mergeVec, tamanhoVetor, &sucesso);
+    imprimeVet(mergeVec, tamanhoVetor);
 
     // quick sort
     int quickVec[tamanhoVetor];
     copia(vetor, quickVec, tamanhoVetor);
     mergeSort(quickVec, tamanhoVetor);
     printf("\nQuick sort: ");
-    imprimeVet(quickVec, tamanhoVetor, &sucesso);
+    imprimeVet(quickVec, tamanhoVetor);
 
     // heap sort
     int heapVec[tamanhoVetor];
     copia(vetor, heapVec, tamanhoVetor);
     mergeSort(heapVec, tamanhoVetor);
     printf("\nHeap sort: ");
-    imprimeVet(heapVec, tamanhoVetor, &sucesso);
+    imprimeVet(heapVec, tamanhoVetor);
 
     // counting sort
     int countingVec[tamanhoVetor];
     copia(vetor, countingVec, tamanhoVetor);
     countingSort(countingVec, tamanhoVetor);
     printf("\nCounting sort: ");
-    imprimeVet(countingVec, tamanhoVetor, &sucesso);
+    imprimeVet(countingVec, tamanhoVetor);
 
     // radix sort
 
     return 0;
 }
-void imprimeVet(int *V, int size, int *sucesso){
-    if (*sucesso == 0){
-        printf("\nImpossível ordenar o vetor com o método selecionado:");
-        *sucesso = 1;
+void imprimeVet(int *V, int size){
+    if (sucesso == 0){
+        printf("Impossível ordenar o vetor com o método selecionado:\n");
+        sucesso = 1;
         return;
     }
     
@@ -312,16 +312,12 @@ int maiorElemento(int *A, int size){
 }
 
 void countingSort(int *A, int size){
-    CountingSort(A, size, &sucesso);
-}
-
-void CountingSort(int *A, int size, int *sucesso){
     int k = maiorElemento(A, size);
     int count[k+1];
     int aux[size];
 
-    if (k < 0){
-        *sucesso = 0;
+    if (k == 0){
+        sucesso = 0;
         return;
     }
 
