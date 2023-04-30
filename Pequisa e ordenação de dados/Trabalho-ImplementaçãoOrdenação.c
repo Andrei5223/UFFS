@@ -119,14 +119,13 @@ int main(){
     return 0;
 }
 void imprimeVet(int *V, int size, int *sucesso){
-    int i;
     if (*sucesso == 0){
         printf("\nImpossível ordenar o vetor com o método selecionado:");
-        sucesso = 1;
+        *sucesso = 1;
         return;
     }
     
-    for (i = 0 ; i < size ; i++)
+    for (int i = 0 ; i < size ; i++)
         printf("%d ", V[i]);
     printf("\n");
 }
