@@ -30,13 +30,14 @@
 
 void troca(int *A, int *B);
 void copia(int *A, int *v, int size); //copia o vetor original (A) para outro (v)
-void imprimeVet(int *V, int size);
+void imprimeVet(int *V, int size, int *sucesso);
 void intercalaMerge(int *A, int inicio, int meio, int fim);
 void MergeSort(int *A, int inicio, int fim);
 int particiona(int *A, int inicio, int fim);
 void QuickSort(int *A, int inicio, int fim);
 void criaHeap(int *A, int i, int size);
 int maiorElemento(int *A, int size);
+void CountingSort(int *A, int size, int *sucesso);
 
 void bubbleSort(int *A, int size);
 void selectionSort(int *A, int size);
@@ -47,12 +48,16 @@ void heapSort(int *A, int size);
 void countingSort(int *A, int size);
 // void radixSort(int *A, int size);
 
+int sucesso = 1; 
+//Como não é possível mudar a tipagem das funções declaradas eu n posso fazer elas retornarem um valor de flag
+//então utilizarei uma variável global (a contra gosto) para passar como referencia dentro da função secundaria que criei para verificar se houve sucesso na ordenação.
 
 int main(){
 
     int i;
     int vetor[] = {1, 22, -10, 38, 5, 7};
     int tamanhoVetor = (int)sizeof(vetor)/sizeof(int);
+    
 
     printf("\nVetor original: ");
     for (i = 0 ; i < tamanhoVetor ; i++)
@@ -65,56 +70,62 @@ int main(){
     copia(vetor, bubbleVec, tamanhoVetor);
     bubbleSort(bubbleVec, tamanhoVetor);
     printf("\nBubble sort: ");
-    imprimeVet(bubbleVec, tamanhoVetor);
+    imprimeVet(bubbleVec, tamanhoVetor, &sucesso);
 
     // selection sort
     int selectionVec[tamanhoVetor];
     copia(vetor, selectionVec, tamanhoVetor);
     selectionSort(selectionVec, tamanhoVetor);
     printf("\nSelection sort: ");
-    imprimeVet(selectionVec, tamanhoVetor);
+    imprimeVet(selectionVec, tamanhoVetor, &sucesso);
 
     // insertion sort
     int insertionVec[tamanhoVetor];
     copia(vetor, insertionVec, tamanhoVetor);
     insertionSort(insertionVec, tamanhoVetor);
     printf("\nInsertion sort: ");
-    imprimeVet(insertionVec, tamanhoVetor);
+    imprimeVet(insertionVec, tamanhoVetor, &sucesso);
 
     // merge sort
     int mergeVec[tamanhoVetor];
     copia(vetor, mergeVec, tamanhoVetor);
     mergeSort(mergeVec, tamanhoVetor);
     printf("\nMerge sort: ");
-    imprimeVet(mergeVec, tamanhoVetor);
+    imprimeVet(mergeVec, tamanhoVetor, &sucesso);
 
     // quick sort
     int quickVec[tamanhoVetor];
     copia(vetor, quickVec, tamanhoVetor);
     mergeSort(quickVec, tamanhoVetor);
     printf("\nQuick sort: ");
-    imprimeVet(quickVec, tamanhoVetor);
+    imprimeVet(quickVec, tamanhoVetor, &sucesso);
 
     // heap sort
     int heapVec[tamanhoVetor];
     copia(vetor, heapVec, tamanhoVetor);
     mergeSort(heapVec, tamanhoVetor);
     printf("\nHeap sort: ");
-    imprimeVet(heapVec, tamanhoVetor);
+    imprimeVet(heapVec, tamanhoVetor, &sucesso);
 
     // counting sort
     int countingVec[tamanhoVetor];
     copia(vetor, countingVec, tamanhoVetor);
     countingSort(countingVec, tamanhoVetor);
     printf("\nCounting sort: ");
-    imprimeVet(countingVec, tamanhoVetor);
+    imprimeVet(countingVec, tamanhoVetor, &sucesso);
 
     // radix sort
 
     return 0;
 }
-void imprimeVet(int *V, int size){
+void imprimeVet(int *V, int size, int *sucesso){
     int i;
+    if (*sucesso == 0){
+        printf("\nImpossível ordenar o vetor com o método selecionado:");
+        sucesso = 1;
+        return;
+    }
+    
     for (i = 0 ; i < size ; i++)
         printf("%d ", V[i]);
     printf("\n");
@@ -295,19 +306,23 @@ int maiorElemento(int *A, int size){
             maior = A[i];
         }
         if (A[i] < 0){
-            return maior = -1;
+            return 0;
         }
     }
     return maior;
 }
 
 void countingSort(int *A, int size){
+    CountingSort(A, size, &sucesso);
+}
+
+void CountingSort(int *A, int size, int *sucesso){
     int k = maiorElemento(A, size);
     int count[k+1];
     int aux[size];
 
     if (k < 0){
-        printf("\nNão é possível ordenar usando Counting Sort (valor menor do que zero)");
+        *sucesso = 0;
         return;
     }
 
@@ -331,4 +346,5 @@ void countingSort(int *A, int size){
     for (int i = 0; i < size; i++){
         A[i] = aux[i];
     }
+
 }
