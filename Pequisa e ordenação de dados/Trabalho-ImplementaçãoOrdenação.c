@@ -37,7 +37,7 @@ int particiona(int *A, int inicio, int fim);
 void QuickSort(int *A, int inicio, int fim);
 void criaHeap(int *A, int i, int size);
 int maiorElemento(int *A, int size);
-void CountingSort(int *A, int size, int *sucesso);
+void CountingSort(int *A, int size, int pos);
 
 void bubbleSort(int *A, int size);
 void selectionSort(int *A, int size);
@@ -46,7 +46,7 @@ void mergeSort(int *A, int fim);
 void quickSort(int *A, int size);
 void heapSort(int *A, int size);
 void countingSort(int *A, int size);
-// void radixSort(int *A, int size);
+void radixSort(int *A, int size);
 
 int sucesso = 1; 
 //Como não é permitido mudar a tipagem das funções declaradas eu n posso fazer elas retornarem um valor de flag mesmo que eu crie uma outra função,
@@ -96,14 +96,14 @@ int main(){
     // quick sort
     int quickVec[tamanhoVetor];
     copia(vetor, quickVec, tamanhoVetor);
-    mergeSort(quickVec, tamanhoVetor);
+    quickSort(quickVec, tamanhoVetor);
     printf("\nQuick sort: ");
     imprimeVet(quickVec, tamanhoVetor);
 
     // heap sort
     int heapVec[tamanhoVetor];
     copia(vetor, heapVec, tamanhoVetor);
-    mergeSort(heapVec, tamanhoVetor);
+    heapSort(heapVec, tamanhoVetor);
     printf("\nHeap sort: ");
     imprimeVet(heapVec, tamanhoVetor);
 
@@ -115,12 +115,18 @@ int main(){
     imprimeVet(countingVec, tamanhoVetor);
 
     // radix sort
+    int radixVec[tamanhoVetor];
+    copia(vetor, radixVec, tamanhoVetor);
+    radixSort(radixVec, tamanhoVetor);
+    printf("\nRadix sort: ");
+    imprimeVet(radixVec, tamanhoVetor);
 
     return 0;
 }
+
 void imprimeVet(int *V, int size){
     if (sucesso == 0){
-        printf("Impossível ordenar o vetor com o método selecionado:\n");
+        printf("Impossível ordenar o vetor com o método selecionado.\n");
         sucesso = 1;
         return;
     }
@@ -342,4 +348,42 @@ void countingSort(int *A, int size){
         A[i] = aux[i];
     }
 
+}
+
+void CountingSort(int *A, int size, int pos){
+    int aux[size];
+    int count[10] = {0,0,0,0,0,0,0,0,0,0};
+    int digito;
+
+    for (int i = 0; i < size; i++){
+        digito = (A[i] / pos) % 10;
+        count[digito]++;
+    }
+
+    for (int i = 1; i < 10; i++){
+        count[i] = count[i] + count[i-1];
+    }
+
+    for (int i = size-1; i >= 0; i--){
+        digito = (A[i] / pos) % 10;
+        count[digito]--;
+        aux[count[digito]] = A[i];
+    }
+
+    for (int i = 0; i < size; i++){
+        A[i] = aux[i];
+    }
+}
+
+void radixSort(int *A, int size){
+    int max = maiorElemento(A, size);
+    
+    if (max == 0){
+        sucesso = 0;
+        return;
+    }
+
+    for (int pos = 1; max/pos > 0; pos *= 10){
+        CountingSort(A, size, pos);
+    }
 }
