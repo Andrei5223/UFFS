@@ -256,9 +256,9 @@ int particiona(int *A, int inicio, int fim){
 
     if (A[k]>A[posPivo]){
         troca(&A[k], &A[posPivo]);
-        posPivo = k;  //essa linha não estava no pseudocodigo
+        //posPivo = k;  //essa linha não estava no pseudocodigo
     }
-    return posPivo;
+    return k;
 }
 
 void QuickSort(int *A, int inicio, int fim){
