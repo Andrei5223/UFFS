@@ -231,7 +231,7 @@ void intercalaMerge(int *A, int inicio, int meio, int fim){
 }
 
 void mergeSort(int *A, int fim){
-    MergeSort(A, 0, fim);
+    MergeSort(A, 0, fim-1);
 }
 
 void MergeSort(int *A, int inicio, int fim){
@@ -246,8 +246,8 @@ void MergeSort(int *A, int inicio, int fim){
 
 int particiona(int *A, int inicio, int fim){
     int posPivo = fim;
-    int k = inicio, i = inicio;
-    for (i = inicio; i < fim; i++){
+    int k = inicio;
+    for (int i = inicio; i < fim; i++){
         if (A[i] <= A[posPivo]){
             troca(&A[i], &A[k]);
             k++;
@@ -255,7 +255,8 @@ int particiona(int *A, int inicio, int fim){
     }
 
     if (A[k]>A[posPivo]){
-        troca(&A[i], &A[posPivo]);
+        troca(&A[k], &A[posPivo]);
+        posPivo = k;  //essa linha não estava no pseudocodigo
     }
     return posPivo;
 }
@@ -264,13 +265,13 @@ void QuickSort(int *A, int inicio, int fim){
     int posPivo;
     if (inicio < fim){
         posPivo = particiona(A, inicio, fim);
-        QuickSort(A, inicio, posPivo+1);
+        QuickSort(A, inicio, posPivo-1);
         QuickSort(A, posPivo+1, fim);
     }
 }
 
 void quickSort(int *A, int size){
-    QuickSort(A, 0, size);
+    QuickSort(A, 0, size-1);
 }
 
 void criaHeap(int *A, int i, int size){
@@ -292,12 +293,11 @@ void criaHeap(int *A, int i, int size){
 }
 
 void heapSort(int *A, int size){
-    int k;
-    for (k = size/2-1; k == 0; k--){
+    for (int k = size/2-1; k >= 0; k--){
         criaHeap(A, k, size);
     }
 
-    for (k = size-1; k==1; k--){
+    for (int k = size-1; k>=1; k--){
         troca(&A[0], &A[k]);
         criaHeap(A, 0, k);
     }
