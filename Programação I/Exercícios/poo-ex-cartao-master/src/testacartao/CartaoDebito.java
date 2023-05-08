@@ -28,16 +28,23 @@ public class CartaoDebito extends Cartao {
         this.conta = conta;
     }
     
-    public void depositar(double valor) {
-        this.saldo += valor;
+    public void depositar(double valor, String loja, String data, String operacao) {
+        if (estaBloqueado() == false){   
+            this.saldo += valor;
+            registraOp(valor, loja, data, operacao);
+        }
     }
     
-    public void pagar(double valor) {
-        if (valor <= saldo) {
-            saldo -= valor;
-            System.out.println("Pagamento efetuado com sucesso!");
-        } else {
-            System.out.println("Saldo insuficiente!");
+    public void pagar(double valor, String loja, String data, String operacao) {
+        if(estaBloqueado() == false){
+            if (valor <= saldo) {
+                saldo -= valor;
+                System.out.println("Pagamento efetuado com sucesso!");
+            } else {
+                System.out.println("Saldo insuficiente!");
+            }
+            registraOp(valor, loja, data, operacao);
         }
+
     }
 }
