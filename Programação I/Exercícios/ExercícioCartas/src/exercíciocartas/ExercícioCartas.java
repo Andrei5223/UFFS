@@ -14,7 +14,18 @@ public class ExercícioCartas {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Baralho baralho = new Baralho();
+        
+        baralho.adicionaCarta(1, "copas");
+        baralho.adicionaCarta(5, "copas");
+        baralho.adicionaCarta(0, "paus");
+        baralho.adicionaCarta(2, "paus");
+        baralho.adicionaCarta(7, "ouro");
+        baralho.adicionaCarta(10, "copas");
+        
+        baralho.imprimeBaralho();
+        baralho.embaralha();
+        baralho.imprimeBaralho();
     }
     
 }
