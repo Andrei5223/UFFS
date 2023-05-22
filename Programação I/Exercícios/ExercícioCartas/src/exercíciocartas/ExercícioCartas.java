@@ -17,11 +17,12 @@ public class ExercícioCartas {
         Baralho baralho = new Baralho();
         
         baralho.adicionaCarta(1, "copas");
-        baralho.adicionaCarta(5, "copas");
+        baralho.adicionaCarta(5, "espada");
         baralho.adicionaCarta(0, "paus");
         baralho.adicionaCarta(2, "paus");
         baralho.adicionaCarta(7, "ouro");
         baralho.adicionaCarta(10, "copas");
+        baralho.adicionaCarta(10, "copa");
         
         baralho.imprimeBaralho();
         baralho.embaralha();
