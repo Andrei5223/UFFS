@@ -4,6 +4,8 @@
  */
 package cadastrofilmes;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
@@ -13,11 +15,15 @@ import javax.swing.UIManager;
  */
 public class TelaCadastro extends javax.swing.JFrame {
 
+    private List<Filme> filmes;
+    
     /**
      * Creates new form TelaCadastro
      */
     public TelaCadastro() {
         initComponents();
+        
+        filmes = new ArrayList<>();
     }
 
     /**
@@ -37,7 +43,7 @@ public class TelaCadastro extends javax.swing.JFrame {
         edtTitulo = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        edtSinopse = new javax.swing.JTextArea();
+        taSinopse = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
         edtDuracao = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -47,10 +53,20 @@ public class TelaCadastro extends javax.swing.JFrame {
         rb16 = new javax.swing.JRadioButton();
         rb18 = new javax.swing.JRadioButton();
         bntCadastrar = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        cbAcao = new javax.swing.JCheckBox();
+        cbAventura = new javax.swing.JCheckBox();
+        cbComedia = new javax.swing.JCheckBox();
+        cbDrama = new javax.swing.JCheckBox();
+        cbSuspense = new javax.swing.JCheckBox();
+        cbTerror = new javax.swing.JCheckBox();
+        jLabel8 = new javax.swing.JLabel();
+        ccPais = new javax.swing.JComboBox<>();
+        btnMostrarFilmes = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cadastro de filmes");
-        setPreferredSize(new java.awt.Dimension(600, 400));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Informações básicas"));
 
@@ -60,9 +76,9 @@ public class TelaCadastro extends javax.swing.JFrame {
 
         jLabel3.setText("Sinopse");
 
-        edtSinopse.setColumns(20);
-        edtSinopse.setRows(5);
-        jScrollPane1.setViewportView(edtSinopse);
+        taSinopse.setColumns(20);
+        taSinopse.setRows(5);
+        jScrollPane1.setViewportView(taSinopse);
 
         jLabel4.setText("Duração");
 
@@ -71,6 +87,7 @@ public class TelaCadastro extends javax.swing.JFrame {
         jLabel6.setText("Classificação");
 
         buttonGroup1.add(rbLivre);
+        rbLivre.setSelected(true);
         rbLivre.setText("Livre");
 
         buttonGroup1.add(rb14);
@@ -81,13 +98,6 @@ public class TelaCadastro extends javax.swing.JFrame {
 
         buttonGroup1.add(rb18);
         rb18.setText("18 anos");
-
-        bntCadastrar.setText("Cadastrar");
-        bntCadastrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bntCadastrarActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -115,10 +125,10 @@ public class TelaCadastro extends javax.swing.JFrame {
                                 .addGap(137, 137, 137)
                                 .addComponent(jLabel6))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(edtDuracao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(edtDuracao, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel5)
-                                .addGap(71, 71, 71)
+                                .addGap(42, 42, 42)
                                 .addComponent(rbLivre)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(rb14)
@@ -126,16 +136,12 @@ public class TelaCadastro extends javax.swing.JFrame {
                                 .addComponent(rb16)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(rb18)))
-                        .addGap(0, 76, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(bntCadastrar)))
+                        .addGap(0, 76, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
@@ -146,11 +152,11 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel6))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(edtDuracao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -158,11 +164,87 @@ public class TelaCadastro extends javax.swing.JFrame {
                     .addComponent(rbLivre)
                     .addComponent(rb14)
                     .addComponent(rb16)
-                    .addComponent(rb18))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
-                .addComponent(bntCadastrar)
-                .addContainerGap())
+                    .addComponent(rb18)))
         );
+
+        bntCadastrar.setText("Cadastrar");
+        bntCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntCadastrarActionPerformed(evt);
+            }
+        });
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Outras Informações"));
+
+        jLabel7.setText("Gênero");
+
+        cbAcao.setText("Ação");
+
+        cbAventura.setText("Aventura");
+
+        cbComedia.setText("Comédia");
+
+        cbDrama.setText("Drama");
+
+        cbSuspense.setText("Suspense");
+
+        cbTerror.setText("Terror");
+
+        jLabel8.setText("País de origem");
+
+        ccPais.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Brasil", "Estados Unidos", "Argentina", "Uruguai" }));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(ccPais, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(cbAcao)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cbAventura)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cbComedia)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cbDrama)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cbSuspense)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cbTerror)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbAcao)
+                    .addComponent(cbAventura)
+                    .addComponent(cbComedia)
+                    .addComponent(cbDrama)
+                    .addComponent(cbSuspense)
+                    .addComponent(cbTerror))
+                .addGap(12, 12, 12)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ccPais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
+        );
+
+        btnMostrarFilmes.setText("Mostrar filmes");
+        btnMostrarFilmes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMostrarFilmesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -170,15 +252,28 @@ public class TelaCadastro extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnMostrarFilmes)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(bntCadastrar))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bntCadastrar)
+                    .addComponent(btnMostrarFilmes))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -186,14 +281,87 @@ public class TelaCadastro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bntCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntCadastrarActionPerformed
-        String titulo = edtTitulo.getText();
-        String tituloOriginal = edtTituloOriginal.getText();
-        String sinopse = edtSinopse.getText();
+        try {
+
+            String titulo = edtTitulo.getText();
+            String tituloOriginal = edtTituloOriginal.getText();
+            String sinopse = taSinopse.getText();
+
+            int duracao = Integer.parseInt(edtDuracao.getText());
+
+            int classificacao;
+            if (rbLivre.isSelected()) {
+                classificacao = 0;
+            } else if (rb14.isSelected()) {
+                classificacao = 1;
+            } else if (rb16.isSelected()) {
+                classificacao = 2;
+            } else {
+                classificacao = 3;
+            }
+
+            String generos = "";
+            if (cbAcao.isSelected()) {
+                generos += "Acao ";
+            }
+            if (cbAventura.isSelected()) {
+                generos += "Aventura ";
+            }
+            if (cbComedia.isSelected()) {
+                generos += "Comedia ";
+            }
+            if (cbDrama.isSelected()) {
+                generos += "Drama ";
+            }
+            if (cbSuspense.isSelected()) {
+                generos += "Suspense ";
+            }
+            if (cbTerror.isSelected()) {
+                generos += "Terror ";
+            }
+
+            int pais = ccPais.getSelectedIndex();
+            String paisDeOrigem = (String) ccPais.getSelectedItem();
+
+//            String msg = "Título: " + titulo + "\n";
+//            msg += "Título original: " + tituloOriginal + "\n";
+//            msg += "Sinopse: " + sinopse + "\n";
+//            msg += "Duração: " + duracao + "\n";
+//            msg += "Classificação: " + classificacao + "\n";
+//            msg += "Gêneros: " + generos + "\n";
+//            msg += "País de origem: " + paisDeOrigem + "\n";
+//
+//            JOptionPane.showMessageDialog(null, msg);
+
+        Filme f = new Filme(titulo, tituloOriginal, sinopse);
+
+        filmes.add(f);
         
-        String msg = titulo + " | " + tituloOriginal + " | " + sinopse;
+        JOptionPane.showMessageDialog(null, "Filme cadastrado com sucesso!");
+        
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Erro na conversão da duração!");
+        }
+    }//GEN-LAST:event_bntCadastrarActionPerformed
+
+    private void btnMostrarFilmesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarFilmesActionPerformed
+        
+        String msg = "";
+        int cont = 0;
+        
+        for (Filme f : filmes){
+            msg += "Filme " + cont + "\n";
+            msg += "Titulo: " + f.getTitulo() + "\n";
+            msg += "Titulo Original: " + f.getTituloOrignal()+ "\n";
+            msg += "Sinopse: " + f.getSinopse() + "\n";
+            msg += "--------------------------------------------\n";
+            
+            cont++;
+        }
         
         JOptionPane.showMessageDialog(null, msg);
-    }//GEN-LAST:event_bntCadastrarActionPerformed
+        
+    }//GEN-LAST:event_btnMostrarFilmesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -205,7 +373,7 @@ public class TelaCadastro extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-                javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(TelaCadastro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -227,9 +395,16 @@ public class TelaCadastro extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bntCadastrar;
+    private javax.swing.JButton btnMostrarFilmes;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox cbAcao;
+    private javax.swing.JCheckBox cbAventura;
+    private javax.swing.JCheckBox cbComedia;
+    private javax.swing.JCheckBox cbDrama;
+    private javax.swing.JCheckBox cbSuspense;
+    private javax.swing.JCheckBox cbTerror;
+    private javax.swing.JComboBox<String> ccPais;
     private javax.swing.JTextField edtDuracao;
-    private javax.swing.JTextArea edtSinopse;
     private javax.swing.JTextField edtTitulo;
     private javax.swing.JTextField edtTituloOriginal;
     private javax.swing.JLabel jLabel1;
@@ -238,11 +413,15 @@ public class TelaCadastro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton rb14;
     private javax.swing.JRadioButton rb16;
     private javax.swing.JRadioButton rb18;
     private javax.swing.JRadioButton rbLivre;
+    private javax.swing.JTextArea taSinopse;
     // End of variables declaration//GEN-END:variables
 }
