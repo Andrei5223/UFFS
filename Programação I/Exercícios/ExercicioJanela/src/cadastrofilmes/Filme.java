@@ -42,6 +42,11 @@ public class Filme {
     public void setSinopse(String sinopse) {
         this.sinopse = sinopse;
     }
+
+    @Override
+    public String toString() {
+        return "Filme{" + "titulo=" + titulo + ", tituloOrignal=" + tituloOrignal + ", sinopse=" + sinopse + '}';
+    }
     
     
 }

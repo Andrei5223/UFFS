@@ -64,6 +64,7 @@ public class TelaCadastro extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         ccPais = new javax.swing.JComboBox<>();
         btnMostrarFilmes = new javax.swing.JButton();
+        btnFiltrarFilmes = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cadastro de filmes");
@@ -246,6 +247,13 @@ public class TelaCadastro extends javax.swing.JFrame {
             }
         });
 
+        btnFiltrarFilmes.setText("Filtrar Filmes");
+        btnFiltrarFilmes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFiltrarFilmesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -255,9 +263,10 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnFiltrarFilmes)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnMostrarFilmes)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(bntCadastrar))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -272,7 +281,8 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bntCadastrar)
-                    .addComponent(btnMostrarFilmes))
+                    .addComponent(btnMostrarFilmes)
+                    .addComponent(btnFiltrarFilmes))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -363,6 +373,12 @@ public class TelaCadastro extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnMostrarFilmesActionPerformed
 
+    private void btnFiltrarFilmesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarFilmesActionPerformed
+        TelaFiltragem t = new TelaFiltragem(filmes);
+        
+        t.setVisible(true);
+    }//GEN-LAST:event_btnFiltrarFilmesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -395,6 +411,7 @@ public class TelaCadastro extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bntCadastrar;
+    private javax.swing.JButton btnFiltrarFilmes;
     private javax.swing.JButton btnMostrarFilmes;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox cbAcao;
