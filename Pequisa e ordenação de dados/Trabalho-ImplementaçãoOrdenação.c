@@ -31,21 +31,33 @@
 void troca(int *A, int *B);
 void copia(int *A, int *v, int size); //copia o vetor original (A) para outro (v)
 void imprimeVet(int *V, int size);
+void intercalaMerge(int *A, int inicio, int meio, int fim);
+void MergeSort(int *A, int inicio, int fim);
+int particiona(int *A, int inicio, int fim);
+void QuickSort(int *A, int inicio, int fim);
+void criaHeap(int *A, int i, int size);
+int maiorElemento(int *A, int size);
+void CountingSort(int *A, int size, int pos);
+
 void bubbleSort(int *A, int size);
 void selectionSort(int *A, int size);
 void insertionSort(int *A, int size);
-// void mergeSort(int *A, int size);
-// void quickSort(int *A, int size);
-// void heapSort(int *A, int size);
-// void countingSort(int *A, int size);
-// void radixSort(int *A, int size);
+void mergeSort(int *A, int fim);
+void quickSort(int *A, int size);
+void heapSort(int *A, int size);
+void countingSort(int *A, int size);
+void radixSort(int *A, int size);
 
+int sucesso = 1; 
+//Como não é permitido mudar a tipagem das funções declaradas eu n posso fazer elas retornarem um valor de flag mesmo que eu crie uma outra função,
+//então utilizarei uma variável global (a contra gosto) para verificar se a ordenação foi concluida.
 
 int main(){
 
     int i;
     int vetor[] = {1, 22, -10, 38, 5, 7};
     int tamanhoVetor = (int)sizeof(vetor)/sizeof(int);
+    
 
     printf("\nVetor original: ");
     for (i = 0 ; i < tamanhoVetor ; i++)
@@ -75,20 +87,51 @@ int main(){
     imprimeVet(insertionVec, tamanhoVetor);
 
     // merge sort
+    int mergeVec[tamanhoVetor];
+    copia(vetor, mergeVec, tamanhoVetor);
+    mergeSort(mergeVec, tamanhoVetor);
+    printf("\nMerge sort: ");
+    imprimeVet(mergeVec, tamanhoVetor);
 
     // quick sort
+    int quickVec[tamanhoVetor];
+    copia(vetor, quickVec, tamanhoVetor);
+    quickSort(quickVec, tamanhoVetor);
+    printf("\nQuick sort: ");
+    imprimeVet(quickVec, tamanhoVetor);
 
     // heap sort
+    int heapVec[tamanhoVetor];
+    copia(vetor, heapVec, tamanhoVetor);
+    heapSort(heapVec, tamanhoVetor);
+    printf("\nHeap sort: ");
+    imprimeVet(heapVec, tamanhoVetor);
 
     // counting sort
+    int countingVec[tamanhoVetor];
+    copia(vetor, countingVec, tamanhoVetor);
+    countingSort(countingVec, tamanhoVetor);
+    printf("\nCounting sort: ");
+    imprimeVet(countingVec, tamanhoVetor);
 
     // radix sort
+    int radixVec[tamanhoVetor];
+    copia(vetor, radixVec, tamanhoVetor);
+    radixSort(radixVec, tamanhoVetor);
+    printf("\nRadix sort: ");
+    imprimeVet(radixVec, tamanhoVetor);
 
     return 0;
 }
+
 void imprimeVet(int *V, int size){
-    int i;
-    for (i = 0 ; i < size ; i++)
+    if (sucesso == 0){
+        printf("Impossível ordenar o vetor com o método selecionado.\n");
+        sucesso = 1;
+        return;
+    }
+    
+    for (int i = 0 ; i < size ; i++)
         printf("%d ", V[i]);
     printf("\n");
 }
@@ -144,5 +187,203 @@ void insertionSort(int *A, int size) {
             A[j] = A[j-1];
         }
         A[j] = p;
+    }
+}
+
+void intercalaMerge(int *A, int inicio, int meio, int fim){
+
+    int auxiliar[fim-inicio+1];
+    int i = inicio; /* i: posição atual no vetor da esquerda */
+    int j = meio+1; /* j: posição atual no vetor da direita */
+    int k = 0;      /* k: posição atual no vetor auxiliar */
+
+    //percorre o vetor A dividido em 2 partes, o i percorre a esquerda e j a direita até que um deles chegue ao fim
+    //Compara cada valor e salva num segundo vetor o menor
+    while (i<=meio && j <= fim){
+        if (A[i] <= A[j]){
+            auxiliar[k] = A[i];
+            i++;
+        } else {
+            auxiliar[k] = A[j];
+            j++;
+        }
+        k++;
+    }
+
+    //verifica se sobraram elementos na esquerda
+    while (i <= meio){
+        auxiliar[k] = A[i];
+        k++;
+        i++;
+    }
+
+    //verifica se sobraram elementos na direita
+    while (j <= fim){
+        auxiliar[k] = A[j];
+        k++;
+        j++;
+    }
+
+    //transfere os elementos da auxiliar para o principal
+    for (k = inicio; k <= fim; k++){
+        A[k] = auxiliar[k - inicio];
+    }
+}
+
+void mergeSort(int *A, int fim){
+    MergeSort(A, 0, fim-1);
+}
+
+void MergeSort(int *A, int inicio, int fim){
+    int meio; 
+    if (inicio < fim){                          //impede que a recurcividade continue infinitamente
+        meio = (inicio + fim) / 2;              //salva onde vai ser feita a separação do vetor principal
+        MergeSort(A, inicio, meio);             //chama a função para a metade da esquerda
+        MergeSort(A, meio+1, fim);              //chama a função para a metade da direita
+        intercalaMerge(A, inicio, meio, fim);   //efetua a ordenação em cada chamada recursiva, do micro ao macro
+    }
+}
+
+int particiona(int *A, int inicio, int fim){
+    int posPivo = fim;
+    int k = inicio;
+    for (int i = inicio; i < fim; i++){
+        if (A[i] <= A[posPivo]){
+            troca(&A[i], &A[k]);
+            k++;
+        }
+    }
+
+    if (A[k]>A[posPivo]){
+        troca(&A[k], &A[posPivo]);
+        //posPivo = k;  //essa linha não estava no pseudocodigo
+    }
+    return k;
+}
+
+void QuickSort(int *A, int inicio, int fim){
+    int posPivo;
+    if (inicio < fim){
+        posPivo = particiona(A, inicio, fim);
+        QuickSort(A, inicio, posPivo-1);
+        QuickSort(A, posPivo+1, fim);
+    }
+}
+
+void quickSort(int *A, int size){
+    QuickSort(A, 0, size-1);
+}
+
+void criaHeap(int *A, int i, int size){
+    int maior = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < size && A[left] > A[i]){
+        maior = left;
+    }
+    if (right < size && A[right] > A[maior]){
+        maior = right;
+    }
+
+    if (maior != i){
+        troca(&A[i], &A[maior]);
+        criaHeap(A, maior, size);
+    }
+}
+
+void heapSort(int *A, int size){
+    for (int k = size/2-1; k >= 0; k--){
+        criaHeap(A, k, size);
+    }
+
+    for (int k = size-1; k>=1; k--){
+        troca(&A[0], &A[k]);
+        criaHeap(A, 0, k);
+    }
+}
+
+int maiorElemento(int *A, int size){
+    int maior = A[0];
+
+    for (int i = 0; i < size; i++){
+        if (A[i] > maior){
+            maior = A[i];
+        }
+        if (A[i] < 0){
+            return 0;
+        }
+    }
+    return maior;
+}
+
+void countingSort(int *A, int size){
+    int k = maiorElemento(A, size);
+    int count[k+1];
+    int aux[size];
+
+    if (k == 0){
+        sucesso = 0;
+        return;
+    }
+
+    for (int i = 0; i <= k; i++){
+        count[i] = 0;
+    }
+
+    for (int i = 0; i < size; i++){
+        count[A[i]]++;
+    }
+
+    for (int i = 1; i <= k; i++){
+        count[i] += count[i-1];
+    }
+
+    for (int i = size-1; i >= 0; i--){
+        count[A[i]] = count[A[i]] - 1;
+        aux[count[A[i]]] = A[i];
+    }
+
+    for (int i = 0; i < size; i++){
+        A[i] = aux[i];
+    }
+
+}
+
+void CountingSort(int *A, int size, int pos){
+    int aux[size];
+    int count[10] = {0,0,0,0,0,0,0,0,0,0};
+    int digito;
+
+    for (int i = 0; i < size; i++){
+        digito = (A[i] / pos) % 10;
+        count[digito]++;
+    }
+
+    for (int i = 1; i < 10; i++){
+        count[i] = count[i] + count[i-1];
+    }
+
+    for (int i = size-1; i >= 0; i--){
+        digito = (A[i] / pos) % 10;
+        count[digito]--;
+        aux[count[digito]] = A[i];
+    }
+
+    for (int i = 0; i < size; i++){
+        A[i] = aux[i];
+    }
+}
+
+void radixSort(int *A, int size){
+    int max = maiorElemento(A, size);
+    
+    if (max == 0){
+        sucesso = 0;
+        return;
+    }
+
+    for (int pos = 1; max/pos > 0; pos *= 10){
+        CountingSort(A, size, pos);
     }
 }
