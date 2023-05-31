@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>four_bits</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>a:4,b:4,carry_in</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>carry_out,sum_out:4</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library ieee;
+use ieee.std_logic_1164.all;
+
+entity four_bits is
+    port(
+        a, b: in std_logic_vector(3 downto 0);
+        carry_in: in std_logic;
+        carry_out: out std_logic;
+        sum_out: out std_logic_vector(3 downto 0)
+    );
+end four_bits;
+
+architecture behav_four_bits of four_bits is
+    component full_add is
+            port(
+                a, b, carry_in: in std_logic;
+                carry, sum: out std_logic
+            );
+        end component full_add;
+
+    signal x, y, z: std_logic; --usados para ligar os carrys entre os FA 
+
+    begin
+        fa1: full_add
+            PORT MAP (
+                a =&gt; a(0),              --liga a entrada &apos;a&apos; do fa1 à entrada &apos;a(0)&apos; do somador 4 bits
+                b =&gt; b(0),              --liga a entrada &apos;b&apos; do fa1 à entrada &apos;b(0)&apos; do somador 4 bits
+                carry_in =&gt; carry_in,   --liga a entrada &apos;carry_in&apos; do fa1 à entrada &apos;carry_in&apos; do somador 4 bits
+                sum =&gt; sum_out(0),      --liga a saida &apos;sum&apos; do fa1 à saida &apos;sum_out9(0)&apos; do somador 4 bits
+                carry =&gt; x              --liga a saida &apos;carry&apos; do fa1 ao signal &apos;x&apos;
+            );
+
+        fa2: full_add
+            PORT MAP (
+                a =&gt; a(1),
+                b =&gt; b(1),
+                carry_in =&gt; x,          --liga a entrada &apos;carry_in&apos; do fa2 ao signal &apos;x&apos;
+                sum =&gt; sum_out(1),
+                carry =&gt; y
+            );
+
+        fa3: full_add
+            PORT MAP (
+                a =&gt; a(2),
+                b =&gt; b(2),
+                carry_in =&gt; y,
+                sum =&gt; sum_out(2),
+                carry =&gt; z
+            );
+
+        fa4: full_add
+            PORT MAP (
+                a =&gt; a(3),
+                b =&gt; b(3),
+                carry_in =&gt; z,
+                sum =&gt; sum_out(3),
+                carry =&gt; carry_out
+            );
+        
+end behav_four_bits;
+
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity full_add is
+    port(
+        a, b, carry_in: in std_logic;
+        carry, sum: out std_logic
+    );
+end full_add;
+
+
+architecture behav_full_add of full_add is
+    component half_add is
+            port(
+                a, b: in std_logic;
+                carry, sum: out std_logic
+            );
+        end component half_add;
+
+    signal x, y, z: std_logic;
+
+    begin
+        ha1: half_add
+            PORT MAP (
+                a =&gt; a,         --ligando a entrada &apos;a&apos; do half adder 1 na entrada &apos;a&apos; do full adder
+                b =&gt; b,         --ligando a entrada &apos;b&apos; do half adder 1 na entrada &apos;b&apos; do full adder
+                sum =&gt; x,       --ligando a saida &apos;sum&apos; do half adder 1 no signal &apos;x&apos; (fio)
+                carry =&gt; y      --ligando a saida &apos;carry&apos; do half adder 1 no signal &apos;y&apos;
+            );
+        ha2: half_add
+            PORT MAP (
+                a =&gt; x,         --ligando a entrada &apos;a&apos; do half adder 2 no signal x
+                b =&gt; carry_in,  --ligando a entrada &apos;b&apos; do half adder 2 na entrada carry_in do full adder
+                sum =&gt; sum,     --ligando a saida &apos;sum&apos; do half adder 2 na saida &apos;sum&apos; do full adder
+                carry =&gt; z      --ligando a saida &apos;carry&apos; do half adder 2 no signal &apos;z&apos;
+            );
+        
+        carry &lt;= y OR z;    --ligando os singal dos carrys (&apos;y&apos; e &apos;z&apos;) em um OR e passando pra saida &apos;carry_out&apos; do full adder
+end behav_full_add;
+
+
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity half_add is
+    port(
+        a, b: in std_logic;
+        carry, sum: out std_logic
+    );
+end half_add;
+
+architecture behav_add of half_add is
+    begin
+        carry &lt;= a AND b;
+        sum &lt;= a XOR b;
+end behav_add;</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>10</int>
+        </entry>
+      </elementAttributes>
+      <pos x="360" y="180"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>a</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>4</int>
+        </entry>
+      </elementAttributes>
+      <pos x="240" y="80"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>b</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>4</int>
+        </entry>
+      </elementAttributes>
+      <pos x="240" y="200"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>carry_in</string>
+        </entry>
+      </elementAttributes>
+      <pos x="240" y="320"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>carry_out</string>
+        </entry>
+      </elementAttributes>
+      <pos x="720" y="140"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>sum_out</string>
+        </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>dec</intFormat>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>4</int>
+        </entry>
+      </elementAttributes>
+      <pos x="720" y="240"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="240" y="80"/>
+      <p2 x="340" y="80"/>
+    </wire>
+    <wire>
+      <p1 x="240" y="320"/>
+      <p2 x="340" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="660" y="240"/>
+      <p2 x="720" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="340" y="180"/>
+      <p2 x="360" y="180"/>
+    </wire>
+    <wire>
+      <p1 x="560" y="180"/>
+      <p2 x="660" y="180"/>
+    </wire>
+    <wire>
+      <p1 x="240" y="200"/>
+      <p2 x="360" y="200"/>
+    </wire>
+    <wire>
+      <p1 x="560" y="200"/>
+      <p2 x="660" y="200"/>
+    </wire>
+    <wire>
+      <p1 x="340" y="220"/>
+      <p2 x="360" y="220"/>
+    </wire>
+    <wire>
+      <p1 x="660" y="140"/>
+      <p2 x="720" y="140"/>
+    </wire>
+    <wire>
+      <p1 x="340" y="80"/>
+      <p2 x="340" y="180"/>
+    </wire>
+    <wire>
+      <p1 x="340" y="220"/>
+      <p2 x="340" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="660" y="140"/>
+      <p2 x="660" y="180"/>
+    </wire>
+    <wire>
+      <p1 x="660" y="200"/>
+      <p2 x="660" y="240"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>
