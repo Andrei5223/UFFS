@@ -4,6 +4,10 @@
  */
 package exercíciocarro;
 
+/**
+ *
+ * @author andre
+ */
 public class portaMala {
     private int angulo;
     private boolean aberto;
@@ -41,4 +45,5 @@ public class portaMala {
     public void setLimpador(boolean estado) {
         limpador = estado;
     }
+
 }

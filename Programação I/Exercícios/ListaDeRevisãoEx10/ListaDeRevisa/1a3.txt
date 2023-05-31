@@ -1,0 +1,11 @@
+1:
+Objetos, em java, são compostos por classes, já as classes, são compostos por atributos e métodos (anteriormente conhecida como structs em C).
+
+2:
+Atributos: Variáveis que guardam os dados de uma classe
+Métodos: Funções internas de uma classe que trabalho sobre os dados da própria classe.
+
+3:
+public: Atributos ou métodos que podem ser acessados por qualquer instância do código, tanto internamente quanto externamente à classe.
+protected: Atributos ou métodos que podem ser acessados pela própria classe e as classes que a tem como herança
+private: Atributos ou métodos que podem ser acessados apenas internamente pela própria classe
