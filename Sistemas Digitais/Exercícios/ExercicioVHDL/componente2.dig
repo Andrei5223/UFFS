@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>Componente2</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>a,b,c</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>d,e</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library ieee;
+use ieee.std_logic_1164.all;
+
+entity Componente2 is
+    port(
+        a, b, c: in std_logic;
+        d, e: out std_logic
+    );
+end Componente2;
+
+architecture behav_componente2 of Componente2 is
+
+    signal x, y, z, w: std_logic;
+
+    begin
+        x &lt;= (not a) AND b;
+        y &lt;= (not a) AND c;
+        z &lt;= b AND c;
+        w &lt;= a XOR b;
+
+        d &lt;= x OR y OR z;
+        e &lt;= w XOR c;
+end behav_componente2;</string>
+        </entry>
+      </elementAttributes>
+      <pos x="360" y="300"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>A</string>
+        </entry>
+      </elementAttributes>
+      <pos x="200" y="260"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>D</string>
+        </entry>
+      </elementAttributes>
+      <pos x="560" y="280"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>B</string>
+        </entry>
+      </elementAttributes>
+      <pos x="200" y="320"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>C</string>
+        </entry>
+      </elementAttributes>
+      <pos x="200" y="380"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>E</string>
+        </entry>
+      </elementAttributes>
+      <pos x="560" y="320"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Testcase</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Testdata</string>
+          <testData>
+            <dataString>A B C D E
+0 0 0 0 0
+0 0 1 1 1
+0 1 0 1 1
+0 1 1 1 0
+1 0 0 0 1
+1 0 1 0 0
+1 1 0 0 0
+1 1 1 1 1
+</dataString>
+          </testData>
+        </entry>
+      </elementAttributes>
+      <pos x="-120" y="20"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="420" y="300"/>
+      <p2 x="560" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="200" y="320"/>
+      <p2 x="360" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="420" y="320"/>
+      <p2 x="560" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="200" y="260"/>
+      <p2 x="220" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="220" y="340"/>
+      <p2 x="360" y="340"/>
+    </wire>
+    <wire>
+      <p1 x="220" y="300"/>
+      <p2 x="360" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="200" y="380"/>
+      <p2 x="220" y="380"/>
+    </wire>
+    <wire>
+      <p1 x="220" y="260"/>
+      <p2 x="220" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="220" y="340"/>
+      <p2 x="220" y="380"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>

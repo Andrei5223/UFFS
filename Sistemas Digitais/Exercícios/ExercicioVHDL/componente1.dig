@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>OR4</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>a:4</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>s</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library ieee;
+use ieee.std_logic_1164.all;
+
+entity OR4 is
+    port(
+        a: in std_logic_vector(3 downto 0);
+        s: out std_logic
+    );
+end OR4;
+
+architecture behav_OR of OR4 is
+    begin
+        s &lt;= a(0) OR a(1) OR a(2) OR a(3);
+end behav_OR;</string>
+        </entry>
+      </elementAttributes>
+      <pos x="360" y="300"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Bits</string>
+          <int>4</int>
+        </entry>
+      </elementAttributes>
+      <pos x="220" y="300"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes/>
+      <pos x="560" y="300"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="220" y="300"/>
+      <p2 x="360" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="420" y="300"/>
+      <p2 x="560" y="300"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>
