@@ -107,6 +107,16 @@ int main (){
         printf("Erro na gravação");
     }
         
-    
+    fclose(fp4);
+    fp4 = fopen("entrada", "rb");
+
+    int total2, v2[5];
+    total2 = fread(v2, sizeof(int), 5, fp4);
+    printf("%d %d %d %d %d\n",v2[0],v2[1],v2[2],v2[3],v2[4]);
+
+    fseek(fp4, 2 * sizeof(int), SEEK_SET);
+    total2 = fread(v2, sizeof(int), 3, fp4);
+    printf("%d %d %d\n",v2[0],v2[1],v2[2]);
+
     return 0;
 }
