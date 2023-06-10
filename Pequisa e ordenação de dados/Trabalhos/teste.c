@@ -167,7 +167,23 @@ void mergeTempFiles(int numFiles) {
 }
 
 void renameFinalFile() {
-    char finalOutputFile[20];
-    sprintf(finalOutputFile, "sorted_data.txt");
-    rename("temp0.txt", finalOutputFile);
+    FILE* binaryFile = fopen("temp0.txt", "rb");
+    if (binaryFile == NULL) {
+        printf("Erro ao abrir o arquivo binário.\n");
+        exit(1);
+    }
+
+    FILE* textFile = fopen("sorted_data.txt", "w");
+    if (textFile == NULL) {
+        printf("Erro ao criar o arquivo de texto.\n");
+        exit(1);
+    }
+
+    int num;
+    while (fread(&num, sizeof(int), 1, binaryFile) == 1) {
+        fprintf(textFile, "%d\n", num);
+    }
+
+    fclose(binaryFile);
+    fclose(textFile);
 }
