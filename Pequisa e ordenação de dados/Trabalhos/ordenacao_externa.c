@@ -118,5 +118,8 @@ int main (){
     total2 = fread(v2, sizeof(int), 3, fp4);
     printf("%d %d %d\n",v2[0],v2[1],v2[2]);
 
+
+    FILE *files[5];
+
     return 0;
 }
