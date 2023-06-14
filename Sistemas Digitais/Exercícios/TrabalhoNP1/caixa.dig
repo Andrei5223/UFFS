@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>Caixa</string>
+        </entry>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>caixaA:4,sensorB</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library ieee;
+use ieee.std_logic_1164.all;
+
+entity Caixa is
+    port(
+        caixaA: in std_logic_vector(3 downto 0);
+        sensorB: in std_logic;
+        bombaB, eletroA: out std_logic
+    );
+end Caixa;
+
+--FIZ O CODIGO CONSIDERANDO QUE A BOMBA DA CAIXA B ESTARIA SEMPRE ATIVA
+--EM RESALVA AOS CASOS DESCRITOS NA QUESTAO POIS ISSO NÃO FOI ESPECIFICADO
+architecture behav_caixa of Caixa is
+    begin
+        PROCESS (caixaA, sensorB)
+        begin
+            eletroA &lt;= &apos;0&apos;;
+            bombaB &lt;= &apos;1&apos;;
+            if caixaA(0) = &apos;0&apos; then
+                bombaB &lt;= &apos;0&apos;;
+                eletroA &lt;= &apos;1&apos;;
+            end if;
+            if sensorB = &apos;1&apos; then
+                bombaB &lt;= &apos;0&apos;;
+            end if;
+        end PROCESS;
+end behav_caixa;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>bombaB,eletroA</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>10</int>
+        </entry>
+      </elementAttributes>
+      <pos x="560" y="300"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>SensorCaixaB</string>
+        </entry>
+      </elementAttributes>
+      <pos x="440" y="320"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>NivelCaixaA</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>4</int>
+        </entry>
+      </elementAttributes>
+      <pos x="440" y="280"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>BombaB</string>
+        </entry>
+      </elementAttributes>
+      <pos x="860" y="300"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>EletrovalvulaA</string>
+        </entry>
+      </elementAttributes>
+      <pos x="860" y="340"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Testcase</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Testdata</string>
+          <testData>
+            <dataString>SensorCaixaB NivelCaixaA BombaB EletrovalvulaA
+0 0b0000 0 1
+1 0b0000 0 1
+0 0b0001 1 0
+1 0b0011 0 0
+</dataString>
+          </testData>
+        </entry>
+      </elementAttributes>
+      <pos x="60" y="60"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="440" y="320"/>
+      <p2 x="560" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="760" y="320"/>
+      <p2 x="820" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="820" y="340"/>
+      <p2 x="860" y="340"/>
+    </wire>
+    <wire>
+      <p1 x="440" y="280"/>
+      <p2 x="460" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="760" y="300"/>
+      <p2 x="860" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="460" y="300"/>
+      <p2 x="560" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="820" y="320"/>
+      <p2 x="820" y="340"/>
+    </wire>
+    <wire>
+      <p1 x="460" y="280"/>
+      <p2 x="460" y="300"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>
