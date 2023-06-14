@@ -4,50 +4,63 @@ use ieee.std_logic_1164.all;
 entity Contador is
     port(
         clock, reset, S: in std_logic;
-        a, b, c: out std_logic
+        S_out: out std_logic_vector(2 downto 0)
     );
-end Componente1;
+end Contador;
 
-architecture behav_componente1 of Componente1 is
-
-    signal x, y, z, notb, notc: std_logic;
+architecture behav_contador of Contador is
+    TYPE Tipo_estado IS (A, B, C, D, E) ;
+    SIGNAL estado: Tipo_estado ;
 
     begin
-        --inverte entradas
-        notb <= not b;
-        notc <= not c;
-
-        --passa pelo primeiro nivel de portas
-        x <= not (a OR notb);
-        y <= not (notb AND notc);
-        z <= notb AND notc;
-
-        --passa pelo segundo nivel de portas
-        d <= x XOR (not y);
-        e <= y OR notb;
-        f <= y XOR z;
-end behav_componente1;
-
-library ieee;
-use ieee.std_logic_1164.all;
-
-entity Componente2 is
-    port(
-        a, b, c: in std_logic;
-        d, e: out std_logic
-    );
-end Componente2;
-
-architecture behav_componente2 of Componente2 is
-
-    signal x, y, z, w: std_logic;
-
-    begin
-        x <= (not a) AND b;
-        y <= (not a) AND c;
-        z <= b AND c;
-        w <= a XOR b;
-
-        d <= x OR y OR z;
-        e <= w XOR c;
-end behav_componente2;
+        PROCESS (reset, clock)
+        begin
+            if reset = '1' then
+                estado <= A;
+                S_out = "000";
+            elsif (Clock'EVENT AND Clock = '1') then
+                case estado is
+                    when A =>
+                        if S = '1' then
+                            S_out <= "001";
+                            estado <= B;
+                        else
+                            S_out <= "100";
+                            estado <= E;
+                        end if;
+                    when B =>
+                        if S = '1' then
+                            S_out <= "010";
+                            estado <= C;
+                        else
+                            S_out <= "000";
+                            estado <= A;
+                        end if;
+                    when C =>
+                        if S = '1' then
+                            S_out <= "011";
+                            estado <= D;
+                        else
+                            S_out <= "001";
+                            estado <= B;
+                        end if;
+                    when D =>
+                        if S = '1' then
+                            S_out <= "100";
+                            estado <= E;
+                        else
+                            S_out <= "010";
+                            estado <= C;
+                        end if;
+                    when E =>
+                        if S = '1' then
+                            S_out <= "000";
+                            estado <= A;
+                        else
+                            S_out <= "011";
+                            estado <= D;
+                        end if;
+                end case;
+            end if;
+        end PROCESS;
+end behav_contador;

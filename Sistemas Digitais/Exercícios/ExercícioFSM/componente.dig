@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>Contador</string>
+        </entry>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>clock,reset,S</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library ieee;
+use ieee.std_logic_1164.all;
+
+entity Contador is
+    port(
+        clock, reset, S: in std_logic;
+        S_out: out std_logic_vector(2 downto 0)
+    );
+end Contador;
+
+architecture behav_contador of Contador is
+    TYPE Tipo_estado IS (A, B, C, D, E) ;
+    SIGNAL estado: Tipo_estado ;
+
+    begin
+        PROCESS (reset, clock)
+        begin
+            if reset = &apos;1&apos; then
+                estado &lt;= A;
+                S_out &lt;= &quot;000&quot;;
+            elsif (Clock&apos;EVENT AND Clock = &apos;1&apos;) then
+                case estado is
+                    when A =&gt;
+                        if S = &apos;1&apos; then
+                            S_out &lt;= &quot;001&quot;;
+                            estado &lt;= B;
+                        else
+                            S_out &lt;= &quot;100&quot;;
+                            estado &lt;= E;
+                        end if;
+                    when B =&gt;
+                        if S = &apos;1&apos; then
+                            S_out &lt;= &quot;010&quot;;
+                            estado &lt;= C;
+                        else
+                            S_out &lt;= &quot;000&quot;;
+                            estado &lt;= A;
+                        end if;
+                    when C =&gt;
+                        if S = &apos;1&apos; then
+                            S_out &lt;= &quot;011&quot;;
+                            estado &lt;= D;
+                        else
+                            S_out &lt;= &quot;001&quot;;
+                            estado &lt;= B;
+                        end if;
+                    when D =&gt;
+                        if S = &apos;1&apos; then
+                            S_out &lt;= &quot;100&quot;;
+                            estado &lt;= E;
+                        else
+                            S_out &lt;= &quot;010&quot;;
+                            estado &lt;= C;
+                        end if;
+                    when E =&gt;
+                        if S = &apos;1&apos; then
+                            S_out &lt;= &quot;000&quot;;
+                            estado &lt;= A;
+                        else
+                            S_out &lt;= &quot;011&quot;;
+                            estado &lt;= D;
+                        end if;
+                end case;
+            end if;
+        end PROCESS;
+end behav_contador;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>S_out:3</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>5</int>
+        </entry>
+      </elementAttributes>
+      <pos x="860" y="420"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Bits</string>
+          <int>3</int>
+        </entry>
+      </elementAttributes>
+      <pos x="1060" y="440"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Clock</elementName>
+      <elementAttributes/>
+      <pos x="700" y="380"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes/>
+      <pos x="700" y="440"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes/>
+      <pos x="700" y="500"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="720" y="420"/>
+      <p2 x="860" y="420"/>
+    </wire>
+    <wire>
+      <p1 x="700" y="500"/>
+      <p2 x="720" y="500"/>
+    </wire>
+    <wire>
+      <p1 x="700" y="440"/>
+      <p2 x="860" y="440"/>
+    </wire>
+    <wire>
+      <p1 x="960" y="440"/>
+      <p2 x="1060" y="440"/>
+    </wire>
+    <wire>
+      <p1 x="720" y="460"/>
+      <p2 x="860" y="460"/>
+    </wire>
+    <wire>
+      <p1 x="700" y="380"/>
+      <p2 x="720" y="380"/>
+    </wire>
+    <wire>
+      <p1 x="720" y="380"/>
+      <p2 x="720" y="420"/>
+    </wire>
+    <wire>
+      <p1 x="720" y="460"/>
+      <p2 x="720" y="500"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>
