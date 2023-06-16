@@ -166,8 +166,7 @@ int removePalavra(TrieNo* raiz, char* palavra, int size) {
 //o prefixo a ser pesquisado
 //o vetor de strings para salvar as q encontrar
 //um int pra salvar a quantia de strings encontradas
-void buscaChavesRecursivo(TrieNo* no, char* prefixo, char** vetor, int* contador) {
-    printf("Busca Recursiva!\n");
+void buscaChavesRecursivo(TrieNo* no, char* prefixo, int indice, char** vetor, int* contador) {
     //encerra caso o nó atual seja nulo
     if (no == NULL) {
         return;
@@ -175,7 +174,6 @@ void buscaChavesRecursivo(TrieNo* no, char* prefixo, char** vetor, int* contador
 
     //caso encontre um terminal copia o prefixo para o vetor
     if (no->terminal == true) {
-        printf("Encontrou chave! %s\n", prefixo);
         vetor[*contador] = strdup(prefixo);
         (*contador)++;
     }
@@ -184,22 +182,22 @@ void buscaChavesRecursivo(TrieNo* no, char* prefixo, char** vetor, int* contador
     for (int i = 0; i < ALFABETO_SIZE; i++) {
         if (no->filho[i] != NULL) {
             //adiciona no prefixo a letra do nó atual
-            prefixo[strlen(prefixo)] = 'a' + i;
+            prefixo[indice] = 'a' + i;
 
             //adiciona a marcação de fim de string
-            prefixo[strlen(prefixo) + 1] = '\0';
+            prefixo[indice + 1] = '\0';
 
             //chama a função para o filho atual e com o prefixo modificado
-            buscaChavesRecursivo(no->filho[i], prefixo, vetor, contador);
+            buscaChavesRecursivo(no->filho[i], prefixo, indice + 1, vetor, contador);
 
             //desfaz a mudança no prefixo
-            prefixo[strlen(prefixo) - 1] = '\0';
+            prefixo[indice] = '\0';
         }
     }
 }
 
-// verifica se um prefixo existe
-int busca(TrieNo* raiz, char* prefixo) {
+// verifica se um prefixo existe e retorna o nodo dele
+TrieNo* busca(TrieNo* raiz, char* prefixo) {
     TrieNo* atual = raiz;
 
     for (int i = 0; prefixo[i] != '\0'; i++) {
@@ -208,27 +206,28 @@ int busca(TrieNo* raiz, char* prefixo) {
 
         //se ele não existe retorna NULL
         if (atual->filho[index] == NULL) {
-            return false;
+            return NULL;
         }
 
         //percorre o trie
         atual = atual->filho[index];
     }
 
-    return true;
+    return atual;
 }
 
 //busca todas as palavras com um determinado prefixo
 //recebe um vetor de chars como prefixo a ser pesquisado e uma variavel para armazenar a quantidade de chaves encontradas
 char** buscaChaves(TrieNo* raiz, char* prefixo, int* tamanhoVetor) {
-    printf("Busca Chaves!\n");
+    TrieNo* atual = busca(raiz, prefixo);
+
     //retorna NULL em caso de erro
     if (raiz == NULL || prefixo == NULL) {
         return NULL;
     }
 
     //retorna NULL em caso do prefixo nao existir
-    if (busca(raiz, prefixo) == false) {
+    if (atual == NULL) {
         return NULL;
     }
 
@@ -236,8 +235,9 @@ char** buscaChaves(TrieNo* raiz, char* prefixo, int* tamanhoVetor) {
     char** vetor = (char**)malloc(sizeof(char*) * 100);  // tamanho inicial arbitrário
     int contador = 0;
 
-    //faz a busca das strings
-    buscaChavesRecursivo(raiz, prefixo, vetor, &contador);
+    //faz a busca das strings começando pelo prefixo
+    int indice = strlen(prefixo);
+    buscaChavesRecursivo(atual, prefixo, indice, vetor, &contador);
 
     *tamanhoVetor = contador;
     return vetor;
