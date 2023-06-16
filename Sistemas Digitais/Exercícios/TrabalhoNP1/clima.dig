@@ -126,6 +126,46 @@ end behav_add;
       </elementAttributes>
       <pos x="520" y="280"/>
     </visualElement>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Code</string>
+          <string>library ieee;
+use ieee.std_logic_1164.all;
+
+entity Clima is
+    port(
+        janelas: in std_logic_vector(2 downto 0);
+        temperatura: in std_logic_vector(3 downto 0);
+        portaAberta, chuva, dia: in std_logic;
+        aviso: out std_logic
+    );
+end Clima;
+
+architecture behav_clima of clima is
+    begin
+        PROCESS (janelas, portaAberta, dia, chuva, temperatura)
+        begin
+            aviso &lt;= &apos;0&apos;;
+            if janelas(0) = &apos;1&apos; or janelas(1) = &apos;1&apos; or janelas(2) = &apos;1&apos; then
+                aviso &lt;= &apos;1&apos;;
+            end if;
+            if dia = &apos;1&apos; and janelas(0) = &apos;1&apos; or janelas(1) = &apos;1&apos; or janelas(2) = &apos;1&apos; then
+                alerta &lt;= &apos;1&apos;;
+            end if;
+
+            --Considera-se que a saída do código fornecido seja &quot;0001&quot; para temperatura &lt; 0
+            --e seja &quot;0010&quot; para temperatura &lt; 15
+            if temperatura = &quot;0001&quot; or temperatura = &quot;0010&quot; then
+                aviso &lt;= &apos;1&apos;;
+            end if;
+        end PROCESS;
+end behav_clima;</string>
+        </entry>
+      </elementAttributes>
+      <pos x="960" y="240"/>
+    </visualElement>
   </visualElements>
   <wires>
     <wire>
