@@ -2,15 +2,18 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef struct TrieNode {
-    struct TrieNode* filho[26];  // cada index = uma letra
-    bool terminal;  // fim de uma palavra
-} TrieNode;
+typedef struct TrieNo {
+    struct TrieNo* filho[26];  // cada index = uma letra
+    int terminal;  // fim de uma palavra
+} TrieNo;
 
-// cria um novo nó da Trie
-TrieNode* createNode() {
-    TrieNode* node = (TrieNode*) malloc(sizeof(TrieNode));
+
+TrieNo* criaNo() {
+    //aloca memoria pra um novo nó
+    TrieNo* node = (TrieNo*) malloc(sizeof(TrieNo));
     node->terminal = false;
+
+    //define os filhos como null
     for (int i = 0; i < 26; i++) {
         node->filho[i] = NULL;
     }
@@ -18,8 +21,8 @@ TrieNode* createNode() {
 }
 
 // insere uma palavra na Trie
-void insert(TrieNode* root, char* palavra) {
-    TrieNode* atual = root;
+void insert(TrieNo* raiz, char* palavra) {
+    TrieNo* atual = raiz;
     for (int i = 0; palavra[i] != '\0'; i++) {
         int index = palavra[i] - 'a';           // o (- 'a') serve para mapear cada letra em seu índice no vetor
         if (atual->filho[index] == NULL) {      // através do código ascii. Todas as letras têm seu código subtraído de 97 (a), 
