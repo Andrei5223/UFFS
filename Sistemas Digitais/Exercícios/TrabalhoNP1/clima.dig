@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>saida</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>4</int>
+        </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>bin</intFormat>
+        </entry>
+      </elementAttributes>
+      <pos x="640" y="300"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>a</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>7</int>
+        </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>decSigned</intFormat>
+        </entry>
+      </elementAttributes>
+      <pos x="460" y="280"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>b</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>7</int>
+        </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>decSigned</intFormat>
+        </entry>
+      </elementAttributes>
+      <pos x="460" y="320"/>
+    </visualElement>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>test_int</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>a:7,b:7</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+--------------------------------------------------
+
+entity test_int is
+port(	
+    a: in std_logic_vector(6 downto 0);
+    b: in std_logic_vector(6 downto 0);
+   -- c: in integer;
+	t_out: out std_logic_vector(3 downto 0)
+);
+end test_int;  
+
+--------------------------------------------------
+
+architecture behav_add of test_int is
+    Signal vl1 : integer range  -10 to 50;
+    Signal vl2 : integer range  -10 to 50;
+    Signal vl_avg : integer range  -20 to 100;
+begin
+    process(a,b)
+    begin
+        vl1 &lt;= to_integer(signed(a));
+        vl2 &lt;= to_integer(signed(b));
+
+        vl_avg &lt;= (vl1+vl2);
+
+        if vl_avg &lt; 0 then
+            t_out &lt;= &quot;0001&quot;;
+        elsif vl_avg &lt; 15 then 
+            t_out &lt;= &quot;0010&quot;;
+        elsif vl_avg &lt; 20 then
+            t_out &lt;= &quot;0100&quot;;
+	ELSE 
+	        t_out &lt;= &quot;1000&quot;;
+        end if;
+            
+    end process;
+
+end behav_add;
+
+--------------------------------------------------</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>t_out:4</string>
+        </entry>
+      </elementAttributes>
+      <pos x="520" y="280"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="460" y="320"/>
+      <p2 x="520" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="460" y="280"/>
+      <p2 x="520" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="580" y="300"/>
+      <p2 x="640" y="300"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>
