@@ -15,16 +15,18 @@ architecture behav_clima of clima is
         PROCESS (janelas, portaAberta, dia, chuva, temperatura)
         begin
             aviso <= '0';
-            if janelas(0) = '1' or janelas(1) = '1' or janelas(2) = '1' then
-                aviso <= '1';
+            if (janelas(0) = '1' or janelas(1) = '1' or janelas(2) = '1') or (portaAberta = '1') then
+                if (chuva = '1') then
+                    aviso <= '1';
+                end if;
             end if;
-            if dia = '1' and janelas(0) = '1' or janelas(1) = '1' or janelas(2) = '1' then
-                alerta <= '1';
+            if dia = '1' and (janelas(0) = '1' or janelas(1) = '1' or janelas(2) = '1') then
+                aviso <= '1';
             end if;
 
             --Considera-se que a saída do código fornecido seja "0001" para temperatura < 0
             --e seja "0010" para temperatura < 15
-            if temperatura = "0001" or temperatura = "0010" then
+            if (janelas(0) = '1' or janelas(1) = '1' or janelas(2) = '1') and (temperatura = "0001" or temperatura = "0010") then
                 aviso <= '1';
             end if;
         end PROCESS;

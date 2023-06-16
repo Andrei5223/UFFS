@@ -7,12 +7,12 @@
       <elementName>External</elementName>
       <elementAttributes>
         <entry>
-          <string>Label</string>
-          <string>Contador</string>
-        </entry>
-        <entry>
           <string>applicationType</string>
           <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>Contador</string>
         </entry>
         <entry>
           <string>externalInputs</string>
@@ -99,16 +99,6 @@ end behav_contador;</string>
       <pos x="860" y="420"/>
     </visualElement>
     <visualElement>
-      <elementName>Out</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Bits</string>
-          <int>3</int>
-        </entry>
-      </elementAttributes>
-      <pos x="1060" y="440"/>
-    </visualElement>
-    <visualElement>
       <elementName>Clock</elementName>
       <elementAttributes/>
       <pos x="700" y="380"/>
@@ -122,6 +112,11 @@ end behav_contador;</string>
       <elementName>In</elementName>
       <elementAttributes/>
       <pos x="700" y="500"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes/>
+      <pos x="1080" y="440"/>
     </visualElement>
   </visualElements>
   <wires>
@@ -139,7 +134,7 @@ end behav_contador;</string>
     </wire>
     <wire>
       <p1 x="960" y="440"/>
-      <p2 x="1060" y="440"/>
+      <p2 x="1080" y="440"/>
     </wire>
     <wire>
       <p1 x="720" y="460"/>
