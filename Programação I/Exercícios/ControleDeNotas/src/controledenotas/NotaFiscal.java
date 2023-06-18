@@ -3,26 +3,29 @@ package controledenotas;
 import java.time.LocalDate;
 
 public class NotaFiscal {
-    private Long id;
+    private int id;
+    private static int qtdId = 1;
     private Produto produto;
     private Emissor emissor;
     private Comprador comprador;
-    private int ValorTotal;
+    private double ValorTotal;
     private LocalDate data;
     
-    public void NotaFiscal(Produto produto, Emissor emissor, Comprador comprador){
+    public NotaFiscal(Produto produto, Emissor emissor, Comprador comprador){
         this.produto = produto;
         this.emissor = emissor;
         this.comprador = comprador;
         this.ValorTotal = this.produto.getPeso() * this.produto.getPreco();
         this.data = LocalDate.now();
+        this.id = qtdId;
+        this.qtdId++;
     }
     
     public void calculaTotal(){
         this.ValorTotal = this.produto.getPeso() * this.produto.getPreco();
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
@@ -38,7 +41,7 @@ public class NotaFiscal {
         return comprador;
     }
 
-    public int getValorTotal() {
+    public double getValorTotal() {
         return ValorTotal;
     }
 
@@ -46,7 +49,7 @@ public class NotaFiscal {
         return data;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -62,7 +65,12 @@ public class NotaFiscal {
         this.comprador = comprador;
     }
 
-    public void setValorTotal(int ValorTotal) {
+    public void setValorTotal(double ValorTotal) {
         this.ValorTotal = ValorTotal;
+    }
+
+    @Override
+    public String toString() {
+        return "NotaFiscal{" + "id= " + id + ", produto=" + produto.getNome() + ", emissor=" + emissor.getNome() + ", comprador=" + comprador.getNome() + '}';
     }
 }

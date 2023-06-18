@@ -6,10 +6,10 @@ package controledenotas;
 
 public class Produto {
     private String nome;
-    private int peso;
-    private int preco;
+    private double  peso;
+    private double  preco;
 
-    public Produto(String nome, int peso, int preco) {
+    public Produto(String nome, double peso, double preco) {
         this.nome = nome;
         this.peso = peso;
         this.preco = preco;
@@ -19,11 +19,11 @@ public class Produto {
         return nome;
     }
 
-    public int getPeso() {
+    public double getPeso() {
         return peso;
     }
 
-    public int getPreco() {
+    public double getPreco() {
         return preco;
     }
 
@@ -31,11 +31,11 @@ public class Produto {
         this.nome = nome;
     }
 
-    public void setPeso(int peso) {
+    public void setPeso(double peso) {
         this.peso = peso;
     }
 
-    public void setPreco(int preco) {
+    public void setPreco(double preco) {
         this.preco = preco;
     }
 }

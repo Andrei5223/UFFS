@@ -1,22 +1,69 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package controledenotas.janela;
+
+import controledenotas.NotaFiscal;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author andre
  */
-public class TelaFiltragem extends javax.swing.JPanel {
+public class TelaFiltragem extends javax.swing.JFrame {
 
+    private double valorMin, valorMax, pesoMin, pesoMax;
+    private List<NotaFiscal> notas;
+    private javax.swing.JTable tableNotasRegistradas;
+    private List<NotaFiscal> notasAtualizadas;
+    private double pesoTotal;
+    private double pesoMedio;
+    private double precoTotal;
+    private double precoMedio;
+    private double valorTotal;
+    private double valorTotalMedio;
+    private javax.swing.JLabel edtPesoMedio;
+    private javax.swing.JLabel edtPesoTotal;
+    private javax.swing.JLabel edtPrecoMedio;
+    private javax.swing.JLabel edtQtdNotas;
+    private javax.swing.JLabel edtValorMedio;
+    private javax.swing.JLabel edtValorTotal;
+    
     /**
      * Creates new form TelaFiltragem
      */
     public TelaFiltragem() {
         initComponents();
     }
+    
+    public TelaFiltragem(List<NotaFiscal> notas, javax.swing.JTable tableNotasRegistradas,
+            javax.swing.JLabel edtValorTotal, javax.swing.JLabel edtValorMedio, 
+            javax.swing.JLabel edtQtdNotas, javax.swing.JLabel edtPrecoMedio, 
+            javax.swing.JLabel edtPesoTotal, javax.swing.JLabel edtPesoMedio) {
+        
+        initComponents();
+        
+        valorMin = Double.MIN_VALUE;
+        pesoMin = Double.MIN_VALUE;
+        valorMax = Double.MAX_VALUE;
+        pesoMax = Double.MAX_VALUE;
+        
+        this.notas = notas;
+        this.tableNotasRegistradas = tableNotasRegistradas;
+        
+        this.edtPesoMedio = edtPesoMedio;
+        this.edtPesoTotal = edtPesoTotal;
+        this.edtPrecoMedio = edtPrecoMedio;
+        this.edtQtdNotas = edtQtdNotas;
+        this.edtValorMedio = edtValorMedio;
+        this.edtValorTotal = edtValorTotal;
 
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,32 +75,26 @@ public class TelaFiltragem extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        edtValorMin = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        edtValorMax = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
-        jFormattedTextField2 = new javax.swing.JFormattedTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        edtPesoMin = new javax.swing.JTextField();
+        edtPesoMax = new javax.swing.JTextField();
+        btnFiltrar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Filtragem");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Informações a filtrar"));
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Por valor"));
-
-        jLabel1.setText("Intervalo:");
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Por valor total"));
 
         jLabel2.setText("até");
-
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
-            }
-        });
 
         jLabel3.setText("De");
 
@@ -63,40 +104,32 @@ public class TelaFiltragem extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(edtValorMin, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(edtValorMax, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(9, 9, 9)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(edtValorMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(0, 35, Short.MAX_VALUE))
+                    .addComponent(jLabel3)
+                    .addComponent(edtValorMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 18, Short.MAX_VALUE))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Por data"));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Por peso"));
 
         jLabel4.setText("De");
 
         jLabel5.setText("até");
-
-        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-
-        jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -105,13 +138,13 @@ public class TelaFiltragem extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel4)
-                .addGap(5, 5, 5)
-                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(edtPesoMin, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
-                .addGap(18, 18, 18)
-                .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(edtPesoMax, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,14 +153,24 @@ public class TelaFiltragem extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
-                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                    .addComponent(edtPesoMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(edtPesoMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
-        jButton1.setText("Filtrar");
+        btnFiltrar.setText("Filtrar");
+        btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFiltrarActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Cancelar");
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -140,9 +183,9 @@ public class TelaFiltragem extends javax.swing.JPanel {
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2)
+                        .addComponent(btnCancelar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                        .addComponent(btnFiltrar)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -150,17 +193,17 @@ public class TelaFiltragem extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(btnFiltrar)
+                    .addComponent(btnCancelar))
                 .addContainerGap())
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -171,23 +214,121 @@ public class TelaFiltragem extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
+
+        pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
+        //coleta os inputs se foram escritos
+        if (!edtValorMin.getText().equals("")){ valorMin = Double.parseDouble(edtValorMin.getText());System.out.println("Entrou no if valorMin");}
+        if (!edtValorMax.getText().equals("")){ valorMax = Double.parseDouble(edtValorMax.getText());System.out.println("Entrou no if valorMax");}
+        if (!edtPesoMin.getText().equals("")){ pesoMin = Double.parseDouble(edtPesoMin.getText());System.out.println("Entrou no if pesoMin");}
+        if (!edtPesoMax.getText().equals("")){ pesoMax = Double.parseDouble(edtPesoMax.getText());System.out.println("Entrou no if pesoMax");}
+        
+        //cria modelo de acesso à tabela
+        DefaultTableModel dtmNotas = (DefaultTableModel) tableNotasRegistradas.getModel();
+        int qtdLinhas = dtmNotas.getRowCount();
+
+        //remove todas as linhas da tabela
+        for (int i = qtdLinhas - 1; i >= 0; i--){
+            dtmNotas.removeRow(i);
+        }
+
+        //faz a filtragem
+        Stream<NotaFiscal> streamNotas;
+        streamNotas = notas.stream().filter(e -> e.getValorTotal() >= valorMin)
+                .filter(e -> e.getValorTotal() <= valorMax)
+                .filter(e -> e.getProduto().getPeso() >= pesoMin)
+                .filter(e -> e.getProduto().getPeso() <= pesoMax);
+
+        notasAtualizadas = streamNotas.collect(Collectors.toList());
+        //imprime a lista no log
+        System.out.println("LISTA FILTRADA:");
+        notasAtualizadas.forEach(e -> System.out.println(e.toString()));
+        
+        //adiciona os dados do banco à tabela
+        Iterator<NotaFiscal> it = notasAtualizadas.iterator();
+        while (it.hasNext()){
+            NotaFiscal nota = it.next();
+            String dados[] = {String.valueOf(nota.getId()),nota.getProduto().getNome(), nota.getEmissor().getNome(),
+                nota.getComprador().getNome(), String.valueOf(nota.getProduto().getPeso()),
+                String.valueOf(nota.getValorTotal()), nota.getData().toString()};
+            dtmNotas.addRow(dados);
+        }
+        
+        atualizarDados();
+        
+        this.dispose();
+    }//GEN-LAST:event_btnFiltrarActionPerformed
+
+    private void atualizarDados(){
+        pesoTotal = notasAtualizadas.stream().mapToDouble(nota -> nota.getProduto().getPeso()).sum();
+        pesoMedio = pesoTotal / notasAtualizadas.size();
+
+        precoTotal = notasAtualizadas.stream().mapToDouble(nota -> nota.getProduto().getPreco()).sum();
+        precoMedio = precoTotal / notasAtualizadas.size();
+        
+        valorTotal = notasAtualizadas.stream().mapToDouble(nota -> nota.getValorTotal()).sum();
+        valorTotalMedio = valorTotal / notasAtualizadas.size();
+        
+        edtValorTotal.setText(String.valueOf(valorTotal));
+        edtValorMedio.setText(String.valueOf(valorTotalMedio));
+        edtPrecoMedio.setText(String.valueOf(precoMedio));
+        edtQtdNotas.setText(String.valueOf(notasAtualizadas.size()));
+        edtPesoMedio.setText(String.valueOf(pesoMedio));
+        edtPesoTotal.setText(String.valueOf(pesoTotal));
+    }
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(TelaFiltragem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(TelaFiltragem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(TelaFiltragem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(TelaFiltragem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new TelaFiltragem().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
-    private javax.swing.JFormattedTextField jFormattedTextField2;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnFiltrar;
+    private javax.swing.JTextField edtPesoMax;
+    private javax.swing.JTextField edtPesoMin;
+    private javax.swing.JTextField edtValorMax;
+    private javax.swing.JTextField edtValorMin;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -195,7 +336,5 @@ public class TelaFiltragem extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

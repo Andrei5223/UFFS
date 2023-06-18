@@ -4,17 +4,39 @@
  */
 package controledenotas.janela;
 
+import controledenotas.NotaFiscal;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author andre
  */
 public class MenuPrincipal extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MenuPrincipal
-     */
+    private List<NotaFiscal> notas;
+    private double pesoTotal;
+    private double pesoMedio;
+    private double precoTotal;
+    private double precoMedio;
+    private double valorTotal;
+    private double valorTotalMedio;
+
     public MenuPrincipal() {
         initComponents();
+        
+        notas = new ArrayList<>();
+        pesoMedio = 0;
+        pesoTotal = 0;
+        precoMedio = 0;
+        valorTotal = 0;
+        valorTotalMedio = 0;
     }
 
     /**
@@ -31,39 +53,60 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jButton5 = new javax.swing.JButton();
+        edtPesoMedio = new javax.swing.JLabel();
+        edtValorMedio = new javax.swing.JLabel();
+        edtQtdNotas = new javax.swing.JLabel();
+        edtPrecoMedio = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        edtPesoTotal = new javax.swing.JLabel();
+        edtValorTotal = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        tableNotasRegistradas = new javax.swing.JTable();
+        btnNovaNota = new javax.swing.JButton();
+        btnEditarNota = new javax.swing.JButton();
+        btnDeletarNota = new javax.swing.JButton();
+        btnLimparFiltro = new javax.swing.JButton();
+        btnFiltrar = new javax.swing.JButton();
+        btnMaisInfo = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        menuNovaNota = new javax.swing.JMenuItem();
+        menuDeletar = new javax.swing.JMenuItem();
+        menuSair = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        menuEditarNota = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Menu Principal");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Informações Gerais"));
 
         jLabel1.setText("Peso médio:");
 
-        jLabel2.setText("Valor total médio:");
+        jLabel2.setText("Média de todos os valores das notas:");
 
         jLabel3.setText("Quantia de notas registradas:");
 
         jLabel4.setText("Preço de venda médio:");
 
-        jButton5.setText("Mais informações");
+        edtPesoMedio.setText("0");
+
+        edtValorMedio.setText("0");
+
+        edtQtdNotas.setText("0");
+
+        edtPrecoMedio.setText("0");
+
+        jLabel5.setText("Peso total:");
+
+        jLabel6.setText("Soma de todas os valores das notas:");
+
+        edtPesoTotal.setText("0");
+
+        edtValorTotal.setText("0");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -73,207 +116,126 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(edtPrecoMedio)
+                                .addGap(352, 352, 352))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(edtPesoTotal)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel3))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(edtValorTotal)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel2)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(edtValorMedio)
+                            .addComponent(edtQtdNotas)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton5)
-                .addContainerGap())
+                        .addComponent(edtPesoMedio)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(edtValorMedio)
+                    .addComponent(edtValorTotal))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(edtQtdNotas)
+                    .addComponent(edtPesoTotal))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(edtPesoMedio))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5))
-                .addContainerGap(17, Short.MAX_VALUE))
+                    .addComponent(edtPrecoMedio))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Notas registradas"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableNotasRegistradas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
-                "Produto", "Emissor", "Comprador", "Peso", "Valor da nota", "Data"
+                "ID", "Produto", "Emissor", "Comprador", "Peso", "Valor da nota", "Data"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
+        jScrollPane1.setViewportView(tableNotasRegistradas);
+        if (tableNotasRegistradas.getColumnModel().getColumnCount() > 0) {
+            tableNotasRegistradas.getColumnModel().getColumn(0).setPreferredWidth(10);
+        }
+
+        btnNovaNota.setText("Nova nota fiscal");
+        btnNovaNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovaNotaActionPerformed(evt);
             }
         });
-        jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setText("Nova nota fiscal");
+        btnEditarNota.setText("Editar");
+        btnEditarNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarNotaActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Editar");
+        btnDeletarNota.setText("Deletar");
+        btnDeletarNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeletarNotaActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Deletar");
+        btnLimparFiltro.setText("Limpar Filtro");
+        btnLimparFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparFiltroActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Recarregar notas");
+        btnFiltrar.setText("Filtrar");
+        btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFiltrarActionPerformed(evt);
+            }
+        });
+
+        btnMaisInfo.setText("Mais Informações");
+        btnMaisInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMaisInfoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -282,29 +244,34 @@ public class MenuPrincipal extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(btnNovaNota)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(btnEditarNota)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)
+                        .addComponent(btnDeletarNota)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(btnFiltrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnLimparFiltro)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 331, Short.MAX_VALUE)
+                        .addComponent(btnMaisInfo)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(btnNovaNota)
+                    .addComponent(btnEditarNota)
+                    .addComponent(btnDeletarNota)
+                    .addComponent(btnLimparFiltro)
+                    .addComponent(btnFiltrar)
+                    .addComponent(btnMaisInfo))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -312,27 +279,46 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         jMenu3.setText("Novo");
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        jMenuItem2.setText("Nota Fiscal");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        menuNovaNota.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuNovaNota.setText("Nota Fiscal");
+        menuNovaNota.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                menuNovaNotaActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem2);
+        jMenu3.add(menuNovaNota);
 
         jMenu1.add(jMenu3);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        jMenuItem1.setText("Sair");
-        jMenu1.add(jMenuItem1);
+        menuDeletar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuDeletar.setText("Deletar");
+        menuDeletar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuDeletarActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuDeletar);
+
+        menuSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuSair.setText("Sair");
+        menuSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSairActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuSair);
 
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Editar");
 
-        jMenuItem3.setText("Tarefa");
-        jMenu2.add(jMenuItem3);
+        menuEditarNota.setText("Nota");
+        menuEditarNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditarNotaActionPerformed(evt);
+            }
+        });
+        jMenu2.add(menuEditarNota);
 
         jMenuBar1.add(jMenu2);
 
@@ -360,16 +346,224 @@ public class MenuPrincipal extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    private void menuNovaNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNovaNotaActionPerformed
+        TelaCadastro t = new TelaCadastro(notas, tableNotasRegistradas);
+        
+        //vai executar código após a janela ser fechada, para atualizar os valores
+        t.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                // Código a ser executado após o fechamento da janela TelaEditar
+                atualizarDados();
+            }
+        });
+        
+        t.setVisible(true);
+    }//GEN-LAST:event_menuNovaNotaActionPerformed
 
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTable1MouseClicked
+    private void btnNovaNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaNotaActionPerformed
+        TelaCadastro t = new TelaCadastro(notas, tableNotasRegistradas);
+        
+        //vai executar código após a janela ser fechada, para atualizar os valores
+        t.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                // Código a ser executado após o fechamento da janela TelaEditar
+                atualizarDados();
+            }
+        });
+        
+        t.setVisible(true);
+    }//GEN-LAST:event_btnNovaNotaActionPerformed
 
+    private void btnEditarNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarNotaActionPerformed
+        try {
+            //cria um modelo para manipular a tabela
+            DefaultTableModel dtmNotas = (DefaultTableModel) tableNotasRegistradas.getModel();
+
+            //identifica o index da linha selecionada na tabela
+            int index = tableNotasRegistradas.getSelectedRow();
+
+            //identifica o id da nota selecionada
+            int id = Integer.parseInt(tableNotasRegistradas.getValueAt(index, 0).toString());
+
+
+            TelaEditar t = new TelaEditar(notas, tableNotasRegistradas, id);
+            
+            //vai executar código após a janela ser fechada, para atualizar os valores
+            t.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    // Código a ser executado após o fechamento da janela TelaEditar
+                    atualizarDados();
+                }
+            });
+
+            t.setVisible(true);
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Selecione a nota que deseja editar!");
+        }
+    }//GEN-LAST:event_btnEditarNotaActionPerformed
+
+    private void btnDeletarNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletarNotaActionPerformed
+        try {
+            //cria um modelo para manipular a tabela
+            DefaultTableModel dtmNotas = (DefaultTableModel) tableNotasRegistradas.getModel();
+
+            //identifica o index da linha selecionada na tabela
+            int index = tableNotasRegistradas.getSelectedRow();
+
+            //identifica o id da nota selecionada
+            int id = Integer.parseInt(tableNotasRegistradas.getValueAt(index, 0).toString());
+
+            //remove a linha da tabela
+            dtmNotas.removeRow(index);
+
+            //remove a nota com o id da lista usando um filtro com expressão lambda
+            List<NotaFiscal> notaRemovida = notas.stream().filter(e-> e.getId() == id).collect(Collectors.toList());
+            notas.remove(notaRemovida.get(0));
+
+            atualizarDados();
+            
+            //imprime a lista no log
+            System.out.println("LISTA:");
+            notas.forEach(e -> System.out.println(e.toString()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Selecione a nota que deseja deletar!");
+        }
+    }//GEN-LAST:event_btnDeletarNotaActionPerformed
+
+    private void btnLimparFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparFiltroActionPerformed
+        DefaultTableModel dtmNotas = (DefaultTableModel) tableNotasRegistradas.getModel();
+
+        int qtdLinhas = dtmNotas.getRowCount();
+        
+        //remove todas as linhas
+        for (int i = qtdLinhas - 1; i >= 0; i--){
+            dtmNotas.removeRow(i);
+        }
+        
+        //adiciona os dados do banco à tabela
+        Iterator<NotaFiscal> it = notas.iterator();
+        while (it.hasNext()){
+            NotaFiscal nota = it.next();
+            String dados[] = {String.valueOf(nota.getId()),nota.getProduto().getNome(), nota.getEmissor().getNome(),
+                nota.getComprador().getNome(), String.valueOf(nota.getProduto().getPeso()),
+                String.valueOf(nota.getValorTotal()), nota.getData().toString()};
+            dtmNotas.addRow(dados);
+        }
+        
+        //atualiza as informações
+        atualizarDados();
+    }//GEN-LAST:event_btnLimparFiltroActionPerformed
+
+    private void btnMaisInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaisInfoActionPerformed
+        try {
+            //identifica o index da linha selecionada na tabela
+            int index = tableNotasRegistradas.getSelectedRow();
+
+            //identifica o id da nota selecionada
+            int id = Integer.parseInt(tableNotasRegistradas.getValueAt(index, 0).toString());
+
+            TelaInfo t = new TelaInfo(notas, id);
+            
+            t.setVisible(true);
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Selecione a nota que deseja vizualizar!");
+        }
+    }//GEN-LAST:event_btnMaisInfoActionPerformed
+
+    private void menuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSairActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_menuSairActionPerformed
+
+    private void menuDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDeletarActionPerformed
+        try {
+            //cria um modelo para manipular a tabela
+            DefaultTableModel dtmNotas = (DefaultTableModel) tableNotasRegistradas.getModel();
+
+            //identifica o index da linha selecionada na tabela
+            int index = tableNotasRegistradas.getSelectedRow();
+
+            //identifica o id da nota selecionada
+            int id = Integer.parseInt(tableNotasRegistradas.getValueAt(index, 0).toString());
+
+            //remove a linha da tabela
+            dtmNotas.removeRow(index);
+
+            //remove a nota com o id da lista usando um filtro com expressão lambda
+            List<NotaFiscal> notaRemovida = notas.stream().filter(e-> e.getId() == id).collect(Collectors.toList());
+            notas.remove(notaRemovida.get(0));
+
+            atualizarDados();
+            
+            //imprime a lista no log
+            System.out.println("LISTA:");
+            notas.forEach(e -> System.out.println(e.toString()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Selecione a nota que deseja deletar!");
+        }
+    }//GEN-LAST:event_menuDeletarActionPerformed
+
+    private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
+        TelaFiltragem t = new TelaFiltragem(notas, tableNotasRegistradas, edtValorTotal, edtValorMedio, edtQtdNotas, edtPrecoMedio, edtPesoTotal, edtPesoMedio);
+        
+        t.setVisible(true);
+    }//GEN-LAST:event_btnFiltrarActionPerformed
+
+    private void menuEditarNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditarNotaActionPerformed
+        try {
+            //cria um modelo para manipular a tabela
+            DefaultTableModel dtmNotas = (DefaultTableModel) tableNotasRegistradas.getModel();
+
+            //identifica o index da linha selecionada na tabela
+            int index = tableNotasRegistradas.getSelectedRow();
+
+            //identifica o id da nota selecionada
+            int id = Integer.parseInt(tableNotasRegistradas.getValueAt(index, 0).toString());
+
+
+            TelaEditar t = new TelaEditar(notas, tableNotasRegistradas, id);
+            
+            //vai executar código após a janela ser fechada, para atualizar os valores
+            t.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    // Código a ser executado após o fechamento da janela TelaEditar
+                    atualizarDados();
+                }
+            });
+
+            t.setVisible(true);
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Selecione a nota que deseja editar!");
+        }
+    }//GEN-LAST:event_menuEditarNotaActionPerformed
+
+    private void atualizarDados(){
+        pesoTotal = notas.stream().mapToDouble(nota -> nota.getProduto().getPeso()).sum();
+        pesoMedio = pesoTotal / notas.size();
+
+        precoTotal = notas.stream().mapToDouble(nota -> nota.getProduto().getPreco()).sum();
+        precoMedio = precoTotal / notas.size();
+        
+        valorTotal = notas.stream().mapToDouble(nota -> nota.getValorTotal()).sum();
+        valorTotalMedio = valorTotal / notas.size();
+        
+        edtValorTotal.setText(String.valueOf(valorTotal));
+        edtValorMedio.setText(String.valueOf(valorTotalMedio));
+        edtPrecoMedio.setText(String.valueOf(precoMedio));
+        edtQtdNotas.setText(String.valueOf(notas.size()));
+        edtPesoMedio.setText(String.valueOf(pesoMedio));
+        edtPesoTotal.setText(String.valueOf(pesoTotal));
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -406,29 +600,35 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton btnDeletarNota;
+    private javax.swing.JButton btnEditarNota;
+    private javax.swing.JButton btnFiltrar;
+    private javax.swing.JButton btnLimparFiltro;
+    private javax.swing.JButton btnMaisInfo;
+    private javax.swing.JButton btnNovaNota;
+    private javax.swing.JLabel edtPesoMedio;
+    private javax.swing.JLabel edtPesoTotal;
+    private javax.swing.JLabel edtPrecoMedio;
+    private javax.swing.JLabel edtQtdNotas;
+    private javax.swing.JLabel edtValorMedio;
+    private javax.swing.JLabel edtValorTotal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JMenuItem menuDeletar;
+    private javax.swing.JMenuItem menuEditarNota;
+    private javax.swing.JMenuItem menuNovaNota;
+    private javax.swing.JMenuItem menuSair;
+    private javax.swing.JTable tableNotasRegistradas;
     // End of variables declaration//GEN-END:variables
 }

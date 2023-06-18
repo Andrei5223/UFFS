@@ -8,7 +8,9 @@ import controledenotas.Comprador;
 import controledenotas.Emissor;
 import controledenotas.NotaFiscal;
 import controledenotas.Produto;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -16,20 +18,33 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author andre
  */
-public class TelaCadastro extends javax.swing.JFrame {
+public class TelaEditar extends javax.swing.JFrame {
 
     private List<NotaFiscal> notas;
     private javax.swing.JTable tableNotasRegistradas;
+    private List<NotaFiscal> notaAtualizada;
 
-    public TelaCadastro() {
+    public TelaEditar() {
         initComponents();
     }
 
-    public TelaCadastro(List<NotaFiscal> notas, javax.swing.JTable tableNotasRegistradas) {
+    public TelaEditar(List<NotaFiscal> notas, javax.swing.JTable tableNotasRegistradas, int id) {
         initComponents();
         
         this.notas = notas;
         this.tableNotasRegistradas = tableNotasRegistradas;
+        
+        //encontra a nota no banco com o id passado
+        this.notaAtualizada = notas.stream().filter(e-> e.getId() == id).collect(Collectors.toList());
+        
+        //envia os dados ao campo de texto
+        edtNomeProduto.setText(notaAtualizada.get(0).getProduto().getNome());
+        edtPeso.setText(String.valueOf(notaAtualizada.get(0).getProduto().getPeso()));
+        edtPreco.setText(String.valueOf(notaAtualizada.get(0).getProduto().getPreco()));
+        edtNomeEmissor.setText(notaAtualizada.get(0).getEmissor().getNome());
+        edtCPFEmissor.setText(notaAtualizada.get(0).getEmissor().getCpf());
+        edtNomeComprador.setText(notaAtualizada.get(0).getComprador().getNome());
+        edtCNPJComprador.setText(notaAtualizada.get(0).getComprador().getCnpj());
     }
 
     
@@ -44,7 +59,7 @@ public class TelaCadastro extends javax.swing.JFrame {
 
         UnidadesDeMedida = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        btnCadastrar = new javax.swing.JButton();
+        btnAtualizar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         edtNomeEmissor = new javax.swing.JTextField();
@@ -66,12 +81,12 @@ public class TelaCadastro extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Cadastrar Nota"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Atualizar Informações"));
 
-        btnCadastrar.setText("Cadastrar");
-        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
+        btnAtualizar.setText("Atualizar");
+        btnAtualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCadastrarActionPerformed(evt);
+                btnAtualizarActionPerformed(evt);
             }
         });
 
@@ -209,7 +224,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnCancelar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCadastrar))
+                        .addComponent(btnAtualizar))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -226,7 +241,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCadastrar)
+                    .addComponent(btnAtualizar)
                     .addComponent(btnCancelar))
                 .addContainerGap())
         );
@@ -252,27 +267,36 @@ public class TelaCadastro extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
+    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
         try {
-            //coleta dados dos campos de texto
-            Produto produto = new Produto(edtNomeProduto.getText(), Double.parseDouble(edtPeso.getText()), Double.parseDouble(edtPreco.getText()));
-            Emissor emissor = new Emissor(edtNomeEmissor.getText(), edtCPFEmissor.getText());
-            Comprador comprador = new Comprador(edtNomeComprador.getText(), edtCNPJComprador.getText());
-
-            //cria uma nota com os dados e adiciona numa lista de repositório
-            NotaFiscal novaNota = new NotaFiscal(produto, emissor, comprador);
-            notas.add(novaNota);
-
-            //cria um modelo para manipular a tabela
-            DefaultTableModel dtmNotas = (DefaultTableModel) tableNotasRegistradas.getModel();
-            //cria um vetor de strings para adicionar numa linha da tabela
-            String dados[] = {String.valueOf(novaNota.getId()),novaNota.getProduto().getNome(), novaNota.getEmissor().getNome(),
-                novaNota.getComprador().getNome(), String.valueOf(novaNota.getProduto().getPeso()),
-                String.valueOf(novaNota.getValorTotal()), novaNota.getData().toString()};
-            //adiciona numa linha da tabela
-            dtmNotas.addRow(dados);
+            //coleta dados dos campos de texto e atribui ao elemento no banco
+            notaAtualizada.get(0).getProduto().setNome(edtNomeProduto.getText());
+            notaAtualizada.get(0).getProduto().setPeso(Double.parseDouble(edtPeso.getText()));
+            notaAtualizada.get(0).getProduto().setPreco(Double.parseDouble(edtPreco.getText()));
+            notaAtualizada.get(0).getEmissor().setNome(edtNomeEmissor.getText());
+            notaAtualizada.get(0).getEmissor().setCpf(edtCPFEmissor.getText());
+            notaAtualizada.get(0).getComprador().setNome(edtNomeComprador.getText());
+            notaAtualizada.get(0).getComprador().setCnpj(edtCNPJComprador.getText());
+            notaAtualizada.get(0).calculaTotal(); //recalcula valor total
 
             this.dispose();
+
+            //atualiza a tabela
+            DefaultTableModel dtmNotas = (DefaultTableModel) tableNotasRegistradas.getModel();
+            int qtdLinhas = dtmNotas.getRowCount();
+            //remove todas as linhas
+            for (int i = qtdLinhas - 1; i >= 0; i--){
+                dtmNotas.removeRow(i);
+            }
+            //adiciona os dados do banco à tabela
+            Iterator<NotaFiscal> it = notas.iterator();
+            while (it.hasNext()){
+                NotaFiscal nota = it.next();
+                String dados[] = {String.valueOf(nota.getId()),nota.getProduto().getNome(), nota.getEmissor().getNome(),
+                    nota.getComprador().getNome(), String.valueOf(nota.getProduto().getPeso()),
+                    String.valueOf(nota.getValorTotal()), nota.getData().toString()};
+                dtmNotas.addRow(dados);
+            }
 
             //imprime a lista no log
             System.out.println("LISTA:");
@@ -281,8 +305,7 @@ public class TelaCadastro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Insira os dados corretamente!");
         }
 
-
-    }//GEN-LAST:event_btnCadastrarActionPerformed
+    }//GEN-LAST:event_btnAtualizarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
@@ -305,27 +328,28 @@ public class TelaCadastro extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaCadastro().setVisible(true);
+                new TelaEditar().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup UnidadesDeMedida;
-    private javax.swing.JButton btnCadastrar;
+    private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JTextField edtCNPJComprador;
     private javax.swing.JTextField edtCPFEmissor;
