@@ -86,6 +86,9 @@ public class TelaFiltragem extends javax.swing.JFrame {
         edtPesoMax = new javax.swing.JTextField();
         btnFiltrar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        edtNomeProduto = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Filtragem");
@@ -172,6 +175,33 @@ public class TelaFiltragem extends javax.swing.JFrame {
             }
         });
 
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Por nome"));
+
+        jLabel1.setText("Digite o nome do produto:");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(edtNomeProduto))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(edtNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -179,6 +209,7 @@ public class TelaFiltragem extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -195,6 +226,8 @@ public class TelaFiltragem extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnFiltrar)
@@ -214,8 +247,9 @@ public class TelaFiltragem extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -228,10 +262,10 @@ public class TelaFiltragem extends javax.swing.JFrame {
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
         //coleta os inputs se foram escritos
-        if (!edtValorMin.getText().equals("")){ valorMin = Double.parseDouble(edtValorMin.getText());System.out.println("Entrou no if valorMin");}
-        if (!edtValorMax.getText().equals("")){ valorMax = Double.parseDouble(edtValorMax.getText());System.out.println("Entrou no if valorMax");}
-        if (!edtPesoMin.getText().equals("")){ pesoMin = Double.parseDouble(edtPesoMin.getText());System.out.println("Entrou no if pesoMin");}
-        if (!edtPesoMax.getText().equals("")){ pesoMax = Double.parseDouble(edtPesoMax.getText());System.out.println("Entrou no if pesoMax");}
+        if (!edtValorMin.getText().equals("")){ valorMin = Double.parseDouble(edtValorMin.getText());}
+        if (!edtValorMax.getText().equals("")){ valorMax = Double.parseDouble(edtValorMax.getText());}
+        if (!edtPesoMin.getText().equals("")){ pesoMin = Double.parseDouble(edtPesoMin.getText());}
+        if (!edtPesoMax.getText().equals("")){ pesoMax = Double.parseDouble(edtPesoMax.getText());}
         
         //cria modelo de acesso à tabela
         DefaultTableModel dtmNotas = (DefaultTableModel) tableNotasRegistradas.getModel();
@@ -248,12 +282,17 @@ public class TelaFiltragem extends javax.swing.JFrame {
                 .filter(e -> e.getValorTotal() <= valorMax)
                 .filter(e -> e.getProduto().getPeso() >= pesoMin)
                 .filter(e -> e.getProduto().getPeso() <= pesoMax);
+        
+        if (!edtNomeProduto.getText().equals("")){
+            streamNotas = streamNotas.filter(e -> e.getProduto().getNome().equals(edtNomeProduto.getText()));
+        }
 
         notasAtualizadas = streamNotas.collect(Collectors.toList());
+        
         //imprime a lista no log
         System.out.println("LISTA FILTRADA:");
         notasAtualizadas.forEach(e -> System.out.println(e.toString()));
-        
+
         //adiciona os dados do banco à tabela
         Iterator<NotaFiscal> it = notasAtualizadas.iterator();
         while (it.hasNext()){
@@ -325,10 +364,12 @@ public class TelaFiltragem extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnFiltrar;
+    private javax.swing.JTextField edtNomeProduto;
     private javax.swing.JTextField edtPesoMax;
     private javax.swing.JTextField edtPesoMin;
     private javax.swing.JTextField edtValorMax;
     private javax.swing.JTextField edtValorMin;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -336,5 +377,6 @@ public class TelaFiltragem extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     // End of variables declaration//GEN-END:variables
 }
