@@ -98,13 +98,18 @@ void criaHuffman(Carcatere** raizes, int size){
 
     // Move todos os nodos um elemento à esquerda
     for (i = 1; i < size-2; i++){
+        //printf("Movendo %d para %d\n", i+1, i);
         raizes[i] = raizes[i+1];
     }
 
     // Atribui NULL ao ultimo
     raizes[size-1] = NULL;
 
+    // Reordena o vetor
+    ordenaNodos(raizes, size-1);
+
     if (size - 1 >= 2){
+        printf("Recursiva Ruffman %d\n", size);
         criaHuffman(raizes, size-1);
     }
 }
@@ -112,14 +117,13 @@ void criaHuffman(Carcatere** raizes, int size){
 // Imprime as chaves da codificação de huffman
 void imprimir(Carcatere* raiz, int posicao, char* caminho){
     if (raiz != NULL) {
-        
         // Adiciona o 0 no caminho para percorrer à esquerda
         caminho[posicao] = '0';
         caminho[posicao+1] = '\0';
         imprimir(raiz->left, posicao+1, caminho);
 
         if (raiz->data != '\0'){
-            printf("%c: %s", raiz->data, caminho);
+            printf("%c: %s\n", raiz->data, caminho);
         }
 
         // Adiciona 1 no caminho para percorrer à direita
@@ -141,11 +145,14 @@ int main() {
     input[strcspn(input, "\n")] = '\0';  // remove o caractere de nova linha
 
     // Atualiza o tamanho do input
-    size = strlen(input);
+    size = strlen(input)+1;
     Carcatere* raizes[size];
 
     // Cria o vetor de raizes
     constroiRaizes(raizes, input, size);
+
+    //cria ruffman
+    criaHuffman(raizes, size);
 
     //imprime a codificação
     imprimir(raizes[0], 0, caminho);
