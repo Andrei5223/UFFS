@@ -85,7 +85,7 @@ void constroiRaizes(Carcatere** raizes, char input[], int size){
 
 // Função recursiva que irá acumular todas as raizes em uma só. Recebe o vetor de raizes e o tamanho.
 void criaHuffman(Carcatere** raizes, int size){
-    Carcatere* novoNodo = criaNodo(), aux;
+    Carcatere* novoNodo = criaNodo();
     int i = 0;
 
     // Soma as frequencias e atribui os filhos novo nodo
@@ -102,17 +102,39 @@ void criaHuffman(Carcatere** raizes, int size){
     }
 
     // Atribui NULL ao ultimo
-    raizes[size] = NULL;
+    raizes[size-1] = NULL;
 
     if (size - 1 >= 2){
         criaHuffman(raizes, size-1);
     }
 }
 
+// Imprime as chaves da codificação de huffman
+void imprimir(Carcatere* raiz, int posicao, char* caminho){
+    if (raiz != NULL) {
+        
+        // Adiciona o 0 no caminho para percorrer à esquerda
+        caminho[posicao] = '0';
+        caminho[posicao+1] = '\0';
+        imprimir(raiz->left, posicao+1, caminho);
+
+        if (raiz->data != '\0'){
+            printf("%c: %s", raiz->data, caminho);
+        }
+
+        // Adiciona 1 no caminho para percorrer à direita
+        caminho[posicao] = '1';
+        imprimir(raiz->right, posicao+1, caminho);
+
+        // Desfaz as alterações
+        caminho[posicao] = '\0';
+    }
+}
 
 int main() {
     int size = 100;
     char input[size];
+    char caminho[100];
 
     // Coleta o input
     fgets(input, sizeof(input), stdin);
@@ -124,6 +146,9 @@ int main() {
 
     // Cria o vetor de raizes
     constroiRaizes(raizes, input, size);
+
+    //imprime a codificação
+    imprimir(raizes[0], 0, caminho);
 
     return 0;
 }
