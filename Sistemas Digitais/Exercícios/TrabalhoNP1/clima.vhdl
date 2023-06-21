@@ -31,3 +31,48 @@ architecture behav_clima of clima is
             end if;
         end PROCESS;
 end behav_clima;
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+--------------------------------------------------
+
+entity test_int is
+port(	
+    a: in std_logic_vector(6 downto 0);
+    b: in std_logic_vector(6 downto 0);
+	t_out: out std_logic_vector(3 downto 0)
+);
+end test_int;  
+
+--------------------------------------------------
+
+architecture behav_add of test_int is
+    
+begin
+    process(a,b)
+    variable vl1 : integer range  -20 to 50;
+    variable vl2 : integer range  -20 to 50;
+    variable vl_avg : integer range  -20 to 100;
+    begin
+        vl1 := to_integer(signed(a));
+        vl2 := to_integer(signed(b));
+
+        vl_avg := (vl1+vl2)/2;
+
+        if vl_avg < 0 then
+            t_out <= "0001";
+        elsif vl_avg < 15 then 
+            t_out <= "0010";
+        elsif vl_avg < 20 then
+            t_out <= "0100";
+	ELSE 
+	        t_out <= "1000";
+        end if;
+            
+    end process;
+
+end behav_add;
+
+--------------------------------------------------
