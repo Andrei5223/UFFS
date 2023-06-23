@@ -23,6 +23,7 @@ int tamanhoArvore(Carcatere** raizes){
 
 // Ordena o vetor de raizes. Recebe o vetor de raizes e o tamanho do mesmo.
 void ordenaNodos(Carcatere** raizes, int size){
+    // printf("Ordenando nodos:\n");
     int i, j;
     Carcatere* aux;
 
@@ -97,19 +98,20 @@ void criaHuffman(Carcatere** raizes, int size){
     raizes[0] = novoNodo;
 
     // Move todos os nodos um elemento à esquerda
-    for (i = 1; i < size-2; i++){
-        //printf("Movendo %d para %d\n", i+1, i);
+    for (i = 1; i < size-1; i++){
+        // printf("Movendo %d para %d\n", i+1, i);
         raizes[i] = raizes[i+1];
     }
+    //printf("Nodos movidos.\n");
 
     // Atribui NULL ao ultimo
     raizes[size-1] = NULL;
 
     // Reordena o vetor
-    ordenaNodos(raizes, size-1);
+    ordenaNodos(raizes, tamanhoArvore(raizes));
 
     if (size - 1 >= 2){
-        printf("Recursiva Ruffman %d\n", size);
+        // printf("Recursiva Ruffman %d\n", size);
         criaHuffman(raizes, size-1);
     }
 }
@@ -123,6 +125,8 @@ void imprimir(Carcatere* raiz, int posicao, char* caminho){
         imprimir(raiz->left, posicao+1, caminho);
 
         if (raiz->data != '\0'){
+            // Desfaz alteração para o print
+            caminho[posicao] = '\0';
             printf("%c: %s\n", raiz->data, caminho);
         }
 
@@ -145,11 +149,14 @@ int main() {
     input[strcspn(input, "\n")] = '\0';  // remove o caractere de nova linha
 
     // Atualiza o tamanho do input
-    size = strlen(input)+1;
+    size = strlen(input);
     Carcatere* raizes[size];
 
     // Cria o vetor de raizes
     constroiRaizes(raizes, input, size);
+
+    // Atualiza o tamanho do size
+    size = tamanhoArvore(raizes);
 
     //cria ruffman
     criaHuffman(raizes, size);
