@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>disp</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>in_rec,in_aut</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library ieee;
+use ieee.std_logic_1164.all;
+
+entity disp is
+    port(
+        in_rec, in_aut: in std_logic;
+        out_rec, out_aut: out std_logic
+    );
+end disp;
+
+architecture behav_disp of disp is
+    begin
+        process (in_aut, in_rec)
+        begin
+
+            out_rec &lt;= in_rec;
+
+            if ((in_aut = &apos;1&apos;) and (out_rec = &apos;1&apos;))  then
+                out_aut &lt;= &apos;1&apos;;
+            else
+                out_aut &lt;= &apos;0&apos;;
+            end if;
+
+        end process;
+end behav_disp;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>out_rec,out_aut</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>10</int>
+        </entry>
+      </elementAttributes>
+      <pos x="440" y="240"/>
+    </visualElement>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>disp</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>in_rec,in_aut</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library ieee;
+use ieee.std_logic_1164.all;
+
+entity disp is
+    port(
+        in_rec, in_aut: in std_logic;
+        out_rec, out_aut: out std_logic
+    );
+end disp;
+
+architecture behav_disp of disp is
+    begin
+        process (in_aut, in_rec)
+        begin
+
+            out_rec &lt;= in_rec;
+
+            if ((in_aut = &apos;1&apos;) and (out_rec = &apos;1&apos;))  then
+                out_aut &lt;= &apos;1&apos;;
+            else
+                out_aut &lt;= &apos;0&apos;;
+            end if;
+
+        end process;
+end behav_disp;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>out_rec,out_aut</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>10</int>
+        </entry>
+      </elementAttributes>
+      <pos x="440" y="340"/>
+    </visualElement>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>disp</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>in_rec,in_aut</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library ieee;
+use ieee.std_logic_1164.all;
+
+entity disp is
+    port(
+        in_rec, in_aut: in std_logic;
+        out_rec, out_aut: out std_logic
+    );
+end disp;
+
+architecture behav_disp of disp is
+    begin
+        process (in_aut, in_rec)
+        begin
+
+            out_rec &lt;= in_rec;
+
+            if ((in_aut = &apos;1&apos;) and (out_rec = &apos;1&apos;))  then
+                out_aut &lt;= &apos;1&apos;;
+            else
+                out_aut &lt;= &apos;0&apos;;
+            end if;
+
+        end process;
+end behav_disp;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>out_rec,out_aut</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>10</int>
+        </entry>
+      </elementAttributes>
+      <pos x="440" y="440"/>
+    </visualElement>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>arbitro</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>rec0,rec1,rec2,reset,clock</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library ieee;
+use ieee.std_logic_1164.all;
+
+entity arbitro is
+    port(
+        rec0, rec1, rec2, reset, clock: in std_logic;
+        aut0, aut1, aut2: out std_logic
+    );
+end arbitro;
+
+architecture behav_arbitro of arbitro is
+
+    TYPE Tipo_estado IS (A, B, C, D) ;
+    SIGNAL estado: Tipo_estado ;
+
+begin
+
+    process (rec0, rec1, rec2, reset, clock)
+    begin
+
+        if (reset = &apos;1&apos;) then
+            estado &lt;= A;
+            aut0 &lt;= &apos;0&apos;;
+            aut1 &lt;= &apos;0&apos;;
+            aut2 &lt;= &apos;0&apos;;
+        elsif (Clock&apos;EVENT AND Clock = &apos;1&apos;) then
+            case estado is
+
+                --logica A para B, C e D
+                when A =&gt;
+                    --logica A para B
+                    if (rec0 = &apos;1&apos;) then
+                        aut0 &lt;= &apos;1&apos;;
+                        aut1 &lt;= &apos;0&apos;;
+                        aut2 &lt;= &apos;0&apos;;
+                        estado &lt;= B;
+                    
+                    --logica A para C
+                    elsif (rec1 = &apos;1&apos;) then
+                        aut0 &lt;= &apos;0&apos;;
+                        aut1 &lt;= &apos;1&apos;;
+                        aut2 &lt;= &apos;0&apos;;
+                        estado &lt;= C;
+                    
+                    --logica A para D
+                    elsif (rec2 = &apos;1&apos;) then
+                        aut0 &lt;= &apos;0&apos;;
+                        aut1 &lt;= &apos;0&apos;;
+                        aut2 &lt;= &apos;1&apos;;
+                        estado &lt;= D;
+                    end if;
+
+                --logica B para A
+                when B =&gt;
+                    if (rec0 = &apos;0&apos;) then
+                        aut0 &lt;= &apos;0&apos;;
+                        aut1 &lt;= &apos;0&apos;;
+                        aut2 &lt;= &apos;0&apos;;
+                        estado &lt;= A;
+                    end if;
+                --logica C para A
+                when C =&gt;
+                    if (rec1 = &apos;0&apos;) then
+                        aut0 &lt;= &apos;0&apos;;
+                        aut1 &lt;= &apos;0&apos;;
+                        aut2 &lt;= &apos;0&apos;;
+                        estado &lt;= A;
+                    end if;
+                --logica D para A
+                when D =&gt;
+                    if (rec2 = &apos;0&apos;) then
+                        aut0 &lt;= &apos;0&apos;;
+                        aut1 &lt;= &apos;0&apos;;
+                        aut2 &lt;= &apos;0&apos;;
+                        estado &lt;= A;
+                    end if;
+            end case;
+        end if;
+        
+    end process;
+
+end behav_arbitro;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>aut0,aut1,aut2</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>10</int>
+        </entry>
+      </elementAttributes>
+      <pos x="820" y="320"/>
+    </visualElement>
+    <visualElement>
+      <elementName>LED</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="1"/>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>aut0</string>
+        </entry>
+      </elementAttributes>
+      <pos x="660" y="100"/>
+    </visualElement>
+    <visualElement>
+      <elementName>LED</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="1"/>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>aut1</string>
+        </entry>
+      </elementAttributes>
+      <pos x="700" y="100"/>
+    </visualElement>
+    <visualElement>
+      <elementName>LED</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="1"/>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>aut2</string>
+        </entry>
+      </elementAttributes>
+      <pos x="740" y="100"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>rec0</string>
+        </entry>
+      </elementAttributes>
+      <pos x="320" y="240"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>rec1</string>
+        </entry>
+      </elementAttributes>
+      <pos x="320" y="340"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>rec2</string>
+        </entry>
+      </elementAttributes>
+      <pos x="320" y="440"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>reset</string>
+        </entry>
+      </elementAttributes>
+      <pos x="320" y="520"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Clock</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>clock</string>
+        </entry>
+      </elementAttributes>
+      <pos x="320" y="580"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="760" y="320"/>
+      <p2 x="820" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="1020" y="320"/>
+      <p2 x="1060" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="380" y="160"/>
+      <p2 x="1080" y="160"/>
+    </wire>
+    <wire>
+      <p1 x="400" y="260"/>
+      <p2 x="440" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="260"/>
+      <p2 x="660" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="320" y="580"/>
+      <p2 x="800" y="580"/>
+    </wire>
+    <wire>
+      <p1 x="760" y="360"/>
+      <p2 x="820" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="380" y="360"/>
+      <p2 x="440" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="1020" y="360"/>
+      <p2 x="1100" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="360"/>
+      <p2 x="700" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="320" y="520"/>
+      <p2 x="780" y="520"/>
+    </wire>
+    <wire>
+      <p1 x="360" y="460"/>
+      <p2 x="440" y="460"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="460"/>
+      <p2 x="740" y="460"/>
+    </wire>
+    <wire>
+      <p1 x="360" y="140"/>
+      <p2 x="1100" y="140"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="240"/>
+      <p2 x="760" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="320" y="240"/>
+      <p2 x="440" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="800" y="400"/>
+      <p2 x="820" y="400"/>
+    </wire>
+    <wire>
+      <p1 x="320" y="340"/>
+      <p2 x="440" y="340"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="340"/>
+      <p2 x="820" y="340"/>
+    </wire>
+    <wire>
+      <p1 x="1020" y="340"/>
+      <p2 x="1080" y="340"/>
+    </wire>
+    <wire>
+      <p1 x="400" y="180"/>
+      <p2 x="1060" y="180"/>
+    </wire>
+    <wire>
+      <p1 x="320" y="440"/>
+      <p2 x="440" y="440"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="440"/>
+      <p2 x="760" y="440"/>
+    </wire>
+    <wire>
+      <p1 x="780" y="380"/>
+      <p2 x="820" y="380"/>
+    </wire>
+    <wire>
+      <p1 x="800" y="400"/>
+      <p2 x="800" y="580"/>
+    </wire>
+    <wire>
+      <p1 x="400" y="180"/>
+      <p2 x="400" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="1060" y="180"/>
+      <p2 x="1060" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="660" y="100"/>
+      <p2 x="660" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="740" y="100"/>
+      <p2 x="740" y="460"/>
+    </wire>
+    <wire>
+      <p1 x="360" y="140"/>
+      <p2 x="360" y="460"/>
+    </wire>
+    <wire>
+      <p1 x="760" y="360"/>
+      <p2 x="760" y="440"/>
+    </wire>
+    <wire>
+      <p1 x="760" y="240"/>
+      <p2 x="760" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="1080" y="160"/>
+      <p2 x="1080" y="340"/>
+    </wire>
+    <wire>
+      <p1 x="380" y="160"/>
+      <p2 x="380" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="700" y="100"/>
+      <p2 x="700" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="780" y="380"/>
+      <p2 x="780" y="520"/>
+    </wire>
+    <wire>
+      <p1 x="1100" y="140"/>
+      <p2 x="1100" y="360"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>
