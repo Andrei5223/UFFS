@@ -1,0 +1,64 @@
+<mxfile host="app.diagrams.net" modified="2023-06-29T12:00:50.226Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/113.0" etag="V1fEuWKA73d4zPhrPgd2" version="21.5.2" type="device">
+  <diagram name="Página-1" id="D81W715mVNwdYoOTfAVc">
+    <mxGraphModel dx="1388" dy="795" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Ywe21WNnGYJjzfRJohKt-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Ywe21WNnGYJjzfRJohKt-5" target="Ywe21WNnGYJjzfRJohKt-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ywe21WNnGYJjzfRJohKt-21" value="rec0 = &#39;1&#39;&lt;br style=&quot;font-size: 18px;&quot;&gt;rec1 = &#39;x&#39;&lt;br style=&quot;font-size: 18px;&quot;&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;rec2 = &#39;x&#39;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=18;" vertex="1" connectable="0" parent="Ywe21WNnGYJjzfRJohKt-18">
+          <mxGeometry x="0.2138" y="-1" relative="1" as="geometry">
+            <mxPoint x="49" y="-54" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ywe21WNnGYJjzfRJohKt-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;fillColor=#f8cecc;strokeColor=#000000;" edge="1" parent="1" source="Ywe21WNnGYJjzfRJohKt-5" target="Ywe21WNnGYJjzfRJohKt-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ywe21WNnGYJjzfRJohKt-23" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;rec0 = &#39;0&#39;&lt;br&gt;rec1 = &#39;0&#39;&lt;br&gt;&lt;/font&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;rec2 = &#39;1&lt;/font&gt;&#39;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Ywe21WNnGYJjzfRJohKt-19">
+          <mxGeometry x="0.4759" y="-5" relative="1" as="geometry">
+            <mxPoint x="45" y="-16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ywe21WNnGYJjzfRJohKt-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Ywe21WNnGYJjzfRJohKt-5" target="Ywe21WNnGYJjzfRJohKt-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ywe21WNnGYJjzfRJohKt-22" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;rec0 = &#39;0&#39;&lt;br style=&quot;font-size: 18px;&quot;&gt;rec1 = &#39;1&#39;&lt;br style=&quot;font-size: 18px;&quot;&gt;&lt;/font&gt;&lt;div style=&quot;font-size: 18px;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;rec2 = &#39;x&#39;&lt;/font&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=18;" vertex="1" connectable="0" parent="Ywe21WNnGYJjzfRJohKt-20">
+          <mxGeometry x="-0.2333" y="-3" relative="1" as="geometry">
+            <mxPoint x="47" y="-14" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ywe21WNnGYJjzfRJohKt-5" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;A&lt;/font&gt;&lt;br&gt;&lt;div&gt;aut0 = &#39;0&#39;&lt;/div&gt;&lt;div&gt;aut1 = &#39;0&#39;&lt;br&gt;aut2 = &#39;0&#39;&lt;br&gt;&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="350" y="380" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="Ywe21WNnGYJjzfRJohKt-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Ywe21WNnGYJjzfRJohKt-6" target="Ywe21WNnGYJjzfRJohKt-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="570" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ywe21WNnGYJjzfRJohKt-6" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;D&lt;/font&gt;&lt;br&gt;&lt;div&gt;aut0 = &#39;0&#39;&lt;/div&gt;&lt;div&gt;aut1 = &#39;0&#39;&lt;br&gt;aut2 = &#39;1&#39;&lt;br&gt;&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="520" y="160" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="Ywe21WNnGYJjzfRJohKt-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Ywe21WNnGYJjzfRJohKt-7" target="Ywe21WNnGYJjzfRJohKt-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ywe21WNnGYJjzfRJohKt-7" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;C&lt;/font&gt;&lt;br&gt;&lt;div&gt;aut0 = &#39;0&#39;&lt;/div&gt;&lt;div&gt;aut1 = &#39;1&#39;&lt;br&gt;aut2 = &#39;0&#39;&lt;br&gt;&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="350" y="160" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="Ywe21WNnGYJjzfRJohKt-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Ywe21WNnGYJjzfRJohKt-8" target="Ywe21WNnGYJjzfRJohKt-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="280" y="430" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="230" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ywe21WNnGYJjzfRJohKt-8" value="&lt;font style=&quot;font-size: 25px;&quot;&gt;B&lt;/font&gt;&lt;br&gt;&lt;div&gt;aut0 = &#39;1&#39;&lt;/div&gt;&lt;div&gt;aut1 = &#39;0&#39;&lt;br&gt;aut2 = &#39;0&#39;&lt;br&gt;&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="180" y="160" width="100" height="100" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
