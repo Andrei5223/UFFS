@@ -12,7 +12,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>disp</string>
+          <string>disp0</string>
         </entry>
         <entry>
           <string>externalInputs</string>
@@ -23,14 +23,14 @@
           <string>library ieee;
 use ieee.std_logic_1164.all;
 
-entity disp is
+entity disp0 is
     port(
         in_rec, in_aut: in std_logic;
         out_rec, out_aut: out std_logic
     );
-end disp;
+end disp0;
 
-architecture behav_disp of disp is
+architecture behav_disp of disp0 is
     begin
         process (in_aut, in_rec)
         begin
@@ -66,7 +66,7 @@ end behav_disp;</string>
         </entry>
         <entry>
           <string>Label</string>
-          <string>disp</string>
+          <string>disp1</string>
         </entry>
         <entry>
           <string>externalInputs</string>
@@ -77,14 +77,14 @@ end behav_disp;</string>
           <string>library ieee;
 use ieee.std_logic_1164.all;
 
-entity disp is
+entity disp1 is
     port(
         in_rec, in_aut: in std_logic;
         out_rec, out_aut: out std_logic
     );
-end disp;
+end disp1;
 
-architecture behav_disp of disp is
+architecture behav_disp of disp1 is
     begin
         process (in_aut, in_rec)
         begin
@@ -120,7 +120,7 @@ end behav_disp;</string>
         </entry>
         <entry>
           <string>Label</string>
-          <string>disp</string>
+          <string>disp2</string>
         </entry>
         <entry>
           <string>externalInputs</string>
@@ -131,14 +131,14 @@ end behav_disp;</string>
           <string>library ieee;
 use ieee.std_logic_1164.all;
 
-entity disp is
+entity disp2 is
     port(
         in_rec, in_aut: in std_logic;
         out_rec, out_aut: out std_logic
     );
-end disp;
+end disp2;
 
-architecture behav_disp of disp is
+architecture behav_disp of disp2 is
     begin
         process (in_aut, in_rec)
         begin
