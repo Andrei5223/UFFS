@@ -1,0 +1,36 @@
+#Criação do projeto quartus
+Novo projeto
+	selecionar pasta para o projeto (por o mesmo nome do projeto)
+	dar nome ao projeto (mesmo do entity do código vhdl que será o principal)
+	selecinar o modelo da placa fpga (EP2C20F484C7)
+	simulation -> none
+
+#Passos para mapear as portas da FPGA
+Assignments
+	import assigment
+		Selecionar csv baixado do moodle
+
+#Criação do arquivo VHDL
+File
+	New
+		Selecione: vhdl file
+	Salvar (escreva algo para poder salvar)
+		nome do arquivo tera o nome da entidade q tera no codigo (no arquivo principal tera o mesmo nome do projeto)
+	
+#Compilar codigo vhdl
+botao "Start Compilation"
+
+#Gravar o codigo na fpga
+tools
+	programmer
+		#Hardware Setup: Precisa estar em -> USB-Blaster [USB-0] 	Mode: JTAG
+		add file
+			output files
+				nomearq.sof
+		start
+
+
+#declaração das portas no arquivo vhdl
+sw: in std_logic_vector(9 downto 0);
+ledg: out std_logic_vector(7 downto 0);
+ledr: out std_logic_vector(9 downto 0)
