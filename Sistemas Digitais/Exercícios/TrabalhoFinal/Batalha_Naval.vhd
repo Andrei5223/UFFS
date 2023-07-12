@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 -- Entidade principal
-ENTITY BN IS
+ENTITY BatalhaNaval IS
     PORT(
         --Reinicia o jogo
         reset : IN STD_LOGIC;
@@ -48,11 +48,11 @@ ENTITY BN IS
         linhaOut: OUT STD_LOGIC_VECTOR(1 downto 0);
         colunaOut: OUT STD_LOGIC_VECTOR(1 downto 0)
     );
-END BN;
+END BatalhaNaval;
 
 
 -- Cria tabuleiro
-ARCHITECTURE Behavior_Tabuleiro OF BN IS 
+ARCHITECTURE Behavior_Tabuleiro OF BatalhaNaval IS 
 
                                     -- indices da matriz (3 em inteiro)            -- Conteudo do indice (vetor de 4 bits)
     TYPE matriz_tabuleiro IS ARRAY (natural range 0 to 3, natural range 0 to 3) of std_logic_vector(3 downto 0);
