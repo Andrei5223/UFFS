@@ -12,8 +12,16 @@ Grafo::Grafo(int num_vertices) {
     }
 }
 
+/*
+Grafo::Grafo(int num_vertices) {
+    num_vertices_ = num_vertices;
+    num_arestas_ = 0;
+    lista_adj_.resize(num_vertices);
+}
+*/
+
 void Grafo::inserir_aresta(Aresta e) {
-    if (matriz_adj_[e.v1][e.v2] == 0 ){
+    if ((matriz_adj_[e.v1][e.v2] == 0) && (e.v1 != e.v2)){
         matriz_adj_[e.v1][e.v2] = 1;
         matriz_adj_[e.v2][e.v1] = 1;
 
@@ -40,4 +48,12 @@ void Grafo::imprime() {
         }
         cout << "\n";
     }
+}
+
+int Grafo::num_vertices(){
+    return num_vertices_;
+}
+
+int Grafo::num_arestar(){
+    return num_arestas_;
 }
