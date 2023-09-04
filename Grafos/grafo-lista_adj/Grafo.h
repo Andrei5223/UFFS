@@ -21,7 +21,7 @@ public:
     Grafo(int num_vertices_);
     
     int num_vertices();
-    int num_arestar();
+    int num_arestas();
 
     /* Insere uma aresta no grafo caso a aresta ainda não exista no grafo e não seja um laço */
     void inserir_aresta(Aresta e);
@@ -29,7 +29,7 @@ public:
     /* Remove uma aresta do grafo caso ela exista */
     void remover_aresta(Aresta e);
 
-    /* Remove um vértice do grafo de modo que tenha seu índice diminuído de 1 todo vértice cujo índice é maior que o índice do vértice removido */
+    /* Remove um vértice do grafo e diminui 1 de todo vértice cujo índice é maior que o índice do vértice removido */
     void remover_vertice(int vertice);
 
     void imprime();

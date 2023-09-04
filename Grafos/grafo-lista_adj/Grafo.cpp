@@ -46,8 +46,26 @@ void Grafo::remover_aresta(Aresta e) {
 
 void Grafo::remover_vertice(int vertice) {
     if (vertice <= num_vertices_){
+        // Remove todas as arestas relacionadas ao vertice
         for (int i = 0; i < num_vertices_; i++) {
-            lista_adj_[vertice].remover_aresta(Aresta(vertice, i));
+            if (contains(lista_adj_[vertice], i) == 1){
+            lista_adj_[vertice].remove(i);
+            lista_adj_[i].remove(vertice);
+            num_arestas_--;
+            }
+        }
+
+        // Remove o vertice
+        lista_adj_.erase(lista_adj_.begin() + vertice);
+        num_vertices_--;
+
+        // Reduz um de todos os indices maiores que o vertice
+        for (int i = 0; i < num_vertices_; i++){
+            for (std::list<int>::iterator it = lista_adj_[i].begin(); it != lista_adj_[i].end(); ++it) {
+                if (*it >= vertice) {
+                (*it)--;
+                }
+            }
         }
     }
 }
@@ -66,6 +84,6 @@ int Grafo::num_vertices(){
     return num_vertices_;
 }
 
-int Grafo::num_arestar(){
+int Grafo::num_arestas(){
     return num_arestas_;
 }
