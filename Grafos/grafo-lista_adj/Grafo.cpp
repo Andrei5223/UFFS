@@ -29,7 +29,7 @@ int contains(list<int> lista, int vertice){
 }
 
 void Grafo::inserir_aresta(Aresta e) {
-    if (contains(lista_adj_[e.v1], e.v2) == 0){
+    if ((contains(lista_adj_[e.v1], e.v2) == 0) && (e.v1 != e.v2)){
         lista_adj_[e.v1].push_front(e.v2);
         lista_adj_[e.v2].push_front(e.v1);
         num_arestas_++;
