@@ -27,6 +27,7 @@ Uma maneira de pesquisar nomes nos audios transcritos e gerar uma lista dos enco
 Pesquisa por palavra-chave nos audios
 Abrir diretamente os arquivos pela lista de pesquisa
 Gerar um arquivos só com todos os audios degravados
+Alguns áudios apresentam um bug de degravação, no qual uma mesma palavra fica repetindo indefinidamente.
 
 Cadastrar agentes diferentes (e super usuario)
 	Relacionado a processos
