@@ -21,6 +21,12 @@ public:
     void remover_aresta(Aresta e);
 
     void imprime();
+
+    bool caminho(int v, int w, std::vector<int> marcado);
+
+    bool conexo();
+
+    bool clico();
 private:
     int num_vertices_;
     int num_arestas_;
