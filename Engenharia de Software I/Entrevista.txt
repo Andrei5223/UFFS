@@ -1,0 +1,40 @@
+Identificação:
+Nome P: Andre Frey
+Nome E: PCRS - Policia Civil do RS
+
+1 - Como é o seu trabalho no dia a dia / pelo oq vc é responsavel?
+a - Rotina:
+Recebe o conteúdo, checa a quantidade e tipo dos conteudos e após autorização judicial faz a análise de cada um dos arquivos e separa o que é relacionado a crime. Procura qualquer tipo de conteúdo que indique que a pessoa está relacionado a um crime, além do processo atual.
+
+b - Funções: 
+Policial Civil - Trabalha principalmente com conteudo relacionado a crime coletado de aparelhos celulares, procurando por provas que possam ser uteis na elucidação. Conteúdos presente no telefone ou na nuvem.
+
+2 - Identificação de documentos com info. úteis:
+- Emails, planilhas.. etc
+Ele precisa gerar um relatorio de análise do conteúdo encontrato relatando tudo relacionado à crime encontrado no dispositivo. O relatorio contem imagens relacioanadas, conversas, envolvidos, áudios (precisa ser anexado .mp3 quanto transcrito para o relatório).
+Gerar um documento fictício de exemplo.
+
+3 - Identificar problemas e dificuldades
+a - Quais os processos mais demorados e trabalhosos?
+Separar o que é crime e o que não é, é utilizado um software que transcreve os audios em textos para facilitar (whisper da openai), porém, 15% dos audios falham.
+
+b - Quais são as maiores dificuldades?
+Buscar a identificação dos envolvidos.
+
+4 - Identificar necessidades
+a - Quais são as funções que vc quer que estejam no software?
+Uma maneira de pesquisar nomes nos audios transcritos e gerar uma lista dos encontrados junto com informações como quantidade e etc. Podendo adicionar novos nomes e apelidos além dos padrões.
+Pesquisa por palavra-chave nos audios
+Abrir diretamente os arquivos pela lista de pesquisa
+Gerar um arquivos só com todos os audios degravados
+
+Cadastrar agentes diferentes (e super usuario)
+	Relacionado a processos
+		
+
+Cadastrar processos
+	Relacionado aos celulares
+		Organizador dos audios do celular em categorias pela fonte: Whats, galeria, etc
+		
+
+b - Quais são as "regras de negócio" que o software precisa estar exposo? Tipo, leis que afetam o seu serviço, condições que ele precisa cumprir...
