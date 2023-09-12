@@ -1,41 +1,44 @@
 Identificação:
 Nome P: Andre Frey
-Nome E: PCRS - Policia Civil do RS
+Nome E: Padaria Nova
 
 1 - Como é o seu trabalho no dia a dia / pelo oq vc é responsavel?
 a - Rotina:
-Recebe o conteúdo, checa a quantidade e tipo dos conteudos e após autorização judicial faz a análise de cada um dos arquivos e separa o que é relacionado a crime. Procura qualquer tipo de conteúdo que indique que a pessoa está relacionado a um crime, além do processo atual.
 
-b - Funções: 
-Policial Civil - Trabalha principalmente com conteudo relacionado a crime coletado de aparelhos celulares, procurando por provas que possam ser uteis na elucidação. Conteúdos presente no telefone ou na nuvem.
+b - Funções:
 
 2 - Identificação de documentos com info. úteis:
 - Emails, planilhas.. etc
-Ele precisa gerar um relatorio de análise do conteúdo encontrato relatando tudo relacionado à crime encontrado no dispositivo. O relatorio contem imagens relacioanadas, conversas, envolvidos, áudios (precisa ser anexado .mp3 quanto transcrito para o relatório).
-Gerar um documento fictício de exemplo.
 
 3 - Identificar problemas e dificuldades
 a - Quais os processos mais demorados e trabalhosos?
-Separar o que é crime e o que não é, é utilizado um software que transcreve os audios em textos para facilitar (whisper da openai), porém, 15% dos audios falham.
 
 b - Quais são as maiores dificuldades?
-Buscar a identificação dos envolvidos.
 
 4 - Identificar necessidades
 a - Quais são as funções que vc quer que estejam no software?
-Uma maneira de pesquisar nomes nos audios transcritos e gerar uma lista dos encontrados junto com informações como quantidade e etc. Podendo adicionar novos nomes e apelidos além dos padrões.
-Pesquisa por palavra-chave nos audios
-Abrir diretamente os arquivos pela lista de pesquisa
-Gerar um arquivos só com todos os audios degravados
-Alguns áudios apresentam um bug de degravação, no qual uma mesma palavra fica repetindo indefinidamente.
-
-Cadastrar agentes diferentes (e super usuario)
-	Relacionado a processos
-		
-
-Cadastrar processos
-	Relacionado aos celulares
-		Organizador dos audios do celular em categorias pela fonte: Whats, galeria, etc
-		
 
 b - Quais são as "regras de negócio" que o software precisa estar exposo? Tipo, leis que afetam o seu serviço, condições que ele precisa cumprir...
+
+
+Cadastro de funcionário: nome de usuário, senha, nome pessoal, RG
+	Acesso a: Cadastrar produtos, remover produtos, visualizar alertas.
+ADM: nome de usuário, senha, nome pessoal, RG
+	Acesso a: Cadastrar receita diária, gerar os relatórios, gerenciamento de usuários.
+
+Gerenciamento de lucros:
+	Cadastrar diária (financeiro): Receita do dia, custos do dia, lucro diário, valor dos bens inicial, valor dos bens final
+	Gerar relatórios de lucro (receita - custos)
+
+Gerenciamento de estoque (matéria prima):
+	Gasto: Dinheiro que "saiu do bolso"
+	Custo: Quanto custou para produzir tal produto.
+
+	Cadastrar diária (estoque): Registra alterações no estoque, salva todos os produtos que entraram e saíram.
+	Cadastrar produtos: ID, quantidade, data de validade, nome do produto, marca, preço, data e horário de entrada, funcionário que o cadastrou
+		Ao remover um produto do estoque, será removido o registro mais antigo. (Sistema PEPS), o custo será calculado pelo preço dos produtos removidos pelo sistema.
+
+	Emitir alertas para o usuário: Fim de estoque, próximo de expirar.
+
+	Gerar relatorio de, lucros, custos (custo aumenta quanto retira produto do estoque) e receitas (resultado financeiro), tabelas, gráficos.
+	Gerar relatorio dos bens no estoque. Relatorios de duração prevista de estoque. Relatorios de produtos mais utilizados e menos utilizados. Relatorios de histórico de preço de produto (se possível separar por marca). Relatorios dos valores dos bens valor dos bens (materias primas).
