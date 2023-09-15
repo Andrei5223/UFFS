@@ -12,7 +12,7 @@ public:
     Grafo(int num_vertices_);
     
     int num_vertices();
-    int num_arestar();
+    int num_arestas();
 
     /* Insere uma aresta no grafo caso a aresta ainda não exista no grafo e não seja um laço */
     void inserir_aresta(Aresta e);
@@ -24,9 +24,15 @@ public:
 
     bool caminho(int v, int w, std::vector<int> marcado);
 
-    bool conexo();
+    bool conexo1();
 
-    bool clico();
+    bool conexo2();
+
+    bool ciclo();
+
+    void busca_prof(int v, int marcado[]);
+
+    bool conexoDFS();
 private:
     int num_vertices_;
     int num_arestas_;
