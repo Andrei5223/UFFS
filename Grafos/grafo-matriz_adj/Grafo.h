@@ -33,6 +33,10 @@ public:
     void busca_prof(int v, int marcado[]);
 
     bool conexoDFS();
+
+    bool cicloDFS();
+
+    bool cicloDFSrecursivo(int v, int marcado[], int anterior);
 private:
     int num_vertices_;
     int num_arestas_;

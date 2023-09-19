@@ -153,3 +153,30 @@ bool Grafo::conexoDFS() {
     // Se todos os vértices foram visitados, o grafo é conexo
     return true;
 }
+
+bool Grafo::cicloDFSrecursivo(int v, int marcado[], int anterior) {
+    //printf("%d\n", v);
+    marcado[v] = 1;
+    bool resultado = true;
+
+    for (int u = 0; u < num_vertices_; u++)
+        if (matriz_adj_[v][u] != 0)
+            if (marcado[u] == 0)
+                resultado = cicloDFSrecursivo(u, marcado, v);
+            else if ((u != anterior) || (!resultado))
+                return false;
+    return true; 
+}
+
+bool Grafo::cicloDFS() {
+    // Array para marcar vértices visitados
+    int marcado[num_vertices_];
+    for (int i = 0; i < num_vertices_; i++) {
+        marcado[i] = 0;
+    }
+
+    int anterior = -1;
+
+    return cicloDFSrecursivo(0, marcado, anterior);
+}
+

@@ -8,8 +8,8 @@ using namespace std;
 
 int main() {
     try {
-        /*
-        const int vertices = 7;
+        
+        const int vertices = 8;
 
         //Inicialização
         vector<int> marcado;
@@ -17,25 +17,25 @@ int main() {
         Grafo grafo(vertices);
 
         //Instanciação direta
-        grafo.inserir_aresta(Aresta(0, 1));
+        grafo.inserir_aresta(Aresta(7, 4));
         grafo.inserir_aresta(Aresta(0, 2));
-        grafo.inserir_aresta(Aresta(1, 3));
-        grafo.inserir_aresta(Aresta(1, 4));
-        grafo.inserir_aresta(Aresta(2, 5));
-        grafo.inserir_aresta(Aresta(2, 6));
+        grafo.inserir_aresta(Aresta(0, 4));
+        grafo.inserir_aresta(Aresta(2, 3));
+        grafo.inserir_aresta(Aresta(2, 4));
         
-        grafo.imprime();
+        //grafo.imprime();
         //grafo.caminho(0, 3, marcado); printf("\n");
-        cout << "Caminho: " << grafo.caminho(0, 6, marcado) << endl;
+        //cout << "Caminho: " << grafo.caminho(0, 6, marcado) << endl;
         cout << "Conexo: " << grafo.conexo1() << endl;
-        cout << "Cíclico: " << grafo.ciclo() << endl;
-        */
+        cout << "Cíclico: " << grafo.cicloDFS() << endl;
+        
 
+        /*
         // Inicialização do gerador de números aleatórios
         random_device rd;
         mt19937 mt(rd());
 
-        int n = 10000;
+        int n = 50;
         int lixo = 0;
         while (n <= 10000){
             // Reinicializar a distribuição com o valor atual de n
@@ -75,7 +75,7 @@ int main() {
             end = chrono::high_resolution_clock::now();
             duration = chrono::duration_cast<chrono::microseconds>(end - start).count();
             cout << duration << " "; cout.flush();
-/*
+
             // Conta o tempo para o conexo de 2 for
             cout << "Conexo2For: "; cout.flush();
             start = chrono::high_resolution_clock::now();
@@ -83,12 +83,12 @@ int main() {
             end = chrono::high_resolution_clock::now();
             duration = chrono::duration_cast<chrono::microseconds>(end - start).count();
             cout << duration << " "; cout.flush();
-            */
+            
 
             cout << endl;
             n = n+50;
         }
-
+        */
     }
     catch (const exception &e) {
         cerr << "exception: " << e.what() << "\n";
