@@ -20,6 +20,7 @@
  6. Heap Sort
  7. Couting Sort
  8. Radix Sort
+ 
  Além disso para o trabalho 02 foi desenvolvido dois métodos de armazenamento de dados: Tabela hash (já implementada anteriormente) e árvore Trie. Para o trabalho final foi desenvolvido o algoritmo de Huffman para a compressão de dados.
 
  ### Programação I
@@ -36,6 +37,7 @@
  10. Desenvolvimento visual (biblioteca Swing)
  11. Coleções, estruturas de dados, Streams, funções da alta ordem
  12. Spring
+
  O trabalho final consite no desenvolvimento de um software fazendo uso de POO e Swing, optei por desenvolver um software para manipulação de notas fiscais.
 
  ### Sistemas digitais
