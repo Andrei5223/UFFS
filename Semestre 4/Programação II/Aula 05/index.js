@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const app = express();
 
 app.use(bodyParser.json());
-app.listen(3001, () => console.log('Servidor na porta 3001.'));
+app.listen(3002, () => console.log('Servidor na porta 3001.'));
 app.use(express.static(`${__dirname}/public`));
 
 // Retorna uma pagina html na request
