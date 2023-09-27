@@ -1,0 +1,49 @@
+# Comandos
+\d
+	-mostra as relações existentes no banco atual
+\l
+	-mostra todos os bancos de dados existentes
+\i
+	-executa um script
+\c <banco> <usuario>
+	-navega pelo banco com um certo usuario
+\du
+	-list all users
+select current_user;
+	-mostra o usuario atual
+create user andrei password '123';
+	-cria um novo user com senha
+select current_time
+	-analogo para hora
+show datestyle
+	-exibe o estilo de data
+set datestyle
+	-seta um tipo de data
+\pset pager off
+	-formatacao da exibição
+
+# Acessar um banco
+psql -U <usuario> -h <servidor> -d <banco>
+psql -U dduarte -h localhost -d postgres
+psql -U postgres -h localhost //senha: postgres
+
+# Tipos de dados
+integer > 4 bytes
+real > 4 bytes (6 decimais)
+numeric(tamanho, casas decimais) > (6,4) > 99.9999
+varchar(n) > n = tamanho maximo
+serial > incrementa automaticamente
+
+create table
+alter table
+drop table
+
+postgres=# //super usuario
+postgres=> //usuario
+
+Evitar usar 'distinct', 'or' ou '*' pois exigem mais do banco
+
+# Select
+select t.valor, t.valor*1.2 from tarifa t; //fazer contas
+select ... case when valor < 10 then 'blabla' when valor >= then 'bleble' end case //altera o escrito no retorno
+select codcli as "Código cliente" from ... //altera o nome da coluna no retorno
