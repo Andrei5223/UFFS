@@ -34,9 +34,17 @@ numeric(tamanho, casas decimais) > (6,4) > 99.9999
 varchar(n) > n = tamanho maximo
 serial > incrementa automaticamente
 
+# DDL controlar objetos do BD
 create table
 alter table
 drop table
+
+# DML controlar dados do BD
+insert
+select
+	select <o que é pedido (corte vertical)> from <da tabela que a contem> where <condições (corte horizontal)> 
+delete
+update
 
 postgres=# //super usuario
 postgres=> //usuario
@@ -47,3 +55,42 @@ Evitar usar 'distinct', 'or' ou '*' pois exigem mais do banco
 select t.valor, t.valor*1.2 from tarifa t; //fazer contas
 select ... case when valor < 10 then 'blabla' when valor >= then 'bleble' end case //altera o escrito no retorno
 select codcli as "Código cliente" from ... //altera o nome da coluna no retorno
+
+
+Retornar os dados das locações em que os carros ainda nao foram retornados, ou nao foram devolvidos.
+Retornar as placa do carro e a data de locacao para os carros que foram locados em setembro de 2020.
+	select placa, dtloca from locacao where dtloca between '01-09-2020' and '30-09-2020';
+Retornar placa do carro, codigo cliente e a data de devolução para as locacoes cuja a tarifa foram blue ou green.
+	select placa, codcli, dtdevo from locacao where tarifa = 'blue' or tarifa = 'green';
+	select placa, codcli, dtdevo from locacao where tarifa in ('blue', 'green');
+Retorne os dados das locacoes feitas pelo cliente C34 na tarifa red
+	 select * from locacao where codcli='C34' and tarifa = 'red';
+Retorne todas as tarifas que nao foram usadas em nenhum locacao.
+	select *
+	from tarifa
+	where descr not in
+	(select tarifa
+	from locacao);
+Retornar a descrição e preço das tarifas, além da classe da tarifa:
+<50 barata
+<80 media
+senao cara
+	select descr, valor, case when valor < 50 then 'barata'
+				  when valor < 80 then 'media'
+				  else 'cara'
+				  end as classe
+	from tarifa;
+
+
+# É possível aninhar um select no from
+select codcli
+from (select * from locacao) t;
+
+# Limitar saida do select
+select ... where ... limit 10;
+
+
+NAO FAZER: https://pgexercises.com/questions/basic/
+-Combining multiple queries;
+-Simple aggregation
+-More aggregation
