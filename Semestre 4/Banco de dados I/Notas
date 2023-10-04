@@ -21,6 +21,7 @@ set datestyle
 	-seta um tipo de data
 \pset pager off
 	-formatacao da exibição
+insert into <table> (<instance>, <instance>) values (<values>, <values>);
 
 # Acessar um banco
 psql -U <usuario> -h <servidor> -d <banco>
@@ -55,6 +56,7 @@ Evitar usar 'distinct', 'or' ou '*' pois exigem mais do banco
 select t.valor, t.valor*1.2 from tarifa t; //fazer contas
 select ... case when valor < 10 then 'blabla' when valor >= then 'bleble' end case //altera o escrito no retorno
 select codcli as "Código cliente" from ... //altera o nome da coluna no retorno
+Função coalesce: Substitui o NULL por um valor.
 
 
 Retornar os dados das locações em que os carros ainda nao foram retornados, ou nao foram devolvidos.
@@ -94,3 +96,17 @@ NAO FAZER: https://pgexercises.com/questions/basic/
 -Combining multiple queries;
 -Simple aggregation
 -More aggregation
+
+# Exercicios BDlcinema
+1. update avaliacao set coment = 'Uau! Took my breath away!!!' where coment = 'Uau! Tooke my breath away!!!';
+2. insert into avaliacao (codf, email, nestrelas, coment) values ('30', 'jaws@gmail.com', 5, 'Super fã dos filmes Tubarão');
+3. insert into pessoa (codp, nome, dtnasc, paisn) values (177, 'Andrei', '16/06/2003', 'Brasil');
+   insert into elenco(codf, codp, codpapel, oscar) values (30, 177, 5, 'N');
+4. select filme.titulo, pessoa.nome from filme join pessoa on filme.codd=pessoa.codp;
+5. select filme.titulo, pessoa.nome from filme join pessoa on filme.codd=pessoa.codp where pessoa.nome = 'Alfred';
+6. select pessoa.nome from pessoa join elenco on pessoa.codp = elenco.codp where elenco.oscar = 'Y';
+   select pessoa.nome, filme.titulo from pessoa join elenco on pessoa.codp = elenco.codp join filme on filme.codf = elenco.codf where elenco.oscar = 'Y';
+7. select f.titulo, f.anol, f.dur, p.nome from filme f join elenco e on f.codf=e.codf join pessoa p on e.codp=p.codp;
+8. select filme.titulo from avaliacao join filme on avaliacao.codf = filme.codf where avaliacao.nestrelas = 5;
+
+
