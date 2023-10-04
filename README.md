@@ -53,5 +53,5 @@ Coleta, manutenção e realização de testes de requisitos para o sistema, com 
 2. Banco de dados I:
 Projeto, gerenciamento e utilização do banco de dados necessário para a aplicação
 3. Programação II:
-Construção, aplicação e hospedagem do front e back end da aplicação.
+Construção, implementação e hospedagem do front e back end da aplicação.
 
