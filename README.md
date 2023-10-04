@@ -44,3 +44,14 @@
  Utilizando a linguagem de descrição de hardware [VHDl](https://pt.wikipedia.org/wiki/VHDL) em conjunto com o programa [Digital](https://github.com/hneemann/Digital/tree/master) foram desenvolvidos diversos exercícios.
  1. Máquinas de estado (Moore e Mealy)
  2. Uso de FPGA
+ 
+ ## Quarto Semestre
+ ### Trabalho Integrador
+ O trabalho integrador se trata da união dos trabalhos finais de três disciplinas do quarto semestre grade de ciência da computação da Universidade Federal da Fronteira Sul (UFFS). O trabalho contempla as disciplinas de Banco de Dados I, Programação II e Engenharia de Software I, sendo cada disciplina responsável por:
+1. Engenharia de Software I:
+Coleta, manutenção e realização de testes de requisitos para o sistema, com base em entrevistas reais realizadas com empresas que se disponibilizaram a contribuir com a realização do trabalho para fins acadêmicos.
+2. Banco de dados I:
+Projeto, gerenciamento e utilização do banco de dados necessário para a aplicação
+3. Programação II:
+Construção, aplicação e hospedagem do front e back end da aplicação.
+
