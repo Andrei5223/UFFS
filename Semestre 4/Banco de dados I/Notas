@@ -108,5 +108,12 @@ NAO FAZER: https://pgexercises.com/questions/basic/
    select pessoa.nome, filme.titulo from pessoa join elenco on pessoa.codp = elenco.codp join filme on filme.codf = elenco.codf where elenco.oscar = 'Y';
 7. select f.titulo, f.anol, f.dur, p.nome from filme f join elenco e on f.codf=e.codf join pessoa p on e.codp=p.codp;
 8. select filme.titulo from avaliacao join filme on avaliacao.codf = filme.codf where avaliacao.nestrelas = 5;
-
+9. select f.titulo from filme f join elenco e on f.codf = e.codf join pessoa p on e.codp = p.codp where p.nome like 'Steven';
+10. select p.nome, f.titulo from filme f right join elenco e on f.codf = e.codf right join pessoa p on e.codp = p.codp;
+11. select p.nome from elenco e right join pessoa p on e.codp = p.codp where e.codf is null;
+12. select f.titulo from filme f left join avaliacao a on f.codf = a.codf where a.nestrelas is null;
+13. select f.titulo, f.dur from filme f where anol between 1960 and 1969;
+14. select p.nome
+from pessoa p join elenco e on p.codp = e.codp
+where e.codpapel = 5;
 
