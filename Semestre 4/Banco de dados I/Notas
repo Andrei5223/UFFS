@@ -91,6 +91,8 @@ from (select * from locacao) t;
 # Limitar saida do select
 select ... where ... limit 10;
 
+# Operadores de conjuntos:
+except - Interceção
 
 NAO FAZER: https://pgexercises.com/questions/basic/
 -Combining multiple queries;
@@ -99,21 +101,59 @@ NAO FAZER: https://pgexercises.com/questions/basic/
 
 # Exercicios BDlcinema
 1. update avaliacao set coment = 'Uau! Took my breath away!!!' where coment = 'Uau! Tooke my breath away!!!';
+
 2. insert into avaliacao (codf, email, nestrelas, coment) values ('30', 'jaws@gmail.com', 5, 'Super fã dos filmes Tubarão');
+
 3. insert into pessoa (codp, nome, dtnasc, paisn) values (177, 'Andrei', '16/06/2003', 'Brasil');
    insert into elenco(codf, codp, codpapel, oscar) values (30, 177, 5, 'N');
+   
 4. select filme.titulo, pessoa.nome from filme join pessoa on filme.codd=pessoa.codp;
-5. select filme.titulo, pessoa.nome from filme join pessoa on filme.codd=pessoa.codp where pessoa.nome = 'Alfred';
-6. select pessoa.nome from pessoa join elenco on pessoa.codp = elenco.codp where elenco.oscar = 'Y';
-   select pessoa.nome, filme.titulo from pessoa join elenco on pessoa.codp = elenco.codp join filme on filme.codf = elenco.codf where elenco.oscar = 'Y';
-7. select f.titulo, f.anol, f.dur, p.nome from filme f join elenco e on f.codf=e.codf join pessoa p on e.codp=p.codp;
-8. select filme.titulo from avaliacao join filme on avaliacao.codf = filme.codf where avaliacao.nestrelas = 5;
-9. select f.titulo from filme f join elenco e on f.codf = e.codf join pessoa p on e.codp = p.codp where p.nome like 'Steven';
-10. select p.nome, f.titulo from filme f right join elenco e on f.codf = e.codf right join pessoa p on e.codp = p.codp;
-11. select p.nome from elenco e right join pessoa p on e.codp = p.codp where e.codf is null;
-12. select f.titulo from filme f left join avaliacao a on f.codf = a.codf where a.nestrelas is null;
-13. select f.titulo, f.dur from filme f where anol between 1960 and 1969;
-14. select p.nome
-from pessoa p join elenco e on p.codp = e.codp
-where e.codpapel = 5;
+   NÃO FAZER: select filme.titulo, pessoa.nome from filme, pessoa where filme.codd=pessoa.codp;
+   
+5. select filme.titulo from filme join pessoa on filme.codd=pessoa.codp where pessoa.nome = 'Alfred';
 
+6. select pessoa.nome from pessoa join elenco on pessoa.codp = elenco.codp where (elenco.oscar) = 'Y';
+   // Retornar o nome e o título do filme que ela ganhou Oscar
+   	select pessoa.nome, filme.titulo from pessoa join elenco on pessoa.codp = elenco.codp join filme on filme.codf = elenco.codf where upper(elenco.oscar) = 'Y';
+   // Contar quantos Oscar tem cada pessoa
+   	select p.nome, count(e.codp) from pessoa p left join (select elenco.codp from elenco where oscar='Y') e on p.codp=e.codp group by p.nome;
+   	
+7. select f.titulo, f.anol, f.dur, p.nome from filme f join elenco e on f.codf=e.codf join pessoa p on e.codp=p.codp;
+   // Exibir os filmes sem elenco:
+   	select f.titulo, f.anol, f.dur, case when p.nome is null then 'Sem elenco' else p.nome end as nome from filme f left join elenco e on f.codf=e.codf left join pessoa p on e.codp=p.codp;
+   	select f.titulo, f.anol, f.dur, coalesce(p.nome, 'Sem elenco') as nome from filme f left join elenco e on f.codf=e.codf left join pessoa p on e.codp=p.codp;
+   	
+8. select distinct filme.titulo from avaliacao join filme on avaliacao.codf = filme.codf where avaliacao.nestrelas = 5;
+   select filme.titulo from avaliacao join filme on avaliacao.codf = filme.codf where avaliacao.nestrelas = 5 group by filme.titulo;
+   
+9. select f.titulo from filme f join elenco e on f.codf = e.codf join pessoa p on e.codp = p.codp where p.nome='Stephen';
+
+10. select p.nome, f.titulo from filme f right join elenco e on f.codf = e.codf right join pessoa p on e.codp = p.codp;
+    select p.nome, f.titulo from pessoa p left join elenco e on p.codp = e.codp left join filme f on e.codf = f.codf;
+
+11. select p.nome from pessoa p left join elenco e on e.codp = p.codp where e.codf is null;
+    select p.nome from pessoa p where p.codp not in (select e.codp from elenco e);
+    select p.nome from pessoa p except select p.nome from pessoa p join elenco e on p.codp=e.codp;
+    // Remover quem foi diretor
+    select p.nome from pessoa p where p.codp not in (select e.codp from elenco e) and p.codp not in (select f.codd from filme f);
+    
+12. select f.titulo from filme f left join avaliacao a on f.codf = a.codf where a.nestrelas is null;
+
+13. select f.titulo, f.dur from filme f where anol between 1961 and 1970;
+
+14. select p.nome from pessoa p join elenco e on p.codp = e.codp where e.codpapel = 5;
+
+15. select count(coment) from avaliacao where email = 'cinefilo@yahoo.com';
+
+16. select paisn, count(codp) from pessoa group by paisn;
+
+17. select p.nome from pessoa p where dtnasc = (select min(dtnasc) from pessoa);
+
+18. select * from filme where dur = (select min(dur) from filme);
+    // Obter filmes com a duracao maior que a média
+    select * from filme where dur > (select avg(dur) from filme);
+   
+19. select f.titulo, count(e.codf) from filme f natural left join elenco e group by f.titulo;
+
+20. select f.titulo, coalesce(round(avg(a.nestrelas), 2), -1) from filme f natural left join avaliacao a group by f.titulo;
+    select f.titulo, coalesce(round(avg(a.nestrelas), 2)::text, 'None') from filme f natural left join avaliacao a group by f.titulo;
