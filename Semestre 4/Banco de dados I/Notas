@@ -21,6 +21,8 @@ set datestyle
 	-seta um tipo de data
 \pset pager off
 	-formatacao da exibição
+vacuum;
+	-limpa a reorganiza o banco
 insert into <table> (<instance>, <instance>) values (<values>, <values>);
 
 # Acessar um banco
@@ -157,3 +159,20 @@ NAO FAZER: https://pgexercises.com/questions/basic/
 
 20. select f.titulo, coalesce(round(avg(a.nestrelas), 2), -1) from filme f natural left join avaliacao a group by f.titulo;
     select f.titulo, coalesce(round(avg(a.nestrelas), 2)::text, 'None') from filme f natural left join avaliacao a group by f.titulo;
+
+explain select p.nome
+from pessoa p
+where p.codp not in (select codp from elenco);
+
+explain select p.nome
+from pessoa p left join elenco e on p.codp = e.codp
+where e.codp is null;
+
+explain select p.nome
+from pessoa p
+except
+select p.nome
+from pessoa p join elenco e on p.codp = e.codp;
+
+explain select p.nome from pessoa p
+where not exists (select 1 from elenco e where e.codp=p.codp);
