@@ -13,6 +13,8 @@ select current_user;
 	-mostra o usuario atual
 create user andrei password '123';
 	-cria um novo user com senha
+create database <nome>;
+	-cria um novo banco de dados
 select current_time
 	-analogo para hora
 show datestyle
@@ -176,3 +178,28 @@ from pessoa p join elenco e on p.codp = e.codp;
 
 explain select p.nome from pessoa p
 where not exists (select 1 from elenco e where e.codp=p.codp);
+
+MARINE
+Q1: select s.* from sailor s natural join reserve r where r.bid = 103;
+Q1A: select s.* from sailor s where not exists (select 1 from reserve r where r.bid = 103 and r.sid=s.sid);
+    select * from sailor s where s.sid not in (select r.sid from reserve r where bid=103);
+    select s.* from sailor s except select s.* from sailor s natural join reserve r where r.bid=103;
+    // Da pra fazer com join tbm
+Q2: select s.* from sailor s natural join reserve r natural join boat b where b.color = 'red';
+Q3: select distinct b.color from boat b natural join reserve r natural join sailor s where s.sname='Lubber';
+Q4: select s.sname from sailor s natural join reserve r;
+Q5: select s.sname from sailor s natural join reserve r natural join boat b where b.color in ('red', 'green');
+Q6:
+
+select s.sname
+from sailor s join reserve r on s.sid=r.sid
+join boat b on r.bid = b.bid
+where s.sid in (select r.sid from reserve r natural join boat b where b.color='green')
+and s.sid in (select r.sid from reserve r natural join boat b where b.color='red');
+
+select s.sname from sailor s 
+join reserve rr on s.sid=rr.sid 
+join boat br on rr.bid=br.bid 
+join reserve rg on s.sid=rg.sid 
+join boat bg on rg.bid=bg.bid
+where bg.color='green' and br.color='red';
