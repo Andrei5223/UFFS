@@ -180,3 +180,56 @@ bool Grafo::cicloDFS() {
     return cicloDFSrecursivo(0, marcado, anterior);
 }
 
+int Grafo::grau(int v){
+    int count = 0;
+    for (int i = 0; i < num_vertices_; i++){
+        if (matriz_adj_[v][i] != 0)
+            count++;
+    }
+    return count;
+}
+
+void Grafo::busca_prof_grau(int v, int marcado[], std::vector<int> graus) {
+    //printf("%d\n", v);
+
+    // verifica se o grau do vertice atual é par e marca
+    if (grau(v) % 2 != 0){
+        graus[v]=1;
+    }
+
+    marcado[v] = 1;
+
+    for (int u = 0; u < num_vertices_; u++){
+        if (matriz_adj_[v][u] != 0)
+            if (marcado[u] == 0)
+                busca_prof_grau(u, marcado, graus);
+    }
+}
+
+
+bool Grafo::euleriano() {
+    std::vector<int> graus(num_vertices_);
+
+    int marcado[num_vertices_];
+    for (int i = 0; i < num_vertices_; i++) {
+        graus[i] = grau(i);
+        if (grau(i) == 0){
+            marcado[i] = 1;
+        } else {
+            marcado[i] = 0;
+        }
+    }
+
+    // Chama DFS a partir do vértice 0
+    busca_prof(0, marcado);
+
+    // Verifica se todos os vértices foram visitados e se possuem grau par
+    for (int i = 0; i < num_vertices_; i++) {
+        if ((marcado[i] == 0 || graus[i] == 1)) {
+            return false;
+        }
+    }
+
+    // Se todos os vértices foram visitados, o grafo é conexo
+    return true;
+}

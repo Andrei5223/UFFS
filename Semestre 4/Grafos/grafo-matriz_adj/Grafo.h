@@ -20,6 +20,8 @@ public:
     /* Remove uma aresta do grafo caso ela exista */
     void remover_aresta(Aresta e);
 
+    int grau(int v);
+
     void imprime();
 
     bool caminho(int v, int w, std::vector<int> marcado);
@@ -37,6 +39,10 @@ public:
     bool cicloDFS();
 
     bool cicloDFSrecursivo(int v, int marcado[], int anterior);
+    
+    bool euleriano();
+
+    void busca_prof_grau(int v, int marcado[], std::vector<int> graus);
 private:
     int num_vertices_;
     int num_arestas_;

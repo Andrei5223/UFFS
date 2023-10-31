@@ -9,7 +9,7 @@ using namespace std;
 int main() {
     try {
         
-        const int vertices = 8;
+        const int vertices = 10;
 
         //Inicialização
         vector<int> marcado;
@@ -17,18 +17,29 @@ int main() {
         Grafo grafo(vertices);
 
         //Instanciação direta
-        grafo.inserir_aresta(Aresta(7, 4));
         grafo.inserir_aresta(Aresta(0, 2));
-        grafo.inserir_aresta(Aresta(0, 4));
+        grafo.inserir_aresta(Aresta(0, 9));
+        grafo.inserir_aresta(Aresta(1, 3));
+        grafo.inserir_aresta(Aresta(1, 9));
         grafo.inserir_aresta(Aresta(2, 3));
         grafo.inserir_aresta(Aresta(2, 4));
-        
+        grafo.inserir_aresta(Aresta(2, 5));
+        grafo.inserir_aresta(Aresta(2, 7));
+        grafo.inserir_aresta(Aresta(3, 4));
+        grafo.inserir_aresta(Aresta(3, 5));
+        grafo.inserir_aresta(Aresta(3, 6));
+        grafo.inserir_aresta(Aresta(3, 7));
+        grafo.inserir_aresta(Aresta(3, 8));
+        grafo.inserir_aresta(Aresta(5, 9));
+        grafo.inserir_aresta(Aresta(7, 8));
+        grafo.inserir_aresta(Aresta(7, 9));
+
         //grafo.imprime();
         //grafo.caminho(0, 3, marcado); printf("\n");
         //cout << "Caminho: " << grafo.caminho(0, 6, marcado) << endl;
+        //cout << "Cíclico: " << grafo.cicloDFS() << endl;
         cout << "Conexo: " << grafo.conexo1() << endl;
-        cout << "Cíclico: " << grafo.cicloDFS() << endl;
-        
+        cout << "Euleriano: " << grafo.euleriano() << endl;
 
         /*
         // Inicialização do gerador de números aleatórios
