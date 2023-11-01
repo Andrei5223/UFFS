@@ -191,6 +191,20 @@ Q4: select s.sname from sailor s natural join reserve r;
 Q5: select s.sname from sailor s natural join reserve r natural join boat b where b.color in ('red', 'green');
 Q6:
 
+QA: Retornar id e nome dos navegadores com suas respecivas quantidades de reservas
+select sid, sname, count(r.bid) as qtd_reservas from sailor s natural left join reserve r group by sid;
+   	
+QB: Retornar todos os navegadores com ranking maior que 2 que fizeram o maior número de reservas
+select s.sname from sailor s natural join reserve r where s.rating > 2 group by s.sid having count(*) = (select max(qt) as mx from (select count(*) as qt from sailor s natural join reserve r where s.rating > 2 group by r.sid) t);
+
+with sailorg2 as (select sid, sname from sailor where rating > 2), reserveqt as (select count(*) as qt from sailorg2 natural join reserve r group by r.sid), reservemx as (select max(qt) as mx from reserveqt) select s.sid, s.sname from sailorg2 s natural join reserve r group by s.sid, s.sname having count(*)=(select mx from reservemx);
+
+QC: Retornar a cor de barco mais frequente
+select color from boat group by color having count(*) = (select max(qt) as mx from (select count(*) as qt from boat group by color) t );
+
+QX: Retorna a maior quantidade de reservas
+select max(qtd) from (select count(*) as qtd from reserve group by sid) t;
+
 select s.sname
 from sailor s join reserve r on s.sid=r.sid
 join boat b on r.bid = b.bid
