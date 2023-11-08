@@ -31,6 +31,7 @@ insert into <table> (<instance>, <instance>) values (<values>, <values>);
 psql -U <usuario> -h <servidor> -d <banco>
 psql -U dduarte -h localhost -d postgres
 psql -U postgres -h localhost //senha: postgres
+sudo -u postgres psql
 
 # Tipos de dados
 integer > 4 bytes

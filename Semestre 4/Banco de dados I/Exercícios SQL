@@ -1,0 +1,319 @@
+CARROS:
+
+Q1: Retornar os dados das locações em que os carros ainda nao foram retornados, ou nao foram devolvidos.
+
+select * from locacao
+where dtdevo is null;
+
+Q2: Retornar as placa do carro e a data de locacao para os carros que foram locados em setembro de 2020.
+
+select l.placa, l.dtloca from locacao l
+where l.dtloca between '01/09/2020' and '30/09/2020';
+
+Q3: Retornar placa do carro, codigo cliente e a data de devolução para as locacoes cuja a tarifa foram blue ou green.
+
+select l.placa, l.codcli, l.dtdevo from locacao l
+where l.tarifa = 'blue' OR l.tarifa = 'green';
+select l.placa, l.codcli, l.dtdevo from locacao l
+where l.tarifa in ('blue', 'green');
+
+Q4: Retorne os dados das locacoes feitas pelo cliente C34 na tarifa red
+
+select * from locacao l where l.codcli = 'C34' and l.tarifa = 'red';
+
+Q5: Retorne todas as tarifas que nao foram usadas em nenhuma locacao.
+
+select t.descr, t.valor from tarifa t
+where t.descr not in (select tarifa from locacao);
+
+Q6: Retornar a descrição e preço das tarifas, além da classe da tarifa: <50 barata, <80 media, senao cara
+
+select t.descr, t.valor, case 
+    when t.valor < 50 then 'barata'
+    when t.valor < 80 then 'media'
+    else 'cara'
+    end as classe
+from tarifa t;
+
+EXERCÍCIOS EXTRAS: https://pgexercises.com/questions/basic/
+
+CINEMA:
+
+Q1: Altere o comentário Uau! Tooke my breath away!!! para Uau! Took my breath away!!!
+
+update avaliacao set coment = 'Uau! Took my breath away' where coment = 'Uau! Tooke my breath away!!!';
+
+Q2: Insira o comentário Super fã dos filmes Tubarão do usuário jaws@gmail.com para o filme Jaws. Ele deu 5 estrelas
+
+insert into avaliacao (codf, email, nestrelas, coment) values ('30', 'jaws@gmail.com', 5, 'Super fã dos filmes Tubarão');
+
+Q3: Execute o seguinte insert: insert into elenco (codf, codp, codpapel, oscar) values (30,177,5,’N’); Analise a mensagem de erro e conserte o problema para que o comando acima seja re-executado da mesma forma que está escrito
+
+Faltava o ator com codp = 177: insert into pessoa (codp, nome, dtnasc, paisn) values (177, 'Andrei', '16/06/2003', 'Brasil');
+
+Q4: Retornar os nomes dos filmes com os nomes dos respectivos diretores
+
+select f.titulo, p.nome as diretor from filme f join pessoa p on f.codd = p.codp;
+
+Q5: Retornar os nomes dos filmes dirigidos por Alfred
+
+select f.titulo from filme f join pessoa p on f.codd = p.codp where p.nome = 'Alfred';
+
+Q6: Retorne os nomes dos atores que já receberam um oscar (oscar=’Y’).
+
+select distinct p.nome from elenco e natural join pessoa p
+where upper(e.oscar) = 'Y';
+
+Q7: Retorne os nomes, anos de lançamento, duração dos filmes bem com os nomes dos atores que fizeram parte do elenco
+
+select f.titulo, f.anol, f.dur, p.nome
+from elenco e natural join filme f
+              natural join pessoa p;
+// Exibir os filmes sem elenco:
+select f.titulo, f.anol, f.dur, case when p.nome is null then 'Sem elenco' else p.nome end as nome from filme f left join elenco e on f.codf=e.codf left join pessoa p on e.codp=p.codp;
+select f.titulo, f.anol, f.dur, coalesce(p.nome, 'Sem elenco') as nome from filme f left join elenco e on f.codf=e.codf left join pessoa p on e.codp=p.codp;
+
+Q8: Retornar os nomes dos filmes que receberam 5 estrelas na avaliação
+// O GROUP BY AGRUPA OS FILMES PELO TITULO E NAO DEIXA REPETILOS
+select f.titulo from avaliacao a natural join filme f where a.nestrelas = 5 group by f.titulo;
+
+Q9: Retornar os nomes dos filmes que o ator Stephen fez parte do elenco
+
+select f.titulo
+from elenco e natural join filme f
+              join pessoa p on e.codp = p.codp
+where p.nome = 'Stephen';
+
+Q10: Retornar os nomes de todos os atores cadastros e os filmes que eles foram elenco, caso existirem.
+
+select p.nome, coalesce(f.titulo, 'Sem filmes') as titulo from
+pessoa p left join elenco e on e.codp = p.codp
+         left join filme f on e.codf = f.codf;
+
+Q11: Retornar os nomes das pessoas que não participaram de nenhum filme
+
+select p.nome
+from pessoa p
+left join elenco e on e.codp = p.codp
+where e.codf is null;
+
+Q12: Retornar, caso existe, um filme que não possua nenhuma avaliação
+
+select f.titulo
+from avaliacao a natural left join filme f
+where a.codf is null;
+
+Q13: Retornar o nome e a duração dos filmes que foram lançados nos anos 1960
+
+select titulo, dur from filme where anol between 1960 and 1969;
+
+Q14: Retornar os nomes dos atores que já tiveram o papel de figur em qualquer filme
+
+select p.nome
+from pessoa p natural join elenco e 
+                      join papel pa on e.codpapel=pa.codpp
+where pa.descr='Figurante';
+
+Q15: Retornar quantos comentários o usuário cinefilo@yahoo.com fez.
+
+select count(coment)
+from avaliacao
+where email='cinefilo@yahoo.com'
+group by coment;
+
+Q16: Retornar o país e a quantidade de atores cadastrados nele
+
+select paisn, count(codp)
+from pessoa
+group by paisn;
+
+Q17: Retornar a pessoa mais velha cadastrada (pode existir mais de 1)
+
+select * 
+from pessoa
+where dtnasc = (select min(dtnasc) from pessoa);
+
+Q18: Retornar o filme com a menor duração (pode existir mais de 1)
+
+select *
+from filme
+where dur = (select min(dur) from filme);
+
+Q19: Retornar o nome do filme e número de atores no elenco
+
+select f.titulo, count(e.codp) as atores
+from elenco e natural join filme f
+group by f.titulo;
+
+Q20: Retornar o nome do filme e a média de número de estrela recebidas
+
+select f.titulo, round(avg(a.nestrelas), 2) as media_estrelas
+from avaliacao a natural join filme f
+group by f.titulo;
+
+MARINA:
+
+Q1: Encontre os velejadores que já reservaram o barco número 103
+
+select s.*
+from sailor s natural join reserve r
+where r.bid = 103;
+
+Q1a: E quem nunca reservou o barco 103?
+
+select s.*
+from sailor s natural join reserve r
+where s.sid not in (select s.sid from )
+
+Q2: Encontre os nomes dos velejadores que reservaram um barco vermelho
+
+select s.sname
+from sailor s natural join reserve r
+              natural join boat b
+where b.color='red';
+
+Q3: Encontre as cores dos barcos reservados pelo Lubber
+
+select distinct b.color
+from reserve r natural join boat b
+               natural join sailor s
+where s.sname = 'Lubber';
+
+Q4: Encontre os nomes dos velejadores que reservaram pelo menos um barco
+
+select distinct s.sname
+from sailor s natural left join reserve r
+where r.bid is not null;
+
+Q5: Retorne os velejadores que reservaram um barco vermelho ou um verde
+
+select s.* from
+sailor s
+where s.sid in 
+(select s.sid from 
+sailor s natural join reserve r
+         natural join boat b
+where b.color='red' or b.color='green');
+
+//Não precisava dessa tramoia ai de cima: select s.sname from sailor s natural join reserve r natural join boat b where b.color in ('red', 'green');
+
+Q6: Encontre os nomes dos velejadores que tenham reservados barcos vermelhos e barcos verdes
+
+select s.* from
+sailor s
+where s.sid in 
+(select s.sid from 
+sailor s natural join reserve r
+         natural join boat b
+where b.color='red')
+and s.sid in
+(select s.sid from 
+sailor s natural join reserve r
+         natural join boat b
+where b.color='green');
+
+Q6a: Find the names of sailors who have reserved a red but not a green boat
+
+select s.* from
+sailor s
+where s.sid in 
+(select s.sid from 
+sailor s natural join reserve r
+         natural join boat b
+where b.color='red')
+and s.sid not in
+(select s.sid from 
+sailor s natural join reserve r
+         natural join boat b
+where b.color='green');
+
+Q7: Encontre os nomes dos velejadores que tenham reservado pelo menos dois barcos diferentes
+
+select s.sname
+from sailor s
+where s.sid in (
+select r.sid
+from reserve r
+group by r.sid
+having count(distinct r.bid) > 1
+);
+
+Q8: Encontre os nomes dos velejadores que reservaram todos os barcos
+
+// Conta quem tem o total de reservas distintas igual ao total de barcos
+select s.sname
+from sailor s natural join reserve r
+group by s.sname
+having count(distinct r.bid) =
+(select count(distinct b.bid) from boat b);
+
+Q9: Calcule o incremento dos rating dos velejadores que velejaram dois barcos diferentes no mesmo dia
+
+SELECT s.sname,avg(s.rating),r.day,r.sid
+FROM reserve r NATURAL JOIN sailor s
+GROUP BY r.sid,r.day,s.sname
+HAVING COUNT(*) > 1;
+
+Q10: Encontre o nome do velejador mais velho
+
+select s.sname
+from sailor s
+where s.age = (select max(age) from sailor);
+
+Q11: Encontre o nome do velejador mais novo
+
+select s.sname
+from sailor s
+where s.age = (select min(age) from sailor s);
+
+Q12: Conte o número de barcos por cor
+
+select b.color, count(b.color) as qtd
+from boat b
+group by b.color;
+
+QA: Retornar id e nome dos navegadores com suas respecivas quantidades de reservas
+
+select s.sid, s.sname, count(r.bid) as qtd_reservas
+from sailor s natural left join reserve r
+group by s.sid, s.sname;
+
+// A TERMINAR
+QB: Retornar todos os navegadores com ranking maior que 2 que fizeram o maior número de reservas
+
+select s.sname
+from sailor s natural join reserve r
+where (select count(r.bid) 
+       from reserve r
+       where s.sid = r.sid
+ ) = (
+select max(qtd_reservas) from 
+        (select count(bid) as qtd_reservas from reserve group by sid) as t);
+
+QC: Retornar a cor de barco mais frequente
+
+select color
+from boat
+group by color
+having count(*) = (select max(qt) as mx
+                   from (select count(*) as qt
+                         from boat group by color) t );
+
+QX: Retorna a maior quantidade de reservas
+
+select max(qtd_reservas) from 
+        (select count(bid) as qtd_reservas from reserve group by sid) as t;
+
+TRAIN:
+
+Q1. Retornar as rotas cadastradas no formato: Estação Origem	Estação Destino	Distância
+
+Q2. Incluir um novo trem: Name: Arrow Passangers: 95 Type: Diesel
+
+Q3. Incluir uma nova estação: Name: Candy Jar
+
+Q4. Incluir uma nova rota: Edgar Codd (id = 6)-> Candy Jar(id=8) Distance: 33
+
+Q5. Incluir uma nova linha para a rota recem criada: Train: Arrow Data: 01/11/2023
+
+Q6. Implementar uma consulta que retorne no formato: Estação Origem	Estação Destino	Distância	Nome Trem	Tipo Trem	Data Partida

@@ -1,5 +1,5 @@
---create database locadora;
---\c locadora
+create database locadora;
+\c locadora
 set datestyle to 'ISO,DMY';
 
 create table if not exists veiculo (
