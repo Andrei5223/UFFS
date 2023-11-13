@@ -1,4 +1,5 @@
-DROP TABLE clientes;
+-- DROP TABLE clientes;
+
 
 CREATE TABLE clientes
 (
