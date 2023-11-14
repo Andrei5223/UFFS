@@ -71,6 +71,7 @@ from elenco e natural join filme f
               natural join pessoa p;
 // Exibir os filmes sem elenco:
 select f.titulo, f.anol, f.dur, case when p.nome is null then 'Sem elenco' else p.nome end as nome from filme f left join elenco e on f.codf=e.codf left join pessoa p on e.codp=p.codp;
+
 select f.titulo, f.anol, f.dur, coalesce(p.nome, 'Sem elenco') as nome from filme f left join elenco e on f.codf=e.codf left join pessoa p on e.codp=p.codp;
 
 Q8: Retornar os nomes dos filmes que receberam 5 estrelas na avaliação
@@ -281,14 +282,7 @@ group by s.sid, s.sname;
 // A TERMINAR
 QB: Retornar todos os navegadores com ranking maior que 2 que fizeram o maior número de reservas
 
-select s.sname
-from sailor s natural join reserve r
-where (select count(r.bid) 
-       from reserve r
-       where s.sid = r.sid
- ) = (
-select max(qtd_reservas) from 
-        (select count(bid) as qtd_reservas from reserve group by sid) as t);
+select s.sname from sailor s natural join reserve r where s.rating > 2 group by s.sid having count(*) = (select max(qt) as mx from (select count(*) as qt from sailor s natural join reserve r where s.rating > 2 group by r.sid) t);
 
 QC: Retornar a cor de barco mais frequente
 
