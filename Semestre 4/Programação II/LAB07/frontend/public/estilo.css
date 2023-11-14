@@ -1,0 +1,60 @@
+body {
+    background-color: #00693E;
+}
+
+#conteiner-principal {
+    background-color: #00693E;
+}
+
+.tabela {
+    background-color: white;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+}
+
+/* Estiliza a primeira linha da tabela com fundo branco */
+.tabela tr:first-child {
+    background-color: #008f45;
+}
+
+/* Estiliza a primeira coluna da tabela com fundo branco */
+.tabela tr td:first-child {
+    background-color: #008f45;
+}
+
+.tabela td, .tabela th {
+    border: 1px solid black; /* Isso adiciona uma borda preta ao redor de cada célula */
+}
+
+.wrapCellText {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+}
+
+.orange-text { 
+    color: orange; 
+    font-weight: bold; 
+}
+
+.containerStyles {
+    height: '15vh'
+}
+
+/* .center {
+    width: 50%;
+    margin: auto;
+    text-align: center;
+    justify-content: center;
+}
+
+
+.imagem {
+    text-align: center;
+}
+
+.conteudo {
+    width: 85%;
+    margin: auto;
+    text-align: center;
+    justify-content: center;
+} */
