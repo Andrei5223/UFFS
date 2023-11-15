@@ -5,6 +5,8 @@ import SubTitulo from "./Subtitulo";
 import Button from "./Button";
 import Acordeao from "./Acordeao";
 import { Grid, useTheme, useMediaQuery } from '@mui/material';
+import CadastroC from "./CadastroC";
+import CadastroCCR from "./CadastroCCR";
 
 axios.defaults.baseURL = "http://localhost:3010/";
 axios.defaults.headers.common["Content-Type"] =
@@ -16,7 +18,7 @@ function App() {
     const [dadosCC, setDadosCC] = React.useState([]);
 
     React.useEffect(() => {
-        const res = axios.get(`/horarios?id=1100`);
+        const res = axios.get(`/horarios?id=1`);
         res.then((query) => {
             setListaHorariosCC(query.data);
             console.log(query.data);
@@ -24,7 +26,7 @@ function App() {
     }, []);
 
     React.useEffect(() => {
-        const res = axios.get(`/cursos?id=1100`);
+        const res = axios.get(`/curso?id=1`);
         res.then((query) => {
             setDadosCC(query.data);
             console.log(query.data);
@@ -36,7 +38,7 @@ function App() {
     const [dadosMed, setDadosMed] = React.useState([]);
 
     React.useEffect(() => {
-        const res = axios.get(`/horarios?id=1101`);
+        const res = axios.get(`/horarios?id=2`);
         res.then((query) => {
             setListaHorariosMed(query.data);
             console.log(query.data);
@@ -44,7 +46,7 @@ function App() {
     }, []);
 
     React.useEffect(() => {
-        const res = axios.get(`/cursos?id=1101`);
+        const res = axios.get(`/curso?id=2`);
         res.then((query) => {
             setDadosMed(query.data);
             console.log(query.data);
@@ -75,6 +77,14 @@ function App() {
             </Grid>
                 
             <Grid container spacing={2} justifyContent="center" style={containerStyles}>
+
+                <Grid item lg={6}>
+                    <CadastroC />
+                </Grid>
+                <Grid item lg={6}>
+                    <CadastroCCR />
+                </Grid>
+
                 <Grid item lg={6}>
                     <SubTitulo mensagem = {dadosCC.nome}/>
                     <Acordeao listaHorarios = {listaHorariosCC}/>

@@ -1,5 +1,6 @@
 import React from "react";
 import { DataGrid } from '@mui/x-data-grid';
+import { Box } from "@mui/material";
 
 const colunas = [
     {
@@ -7,44 +8,44 @@ const colunas = [
     },
     {
         field: "seg", headerName: "Segunda", flex: 1, renderCell: (params) => (
-            <div className="wrapCellText">
+            <Box className="wrapCellText">
                 {params.value}
-            </div>
+            </Box>
         )
     },
     {
         field: "ter", headerName: "Terça", flex: 1, renderCell: (params) => (
-            <div className="wrapCellText">
+            <Box className="wrapCellText">
                 {params.value}
-            </div>
+            </Box>
         )
     },
     {
         field: "qua", headerName: "Quarta", flex: 1, renderCell: (params) => (
-            <div className="wrapCellText">
+            <Box className="wrapCellText">
                 {params.value}
-            </div>
+            </Box>
         )
     },
     {
         field: "qui", headerName: "Quinta", flex: 1, renderCell: (params) => (
-            <div className="wrapCellText">
+            <Box className="wrapCellText">
                 {params.value}
-            </div>
+            </Box>
         )
     },
     {
         field: "sex", headerName: "Sexta", flex: 1, renderCell: (params) => (
-            <div className="wrapCellText">
+            <Box className="wrapCellText">
                 {params.value}
-            </div>
+            </Box>
         )
     },
     {
         field: "sab", headerName: "Sábado", flex: 1, renderCell: (params) => (
-            <div className="wrapCellText">
+            <Box className="wrapCellText">
                 {params.value}
-            </div>
+            </Box>
         )
     }
 ];
