@@ -2,7 +2,6 @@ import Sidebar from "./components/Sidebar";
 import Feed from "./components/Feed";
 import Navbar from "./components/Navbar";
 import { Box, Stack, ThemeProvider, createTheme } from "@mui/material";
-import Add from "./components/Add";
 import { useState } from "react";
 import axios from "axios";
 
@@ -28,7 +27,6 @@ function App() {
           <Sidebar setMode={setMode} mode={mode}/>
           <Feed />
         </Stack>
-        <Add />
       </Box>
     </ThemeProvider>
   );

@@ -6,7 +6,7 @@ import { DataGrid } from '@mui/x-data-grid';
 
 const colunas = [
     { field: "id", headerName: "ID", width: 20 },
-    { field: "nome", headerName: "Nome", width: 90 },
+    { field: "nome", headerName: "Nome", width: 180 },
     { field: "qtd", headerName: "Quantidade", width: 90 },
     { field: "un_med", headerName: "Medida", width: 90 },
     { field: "preco_total", headerName: "Valor", width: 90 },
