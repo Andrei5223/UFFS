@@ -1,13 +1,17 @@
 import Sidebar from "./components/Sidebar";
 import Feed from "./components/Feed";
 import Navbar from "./components/Navbar";
-import Rightbar from "./components/Rightbar";
 import { Box, Stack, ThemeProvider, createTheme } from "@mui/material";
 import Add from "./components/Add";
 import { useState } from "react";
+import axios from "axios";
+
+axios.defaults.baseURL = "http://localhost:3010/";
+axios.defaults.headers.common["Content-Type"] =
+    "application/json;charset=utf-8";
 
 function App() {
-  const [mode, setMode] = useState("light")
+  const [mode, setMode] = useState("light");
 
 
   const darkTheme = createTheme({
@@ -23,7 +27,6 @@ function App() {
         <Stack direction="row" spacing={2} justifyContent="space-between">
           <Sidebar setMode={setMode} mode={mode}/>
           <Feed />
-          <Rightbar />
         </Stack>
         <Add />
       </Box>

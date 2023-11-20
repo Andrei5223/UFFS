@@ -1,13 +1,12 @@
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Switch } from '@mui/material';
 import React from 'react'
-import HomeIcon from '@mui/icons-material/Home';
+
 import ArticleIcon from '@mui/icons-material/Article';
-import GroupIcon from '@mui/icons-material/Group';
-import StorefrontIcon from '@mui/icons-material/Storefront';
-import PersonIcon from '@mui/icons-material/Person';
-import SettingsIcon from '@mui/icons-material/Settings';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import ModeNightIcon from '@mui/icons-material/ModeNight';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import InventoryIcon from '@mui/icons-material/Inventory';
 
 const Sidebar = ({mode, setMode}) => {
     return (
@@ -21,9 +20,9 @@ const Sidebar = ({mode, setMode}) => {
                     <ListItem disablePadding>
                         <ListItemButton component="a" href="#anytag">
                             <ListItemIcon>
-                                <HomeIcon />
+                                <InventoryIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Homepage" />
+                            <ListItemText primary="Gerenciar estoque" />
                         </ListItemButton>
                     </ListItem>
 
@@ -32,52 +31,34 @@ const Sidebar = ({mode, setMode}) => {
                             <ListItemIcon>
                                 <ArticleIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Pages" />
+                            <ListItemText primary="Gerenciar receitas culinárias" />
                         </ListItemButton>
                     </ListItem>
 
                     <ListItem disablePadding>
                         <ListItemButton component="a" href="#anytag">
                             <ListItemIcon>
-                                <GroupIcon />
+                                <PeopleAltIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Groups" />
+                            <ListItemText primary="Gerenciar usuários" />
                         </ListItemButton>
                     </ListItem>
 
                     <ListItem disablePadding>
                         <ListItemButton component="a" href="#anytag">
                             <ListItemIcon>
-                                <StorefrontIcon />
+                                <AttachMoneyIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Marketplace" />
+                            <ListItemText primary="Cadastrar receita diária" />
                         </ListItemButton>
                     </ListItem>
 
                     <ListItem disablePadding>
                         <ListItemButton component="a" href="#anytag">
                             <ListItemIcon>
-                                <PersonIcon />
+                                <AssessmentIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Friends" />
-                        </ListItemButton>
-                    </ListItem>
-
-                    <ListItem disablePadding>
-                        <ListItemButton component="a" href="#anytag">
-                            <ListItemIcon>
-                                <SettingsIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Settings" />
-                        </ListItemButton>
-                    </ListItem>
-
-                    <ListItem disablePadding>
-                        <ListItemButton component="a" href="#anytag">
-                            <ListItemIcon>
-                                <AccountBoxIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Profile" />
+                            <ListItemText primary="Gerar relatórios" />
                         </ListItemButton>
                     </ListItem>
 
@@ -86,7 +67,7 @@ const Sidebar = ({mode, setMode}) => {
                             <ListItemIcon>
                                 <ModeNightIcon />
                             </ListItemIcon>
-                            <Switch onChange={e=>setMode(mode === "light" ? "dark": "light")}/>
+                            <Switch onChange={(e)=>setMode(mode === "light" ? "dark": "light")}/>
                         </ListItemButton>
                     </ListItem>
 
