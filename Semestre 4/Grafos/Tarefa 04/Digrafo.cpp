@@ -3,8 +3,8 @@
  *
  * GEN254 - Grafos - 2023/2
  *
- * Nome:      XXXX
- * Matricula: XXXX
+ * Nome:      Andrei Carlesso Camilotto
+ * Matricula: 2211100026
  */
 
 #include "Digrafo.h"
@@ -42,45 +42,77 @@ void Digrafo::imprime() {
     }
 }
 
-bool Digrafo::bellman_ford(int s, std::vector<int>& pai, std::vector<int>& dp) {
-    // Inicialização: Configuração dos vetores dp e pai para valores iniciais
+bool Digrafo::bellman_ford_max(int s, std::vector<int>& pai, std::vector<int>& dp) {
+
+    // Para cada vértice w de G
     for (int w = 0; w < num_vertices_; ++w) {
-        dp[w] = numeric_limits<int>::max(); // Inicializa todas as distâncias como infinito
-        pai[w] = -1; // Define todos os pais como -1
+        dp[w] = numeric_limits<int>::min();
+        pai[w] = -1;
     }
 
-    dp[s] = 0; // A distância para o vértice de origem é 0
+    dp[s] = 0;
 
-    // Relaxamento: Iterações para encontrar as distâncias mais curtas
-    for (int i = 1; i <= num_vertices_ - 1; ++i) {
-        for (int u = 0; u < num_vertices_; ++u) {
-            // Itera sobre todas as arestas saindo do vértice u
-            for (const auto& uv : matriz_adj_[u]) {
-                int v = uv.first; // Vértice de destino da aresta
-                int peso_uv = uv.second; // Peso da aresta de u para v
 
-                // Relaxamento da aresta: Atualiza dp[v] se encontrar um caminho mais curto
-                if (dp[u] != numeric_limits<int>::max() && dp[v] > dp[u] + peso_uv) {
-                    dp[v] = dp[u] + peso_uv;
-                    pai[v] = u;
+    // Para i = 1 até |V(G)| -1
+    for (int i = 1; i <= num_vertices_ - 1; i++) {
+
+        // Para cada aresta uv de G
+        for (int u = 0; u < num_vertices_; u++) {       // Percorre u
+            for (int v= 0; v < num_vertices_; v++) {    // Percorre v
+                if (matriz_adj_[u][v].first == 1){      // Verifica se a aresta existe
+                    int peso_uv = matriz_adj_[u][v].second; // Obtém o peso da aresta uv
+
+                    // Se dp[u] != ∞ e dp[v] > dp[u] + p(uv): Faz a relaxação
+                    if (dp[u] != numeric_limits<int>::min() && dp[v] < dp[u] + peso_uv) {
+                        dp[v] = dp[u] + peso_uv;
+                        pai[v] = u;
+
+                    }
                 }
             }
         }
     }
 
     // Verificação de ciclo de peso negativo
-    for (int u = 0; u < num_vertices_; ++u) {
-        for (const auto& uv : matriz_adj_[u]) {
-            int v = uv.first;
-            int peso_uv = uv.second;
+    // Para cada aresta uv de G
+    for (int u = 0; u < num_vertices_; u++) {       // Percorre u
+        for (int v= 0; v < num_vertices_; v++) {    // Percorre v
+            if (matriz_adj_[u][v].first == 1){      // Verifica se a aresta existe
+                int peso_uv = matriz_adj_[u][v].second;
 
-            // Se ainda for possível relaxar uma aresta, há um ciclo de peso negativo
-            if (dp[u] != numeric_limits<int>::max() && dp[v] > dp[u] + peso_uv) {
-                return false; // Ciclo de peso negativo encontrado
+                // Se ainda for possível relaxar uma aresta, há um ciclo de peso negativo
+                // Se dp[u] != ∞ e dp[v] > dp[u] + p(uv): Faz a relaxação
+                if (dp[u] != numeric_limits<int>::min() && dp[v] < dp[u] + peso_uv) {
+                    return false; // Ciclo de peso negativo encontrado
+                }
             }
         }
     }
-
     // Se não foi encontrado ciclo de peso negativo, o algoritmo foi bem-sucedido
     return true;
+}
+
+void Digrafo::max_vidas(std::vector<int> origem) {
+    for (auto i: origem){
+        vector<int> pai(num_vertices_, -1);
+        vector<int> dp(num_vertices_, numeric_limits<int>::min());
+
+        if (bellman_ford_max(i, pai, dp)){
+            int max = dp[0];
+
+            for (auto d: dp){
+                if (d > max){
+                    max = d;
+                }
+            }
+
+            if (max < 0)
+                max = 0;
+
+            cout << i << ": " << max << endl;
+
+        } else {
+            cout << i << ": ilimitada" << endl;
+        }
+    }
 }

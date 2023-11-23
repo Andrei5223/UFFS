@@ -3,8 +3,8 @@
  *
  * GEN254 - Grafos - 2023/2
  *
- * Nome:      XXXX
- * Matricula: XXXX
+ * Nome:      Andrei Carlesso Camilotto
+ * Matricula: 2211100026
  */
 
 #ifndef DIGRAFO_H
@@ -24,8 +24,9 @@ public:
 
     void imprime();
 
-    bool bellman_ford(int s, std::vector<int>& pai, std::vector<int>& dp);
+    bool bellman_ford_max(int s, std::vector<int>& pai, std::vector<int>& dp);
 
+    void max_vidas(std::vector<int> origem);
 private:
     int num_vertices_;
     int num_arestas_;

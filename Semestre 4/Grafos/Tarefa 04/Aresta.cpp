@@ -3,8 +3,8 @@
  *
  * GEN254 - Grafos - 2023/2
  *
- * Nome:      XXXX
- * Matricula: XXXX
+ * Nome:      Andrei Carlesso Camilotto
+ * Matricula: 2211100026
  */
 
 #include "Aresta.h"

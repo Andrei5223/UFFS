@@ -3,8 +3,8 @@
  *
  * GEN254 - Grafos - 2023/2
  *
- * Nome:      XXXX
- * Matricula: XXXX
+ * Nome:      Andrei Carlesso Camilotto
+ * Matricula: 2211100026 
  */
 #include "Digrafo.h"
 #include "Aresta.h"
@@ -14,38 +14,28 @@
 using namespace std;
 
 int main() {
+    int ver, are;
+    int v1, v2, v3;
+    int numero_de_origens;
 
-    Digrafo grafo(5);
+    cin >> ver >> are;
 
-    Aresta aresta2(0, 2, 4);
-    Aresta aresta3(1, 2, 3);
-    Aresta aresta4(1, 3, 2);
-    Aresta aresta5(1, 4, 2);
-    Aresta aresta6(3, 2, 5);
-    Aresta aresta7(3, 1, 1);
-    Aresta aresta8(4, 3, 3);
+    Digrafo grafo(ver);
 
-    grafo.inserir_aresta(Aresta (0, 1, 1));
-    grafo.inserir_aresta(aresta2);
-    grafo.inserir_aresta(aresta3);
-    grafo.inserir_aresta(aresta4);
-    grafo.inserir_aresta(aresta5);
-    grafo.inserir_aresta(aresta6);
-    grafo.inserir_aresta(aresta7);
-    grafo.inserir_aresta(aresta8);
-
-    vector<int> pai(5, -1);
-    vector<int> dp(5, numeric_limits<int>::max());
-
-    if (grafo.bellman_ford(0, pai, dp)) {
-        cout << "Distâncias para o vértice 0: " << endl;
-        for (int i = 0; i < 5; i++){
-            cout << "Vértice: " << dp[i] << endl;
-        }
-
-    } else {
-        cout << "Ciclo de peso negativo encontrado." << endl;
+    for (int i = 0; i < are; i++){
+        cin >> v1 >> v2 >> v3;
+        grafo.inserir_aresta(Aresta (v1, v2, v3));
     }
+
+    cin >> numero_de_origens;
+    vector<int> origem(numero_de_origens);
+
+    for (int i = 0; i < numero_de_origens; i++){
+        cin >> v1;
+        origem[i] = v1;
+    }
+
+    grafo.max_vidas(origem);
 
     return 0;
 }
