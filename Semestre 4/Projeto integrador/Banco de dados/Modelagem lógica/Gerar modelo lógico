@@ -1,0 +1,61 @@
+# Código para geração do modelo lógico no site: https://app.quickdatabasediagrams.com
+
+
+bem
+-
+nome PK varchar(20)
+qtd_seg integer
+un_med varchar(20)
+
+usuario
+-
+rg       PK integer
+nome     varchar(20)
+senha    varchar(20)
+adm      char
+
+materia_prima
+-
+id PK serial
+qtd integer
+data_val date
+marca varchar(20)
+preco_total float
+data_cad date
+nome varchar(20) FK >- bem.nome
+
+reg_entrada
+-
+id PK serial
+data date
+qtd_alt integer
+preco_total float
+nome varchar(20) FK >- bem.nome
+
+reg_financeiro
+-
+receita integer
+lucro integer
+data PK date
+
+reg_saida
+-
+id PK serial
+data date FK >- reg_financeiro.data
+qtd_alt integer
+preco_total float
+nome varchar(20) FK >- bem.nome
+
+rec_produtos
+-
+idr PK serial
+modo_prep varchar(512)
+preco float
+nomer varchar(20)
+
+ingrediente
+-
+id  PK serial
+nome varchar(20) FK >- bem.nome
+idr integer FK >- rec_produtos.idr
+qtd varchar(20)
