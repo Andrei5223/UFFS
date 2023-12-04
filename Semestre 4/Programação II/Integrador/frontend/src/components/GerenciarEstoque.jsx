@@ -4,6 +4,8 @@ import axios from "axios";
 import { Alert, Box, Button, Snackbar, Stack, TextField, Autocomplete } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 
+import UpdateM from "./UpdateM";
+
 const colunas = [
     { field: "id", headerName: "ID", width: 20 },
     { field: "nome", headerName: "Nome", width: 180 },
@@ -34,6 +36,8 @@ function CadastroEstoque() {
     const [listaBensNome, setListaBensNome] = React.useState([]);
     const [listaBens, setListaBens] = React.useState([]);
     const [bemMed, setBemMed] = React.useState([]);
+
+    const [open, setOpen] = React.useState(false);
 
     // Para selecionar a row da dataGrid
     const [selectionModel, setSelectionModel] = React.useState([]);
@@ -287,7 +291,7 @@ function CadastroEstoque() {
                             maxWidth: "100px",
                             minWidth: "100px",
                         }}
-                        onClick={handleSubmit}
+                        onClick={(e) => setOpen(true)}
                         type="submit"
                         color="primary"
                     >
@@ -331,6 +335,22 @@ function CadastroEstoque() {
                 </Box>
 
             </Stack>
+            {/* <UpdateM
+                open={open}
+                setOpen={setOpen}
+                nome={nome} 
+                setNome={setNome} 
+                listaBensNome={listaBensNome} 
+                marca={marca} 
+                setMarca={setMarca}
+                qtd={qtd}
+                setQtd={setQtd}
+                bemMed={bemMed}
+                data_val={data_val}
+                setData_val={setData_val}
+                preco_total={preco_total}
+                setPreco_total={setPreco_total}
+            /> */}
         </Box>
     );
 }
