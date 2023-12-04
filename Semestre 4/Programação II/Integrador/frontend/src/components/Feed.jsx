@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import React from 'react';
-import CadastroEstoque from './CadastroEstoque';
+import CadastroEstoque from './GerenciarEstoque';
 
 const Feed = () => {
     return (

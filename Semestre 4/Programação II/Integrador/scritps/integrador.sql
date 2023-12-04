@@ -21,15 +21,10 @@ insert into bem (nome, qtd_seg, un_med)
 create table usuario(
     rg       integer,
     nome     varchar(20) not null,
-    senha    varchar(20) not null,
+    senha    varchar not null,
     adm      char not null,
     constraint pk_usuario primary key (rg)
 );
-
-insert into usuario (rg, nome, senha, adm)
-       values ('00000000', 'Leonardo','Leonardo', 'N'),
-              ('00000001', 'Andrei','Andrei', 'Y'),
-              ('00000002', 'Gustavo','Gustavo', 'N');
 
 create table materia_prima(
     id serial,

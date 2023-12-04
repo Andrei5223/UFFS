@@ -3,19 +3,19 @@ import React from 'react'
 
 import ArticleIcon from '@mui/icons-material/Article';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import ModeNightIcon from '@mui/icons-material/ModeNight';
+
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import InventoryIcon from '@mui/icons-material/Inventory';
 
-const Sidebar = ({mode, setMode}) => {
+const Sidebar = () => {
     return (
         <Box
             flex={1}
             padding={2}
             sx={{ display: { xs: "none", sm: "block" } }}
         >
-            <Box position="fixed">
+            <Box>
                 <List>
                     <ListItem disablePadding>
                         <ListItemButton component="a" href="#anytag">
@@ -65,9 +65,9 @@ const Sidebar = ({mode, setMode}) => {
                     <ListItem disablePadding>
                         <ListItemButton component="a" href="#anytag">
                             <ListItemIcon>
-                                <ModeNightIcon />
+                                
                             </ListItemIcon>
-                            <Switch onChange={(e)=>setMode(mode === "light" ? "dark": "light")}/>
+                            
                         </ListItemButton>
                     </ListItem>
 
