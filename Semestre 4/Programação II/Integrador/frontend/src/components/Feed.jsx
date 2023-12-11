@@ -1,11 +1,11 @@
 import { Box } from '@mui/material';
 import React from 'react';
-import CadastroEstoque from './GerenciarEstoque';
+import GerenciarEstoque from './GerenciarEstoque/GerenciarEstoque';
 
 const Feed = () => {
     return (
         <Box flex={6} padding={2}>
-            <CadastroEstoque/>
+            <GerenciarEstoque/>
         </Box>
     )
 }

@@ -236,6 +236,7 @@ app.post("/estoque", async (req, res) => {
     }
 });
 
+// TODO: Reformular deletar. Receber lista de tuplas a deletar (com todos atributos) e deletar um a um verificando a quantidade. Se a quantidade a ser removida != da quantidade na tupla deve fazer um update para remover
 app.delete("/estoque", async (req, res) => {
     const ids = req.body.idsToDelete;
     try {
@@ -245,10 +246,75 @@ app.delete("/estoque", async (req, res) => {
                 "DELETE FROM materia_prima WHERE id = $1",
                 [ids[i]]
             );
+ 
+			await db.none(
+				"INSERT INTO reg_saida (data, qtd_alt, preco_total, nome) VALUES ($1, $2, $3, $4)",
+				[data_cad_formatada, itemRemover.qtd, itemRemover.preco_total, itemRemover.nome]
+			);
         }
         console.log(`IDs deletados: ${ids}`);
         res.sendStatus(200);
     } catch {
+        console.log(error);
+        res.sendStatus(400);
+    }
+});
+
+//Atualizar uma nova metéria-prima
+app.put("/estoque", async (req, res) => {
+    try {
+		const id = req.body.id;
+        const nome = req.body.nome;
+        const marca = req.body.marca;
+        const qtd = req.body.qtd;
+        const data_val = req.body.data_val;
+        const preco_total = req.body.preco_total;
+        const data_cad = new Date();
+
+        const formatarData = (data) => {
+            const dia = String(data.getDate()).padStart(2, '0');
+            const mes = String(data.getMonth() + 1).padStart(2, '0'); // Os meses são indexados de 0 a 11
+            const ano = data.getFullYear();
+            return `${dia}/${mes}/${ano}`;
+        };
+
+        const data_cad_formatada = formatarData(data_cad);
+
+		// Adiciona no registro de saida
+		const itemRemover = await db.one(
+			"SELECT qtd, preco_total, nome FROM materia_prima WHERE id = $1",
+			[id]
+		);
+
+		try {
+			await db.none(
+				"INSERT INTO reg_saida (data, qtd_alt, preco_total, nome) VALUES ($1, $2, $3, $4)",
+				[data_cad_formatada, itemRemover.qtd, itemRemover.preco_total, itemRemover.nome]
+			);
+		} catch (error){
+			await db.none(
+				"INSERT INTO reg_financeiro (receita, data) VALUES (0, $1)",
+				[data_cad_formatada]
+			);
+			await db.none(
+				"INSERT INTO reg_saida (data, qtd_alt, preco_total, nome) VALUES ($1, $2, $3, $4)",
+				[data_cad_formatada, itemRemover.qtd, itemRemover.preco_total, itemRemover.nome]
+			);
+		}
+
+		// Atualiza o valor
+        console.log(`Nome: ${nome} - Marca: ${marca} - DataV: ${data_val} - qtd: ${qtd} - preco_total: ${preco_total} - data_cad: ${data_cad_formatada}`);
+        await db.none(
+            "UPDATE materia_prima SET nome = $1, data_val = $2, marca = $3, preco_total = $4, data_cad = $5, qtd = $6 WHERE id = $7;",
+            [nome, data_val, marca, preco_total, data_cad_formatada, qtd, id]
+        );
+        await db.none(
+            "INSERT INTO reg_entrada (data, qtd_alt, preco_total, nome) VALUES ($1, $2, $3, $4);",
+            [data_cad_formatada, qtd, preco_total, nome]
+        );
+
+        res.sendStatus(200);
+    } catch (error) {
         console.log(error);
         res.sendStatus(400);
     }

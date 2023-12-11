@@ -1,10 +1,11 @@
 import React from "react";
 import axios from "axios";
 
-import { Alert, Box, Button, Snackbar, Stack, TextField, Autocomplete } from "@mui/material";
+import { Alert, Box, Button, Snackbar, Stack, TextField, Autocomplete, Modal } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
+import DeleteButton from './DeleteButton';
 
-import UpdateM from "./UpdateM";
+import UpdateM from "../UpdateM";
 
 const colunas = [
     { field: "id", headerName: "ID", width: 20 },
@@ -36,6 +37,7 @@ function CadastroEstoque() {
     const [listaBensNome, setListaBensNome] = React.useState([]);
     const [listaBens, setListaBens] = React.useState([]);
     const [bemMed, setBemMed] = React.useState([]);
+    const [itemUpdate, setItemUpdate] = React.useState([]);
 
     const [open, setOpen] = React.useState(false);
 
@@ -145,6 +147,31 @@ function CadastroEstoque() {
         }
     }
 
+    async function handleUpdate() {
+        if (selectionModel.length === 1) {
+            try {
+                const id = selectionModel[0];
+
+                for (let i = 0; i < listaEstoque.length; i++){
+                    if(listaEstoque[i].id === id)
+                    setItemUpdate(listaEstoque[i]);
+                }
+
+                setTimeout(async () => {
+                    await setOpen(true);
+                }, 100);
+                
+            } catch (error) {
+                console.log(error);
+                setMessageText("Falha ao executar!");
+                setMessageSeverity("error");
+            }
+        } else {
+            setMessageText("Selecine uma matéria-prima para atualizar!");
+            setMessageSeverity("warning");
+            setOpenMessage(true);
+        }
+    }
 
     const handleSelectionModelChange = (newSelectionModel) => {
         console.log('New Selection Model:', newSelectionModel);
@@ -272,18 +299,7 @@ function CadastroEstoque() {
                         Enviar
                     </Button>
 
-                    <Button
-                        variant="contained"
-                        style={{
-                            maxWidth: "100px",
-                            minWidth: "100px",
-                        }}
-                        onClick={handleDelete}
-                        type="submit"
-                        color="primary"
-                    >
-                        Deletar
-                    </Button>
+                    <DeleteButton handleDelete={handleDelete} />
 
                     <Button
                         variant="contained"
@@ -291,7 +307,7 @@ function CadastroEstoque() {
                             maxWidth: "100px",
                             minWidth: "100px",
                         }}
-                        onClick={(e) => setOpen(true)}
+                        onClick={(e) => handleUpdate()}
                         type="submit"
                         color="primary"
                     >
@@ -335,24 +351,38 @@ function CadastroEstoque() {
                 </Box>
 
             </Stack>
-            {/* <UpdateM
+            <UpdateM
                 open={open}
                 setOpen={setOpen}
-                nome={nome} 
-                setNome={setNome} 
-                listaBensNome={listaBensNome} 
-                marca={marca} 
-                setMarca={setMarca}
-                qtd={qtd}
-                setQtd={setQtd}
-                bemMed={bemMed}
-                data_val={data_val}
-                setData_val={setData_val}
-                preco_total={preco_total}
-                setPreco_total={setPreco_total}
-            /> */}
+                listaBensNome={listaBensNome}
+                listaBens={listaBens}
+                itemUpdate={itemUpdate}
+                getData={getData}
+                openMessage={openMessage}
+                setOpenMessage={setOpenMessage}
+                messageText={messageText}
+                setMessageText={setMessageText}
+                messageSeverity={messageSeverity}
+                setMessageSeverity={setMessageSeverity}
+                handleCloseMessage={handleCloseMessage}
+            />
         </Box>
     );
 }
 
 export default CadastroEstoque;
+
+/* 
+<Button
+    variant="contained"
+    style={{
+        maxWidth: "100px",
+        minWidth: "100px",
+    }}
+    onClick={handleDelete}
+    type="submit"
+    color="primary"
+>
+    Deletar
+</Button>
+*/

@@ -64,13 +64,12 @@ insert into reg_entrada (data, qtd_alt, preco_total, nome)
 
 create table reg_financeiro (
     receita integer not null,
-    lucro integer not null,
     data date,
     constraint pk_reg_financeiro primary key (data)
 );
 
-insert into reg_financeiro (receita, lucro, data)
-       values (100, 90, '19/11/2023');
+insert into reg_financeiro (receita, data)
+       values (100, '19/11/2023');
 
 create table reg_saida(
     id serial,
