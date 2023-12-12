@@ -6,7 +6,7 @@ create database integrador;
 
 create table bem (
     nome varchar(20),
-    qtd_seg integer not null,
+    qtd_seg float not null,
     un_med varchar(20) not null,
     constraint pk_bem primary key (nome)
 );
@@ -28,7 +28,7 @@ create table usuario(
 
 create table materia_prima(
     id serial,
-    qtd integer not null,
+    qtd float not null,
     data_val date not null,
     marca varchar(20),
     preco_total float not null,
@@ -48,7 +48,7 @@ insert into materia_prima (qtd, data_val, marca, preco_total, data_cad, nome)
 create table reg_entrada(
     id serial,
     data date,
-    qtd_alt integer not null,
+    qtd_alt float not null,
     preco_total float not null,
     nome varchar(20) not null,
     constraint pk_reg_entrada primary key (id),
@@ -63,7 +63,7 @@ insert into reg_entrada (data, qtd_alt, preco_total, nome)
               ('19/11/2023', '10', '50', 'Polvilho');
 
 create table reg_financeiro (
-    receita integer,
+    receita float,
     data date,
     constraint pk_reg_financeiro primary key (data)
 );
@@ -74,7 +74,7 @@ insert into reg_financeiro (receita, data)
 create table reg_saida(
     id serial,
     data date,
-    qtd_alt integer not null,
+    qtd_alt float not null,
     preco_total float not null,
     nome varchar(20) not null,
     constraint pk_reg_saida primary key (id),

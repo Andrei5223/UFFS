@@ -173,7 +173,22 @@ app.post("/novoUsuario", async (req, res) => {
 // Get para obter uma lista de matéria-primas
 app.get("/estoque", async (req, res) => {
 	try {
-		const estoque = await db.any("select m.id, m.nome, m.qtd, b.un_med, m.preco_total, m.marca, m.data_val, m.data_cad, b.qtd_seg from materia_prima m natural join bem b;");
+		const estoque = await db.any(`
+            SELECT 
+                m.id, 
+                m.nome, 
+                m.qtd, 
+                b.un_med, 
+                m.preco_total, 
+                m.marca, 
+                m.data_val, 
+                m.data_cad, 
+                b.qtd_seg 
+            FROM 
+                materia_prima m 
+            NATURAL JOIN 
+                bem b;
+        `);
 
 		for (let i = 0; i < estoque.length; i++) {
 			let dataVal = new Date(estoque[i].data_val);
@@ -199,6 +214,7 @@ app.get("/estoque", async (req, res) => {
 		res.sendStatus(400);
 	}
 });
+
 
 //Postar uma nova metéria-prima
 app.post("/estoque", async (req, res) => {
@@ -248,7 +264,7 @@ app.delete("/remover", async (req, res) => {
 	console.log(qtd_total);
 
 	// Retorna erro se não houver o suficiente em estoque
-	if (qtd_total.sum === null){
+	if (qtd_total.sum === null) {
 		res.sendStatus(400);
 
 	} else if (parseInt(qtd_total.sum) < qtd) {
@@ -349,7 +365,7 @@ app.delete("/remover", async (req, res) => {
 app.delete("/intervalo", async (req, res) => {
 	const nome = req.body.nome;
 	const qtdI = req.body.qtd;
-	
+
 	const qtd_total = await db.one(
 		"SELECT sum(qtd) FROM materia_prima WHERE nome = $1",
 		[nome]
@@ -358,7 +374,7 @@ app.delete("/intervalo", async (req, res) => {
 	let qtd = parseInt(qtd_total.sum) - qtdI;
 
 	// Retorna erro se não houver o suficiente em estoque
-	if (qtd_total.sum === null){
+	if (qtd_total.sum === null) {
 		res.sendStatus(400);
 
 	} else if (parseInt(qtd_total.sum) < qtd || qtd < 0) {
@@ -456,7 +472,6 @@ app.delete("/intervalo", async (req, res) => {
 	}
 });
 
-// TODO: Inserir proteção a reg_saida FK 
 app.delete("/estoque", async (req, res) => {
 	const ids = req.body.idsToDelete;
 	try {
@@ -471,6 +486,20 @@ app.delete("/estoque", async (req, res) => {
 		};
 
 		const data_cad_formatada = formatarData(data_cad);
+
+
+		// Cria o reg_financeiro se não existe
+		const reg_financeiro = await db.oneOrNone(
+			"SELECT * FROM reg_financeiro WHERE data = $1",
+			[data_cad_formatada]
+		)
+
+		if (!reg_financeiro) {
+			await db.none(
+				"INSERT INTO reg_financeiro (data) VALUES ($1)",
+				[data_cad_formatada]
+			);
+		}
 
 		// Deleta da database
 		for (let i = 0; i < ids.length; i++) {
@@ -621,7 +650,6 @@ app.put("/estoque/bem", async (req, res) => {
 		const qtd_seg = req.body.qtd_seg;
 		const un_med = req.body.un_med;
 
-		// Atualiza o valor: NÃO FUNCIONA POIS PRECISA DA CHAVE SEM MODIFICAÇÃO
 		console.log(`Nome: ${nome} - qtd_seg: ${qtd_seg} - un_med: ${un_med}`);
 		await db.none(
 			"UPDATE bem SET nome = $1, qtd_seg = $2, un_med = $3 WHERE nome = $4;",
@@ -629,6 +657,74 @@ app.put("/estoque/bem", async (req, res) => {
 		);
 
 		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
+
+app.get("/dashboard/estoque", async (req, res) => {
+	try {
+		const dia = req.query.dia;
+
+		const sqlQuery = `
+		WITH qtd_val_entrada AS (
+			SELECT 
+				nome, 
+				COALESCE(SUM(qtd_alt), 0) AS qtd_entrada, 
+				COALESCE(SUM(preco_total), 0) AS val_entrada 
+			FROM reg_entrada 
+			WHERE data <= $1
+			GROUP BY nome
+		), 
+		qtd_val_saida AS (
+			SELECT 
+				nome, 
+				COALESCE(SUM(qtd_alt), 0) AS qtd_saida, 
+				COALESCE(SUM(preco_total), 0) AS val_saida,
+				COALESCE(COUNT(reg_saida.id), 0) AS reg_freq
+			FROM reg_saida 
+			WHERE data <= $1
+			GROUP BY nome
+		) 
+		SELECT 
+			bem.nome AS nome, 
+			CAST(COALESCE(qe.qtd_entrada, 0) - COALESCE(qs.qtd_saida, 0) AS numeric(12,2)) AS qtd_total, 
+			CAST(COALESCE(qe.val_entrada, 0) - COALESCE(qs.val_saida, 0) AS numeric(12,2)) AS val_total, 
+			COALESCE(CAST((COALESCE(qe.val_entrada, 0) - COALESCE(qs.val_saida, 0)) / NULLIF(COALESCE(qe.qtd_entrada, 0) - COALESCE(qs.qtd_saida, 0), 0) AS numeric(12,2)), 0) AS val_un,
+			COALESCE(MIN(materia_prima.data_val), '0001-01-01') AS data_m, 
+			CAST(bem.qtd_seg AS numeric(12,2)) AS qtd_seg,
+			bem.un_med AS un_med,
+			COALESCE(qs.reg_freq, 0) AS reg_freq
+		FROM 
+			bem 
+		LEFT JOIN 
+			qtd_val_entrada qe ON bem.nome = qe.nome 
+		LEFT JOIN 
+			qtd_val_saida qs ON bem.nome = qs.nome 
+		LEFT JOIN 
+			materia_prima ON bem.nome = materia_prima.nome 
+		LEFT JOIN 
+			reg_saida ON bem.nome = reg_saida.nome AND reg_saida.data <= $1
+		GROUP BY 
+			bem.nome, bem.qtd_seg, bem.un_med, qe.qtd_entrada, qs.qtd_saida, qe.val_entrada, qs.val_saida, qs.reg_freq;
+		
+        `;
+
+		const bens = await db.any(sqlQuery, [dia]);
+
+		for (let i = 0; i < bens.length; i++) {
+			let dataCad = new Date(bens[i].data_m);
+			let diaC = dataCad.getDate().toString().padStart(2, '0');
+			let mesC = (dataCad.getMonth() + 1).toString().padStart(2, '0');
+			let anoC = dataCad.getFullYear();
+			bens[i].data_m = `${diaC}/${mesC}/${anoC}`;
+		}
+
+		console.log(`Retornando lista de bens`);
+
+		res.json(bens).status(200);
 	} catch (error) {
 		console.log(error);
 		res.sendStatus(400);

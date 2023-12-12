@@ -457,18 +457,3 @@ function CadastroEstoque() {
 }
 
 export default CadastroEstoque;
-
-/* 
-<Button
-    variant="contained"
-    style={{
-        maxWidth: "100px",
-        minWidth: "100px",
-    }}
-    onClick={handleDelete}
-    type="submit"
-    color="primary"
->
-    Deletar
-</Button>
-*/
