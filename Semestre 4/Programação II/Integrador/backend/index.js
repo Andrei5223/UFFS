@@ -120,11 +120,10 @@ const requireJWTAuth = passport.authenticate("jwt", { session: false });
 app.listen(3010, () => console.log("Servidor rodando na porta 3010."));
 
 app.get("/", (req, res) => {
-    res.send("Hello, world!");
+	res.send("Hello, world!");
 });
 
-app.post(
-	"/login",
+app.post("/login",
 	passport.authenticate("local", { session: false }),
 	(req, res) => {
 
@@ -149,19 +148,19 @@ app.post("/logout", function (req, res, next) {
 app.post("/novoUsuario", async (req, res) => {
 	const saltRounds = 10;
 	try {
-        const userRg = req.body.rg;
+		const userRg = req.body.rg;
 		const userNome = req.body.nome;
 		const userPasswd = req.body.passwd;
-        const userAdm = req.body.adm;
+		const userAdm = req.body.adm;
 		const salt = bcrypt.genSaltSync(saltRounds);
 		const hashedPasswd = bcrypt.hashSync(userPasswd, salt);
 
 		console.log(`Nome: ${userNome} - Passwd: ${hashedPasswd} - ADM: ${userAdm}`);
 		db.none("INSERT INTO usuario (rg, nome, senha, adm) VALUES ($1, $2, $3, $4);", [
-            userRg,
+			userRg,
 			userNome,
 			hashedPasswd,
-            userAdm,
+			userAdm,
 		]);
 		res.sendStatus(200);
 	} catch (error) {
@@ -173,112 +172,352 @@ app.post("/novoUsuario", async (req, res) => {
 
 // Get para obter uma lista de matéria-primas
 app.get("/estoque", async (req, res) => {
-    try {
-        const estoque = await db.any("select m.id, m.nome, m.qtd, b.un_med, m.preco_total, m.marca, m.data_val, m.data_cad, b.qtd_seg from materia_prima m natural join bem b;");
+	try {
+		const estoque = await db.any("select m.id, m.nome, m.qtd, b.un_med, m.preco_total, m.marca, m.data_val, m.data_cad, b.qtd_seg from materia_prima m natural join bem b;");
 
-        for (let i = 0; i < estoque.length; i++) {
-            let dataVal = new Date(estoque[i].data_val);
-            let diaV = dataVal.getDate().toString().padStart(2, '0');
-            let mesV = (dataVal.getMonth() + 1).toString().padStart(2, '0');
-            let anoV = dataVal.getFullYear();
-            estoque[i].data_val = `${diaV}/${mesV}/${anoV}`;
-        }
+		for (let i = 0; i < estoque.length; i++) {
+			let dataVal = new Date(estoque[i].data_val);
+			let diaV = dataVal.getDate().toString().padStart(2, '0');
+			let mesV = (dataVal.getMonth() + 1).toString().padStart(2, '0');
+			let anoV = dataVal.getFullYear();
+			estoque[i].data_val = `${diaV}/${mesV}/${anoV}`;
+		}
 
-        for (let i = 0; i < estoque.length; i++) {
-            let dataCad = new Date(estoque[i].data_cad);
-            let diaC = dataCad.getDate().toString().padStart(2, '0');
-            let mesC = (dataCad.getMonth() + 1).toString().padStart(2, '0');
-            let anoC = dataCad.getFullYear();
-            estoque[i].data_cad = `${diaC}/${mesC}/${anoC}`;
-        }
+		for (let i = 0; i < estoque.length; i++) {
+			let dataCad = new Date(estoque[i].data_cad);
+			let diaC = dataCad.getDate().toString().padStart(2, '0');
+			let mesC = (dataCad.getMonth() + 1).toString().padStart(2, '0');
+			let anoC = dataCad.getFullYear();
+			estoque[i].data_cad = `${diaC}/${mesC}/${anoC}`;
+		}
 
-        console.log(`Retornando lista de matérias-primas`);
-        
-        res.json(estoque).status(200);
-    } catch (error) {
-        console.log(error);
-        res.sendStatus(400);
-    }
+		console.log(`Retornando lista de matérias-primas`);
+
+		res.json(estoque).status(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
 });
 
 //Postar uma nova metéria-prima
 app.post("/estoque", async (req, res) => {
-    try {
-        const nome = req.body.nome;
-        const marca = req.body.marca;
-        const qtd = req.body.qtd;
-        const data_val = req.body.data_val;
-        const preco_total = req.body.preco_total;
-        const data_cad = new Date();
+	try {
+		const nome = req.body.nome;
+		const marca = req.body.marca;
+		const qtd = req.body.qtd;
+		const data_val = req.body.data_val;
+		const preco_total = req.body.preco_total;
+		const data_cad = new Date();
 
-        const formatarData = (data) => {
-            const dia = String(data.getDate()).padStart(2, '0');
-            const mes = String(data.getMonth() + 1).padStart(2, '0'); // Os meses são indexados de 0 a 11
-            const ano = data.getFullYear();
-            return `${dia}/${mes}/${ano}`;
-        };
+		const formatarData = (data) => {
+			const dia = String(data.getDate()).padStart(2, '0');
+			const mes = String(data.getMonth() + 1).padStart(2, '0'); // Os meses são indexados de 0 a 11
+			const ano = data.getFullYear();
+			return `${dia}/${mes}/${ano}`;
+		};
 
-        const data_cad_formatada = formatarData(data_cad);
+		const data_cad_formatada = formatarData(data_cad);
 
-        console.log(`Nome: ${nome} - Marca: ${marca} - DataV: ${data_val} - qtd: ${qtd} - preco_total: ${preco_total} - data_cad: ${data_cad_formatada}`);
-        db.none(
-            "INSERT INTO materia_prima (nome, data_val, marca, preco_total, data_cad, qtd) VALUES ($1, $2, $3, $4, $5, $6);",
-            [nome, data_val, marca, preco_total, data_cad_formatada, qtd]
-        );
-        db.none(
-            "INSERT INTO reg_entrada (data, qtd_alt, preco_total, nome) VALUES ($1, $2, $3, $4);",
-            [data_cad, qtd, preco_total, nome]
-        );
-        res.sendStatus(200);
-    } catch (error) {
-        console.log(error);
-        res.sendStatus(400);
-    }
+		console.log(`Nome: ${nome} - Marca: ${marca} - DataV: ${data_val} - qtd: ${qtd} - preco_total: ${preco_total} - data_cad: ${data_cad_formatada}`);
+		await db.none(
+			"INSERT INTO materia_prima (nome, data_val, marca, preco_total, data_cad, qtd) VALUES ($1, $2, $3, $4, $5, $6);",
+			[nome, data_val, marca, preco_total, data_cad_formatada, qtd]
+		);
+		await db.none(
+			"INSERT INTO reg_entrada (data, qtd_alt, preco_total, nome) VALUES ($1, $2, $3, $4);",
+			[data_cad, qtd, preco_total, nome]
+		);
+		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
 });
 
-// TODO: Reformular deletar. Receber lista de tuplas a deletar (com todos atributos) e deletar um a um verificando a quantidade. Se a quantidade a ser removida != da quantidade na tupla deve fazer um update para remover
+app.delete("/remover", async (req, res) => {
+	const nome = req.body.nome;
+	let qtd = req.body.qtd;
+
+	const qtd_total = await db.one(
+		"SELECT sum(qtd) FROM materia_prima WHERE nome = $1",
+		[nome]
+	);
+
+	console.log(`Quantidade: ${qtd}`);
+	console.log(qtd_total);
+
+	// Retorna erro se não houver o suficiente em estoque
+	if (qtd_total.sum === null){
+		res.sendStatus(400);
+
+	} else if (parseInt(qtd_total.sum) < qtd) {
+		res.sendStatus(416);
+
+	} else {
+		console.log("Operação válida");
+		try {
+
+			const data_cad = new Date();
+
+			const formatarData = (data) => {
+				const dia = String(data.getDate()).padStart(2, '0');
+				const mes = String(data.getMonth() + 1).padStart(2, '0'); // Os meses são indexados de 0 a 11
+				const ano = data.getFullYear();
+				return `${dia}/${mes}/${ano}`;
+			};
+
+			const data_cad_formatada = formatarData(data_cad);
+
+			let listaEstoque = await db.any(
+				"SELECT id, nome, qtd, data_val, preco_total FROM materia_prima WHERE nome = $1 ORDER BY data_cad ASC",
+				[nome]
+			);
+
+			let i = 0;
+			let qtd_alt = [];
+			while (qtd > 0) {
+				qtd = qtd - listaEstoque[i].qtd
+
+				if (qtd < 0) {
+					// Salva a quantidade que foi alterada
+					qtd_alt.push(listaEstoque[i].qtd + qtd);
+				} else {
+					qtd_alt.push(listaEstoque[i].qtd)
+				}
+
+				i++;
+			}
+
+			console.log(qtd_alt);
+
+			// Deleta da database
+			for (let i = 0; i < qtd_alt.length; i++) {
+
+				// Cria o reg_financeiro se não existe
+				const reg_financeiro = await db.oneOrNone(
+					"SELECT * FROM reg_financeiro WHERE data = $1",
+					[data_cad_formatada]
+				)
+
+				if (!reg_financeiro) {
+					await db.none(
+						"INSERT INTO reg_financeiro (data) VALUES ($1)",
+						[data_cad_formatada]
+					);
+				}
+				console.log(listaEstoque[i].qtd - qtd_alt[i]);
+				if (listaEstoque[i].qtd - qtd_alt[i] > 0) {
+					// Obtem o preco_alt com regra de 3
+					let preco_qtd_alt = (qtd_alt[i] * listaEstoque[i].preco_total) / listaEstoque[i].qtd;
+
+					// Insere no registro de saída
+					await db.none(
+						"INSERT INTO reg_saida (data, qtd_alt, preco_total, nome) VALUES ($1, $2, $3, $4)",
+						[data_cad_formatada, qtd_alt[i], preco_qtd_alt, listaEstoque[i].nome]
+					);
+
+					// Atualiza na tabela
+					console.log(`ID atualizado: ${listaEstoque[i].id} - Qtd: ${listaEstoque[i].qtd - qtd_alt[i]} - Preco: ${listaEstoque[i].preco_total - preco_qtd_alt}`);
+					await db.none(
+						"UPDATE materia_prima SET preco_total = $1, qtd = $2 WHERE id = $3;",
+						[listaEstoque[i].preco_total - preco_qtd_alt, listaEstoque[i].qtd - qtd_alt[i], listaEstoque[i].id]
+					);
+				} else {
+					// Insere no registro de saída
+					await db.none(
+						"INSERT INTO reg_saida (data, qtd_alt, preco_total, nome) VALUES ($1, $2, $3, $4)",
+						[data_cad_formatada, qtd_alt[i], listaEstoque[i].preco_total, listaEstoque[i].nome]
+					);
+
+					console.log(`ID deletado: ${listaEstoque[i].id} - Qtd: TOTAL`);
+					await db.none(
+						"DELETE FROM materia_prima WHERE id = $1",
+						[listaEstoque[i].id]
+					);
+
+				}
+			}
+			res.sendStatus(200);
+		} catch (error) {
+			console.log(error);
+			res.sendStatus(400);
+		}
+	}
+});
+
+app.delete("/intervalo", async (req, res) => {
+	const nome = req.body.nome;
+	const qtdI = req.body.qtd;
+	
+	const qtd_total = await db.one(
+		"SELECT sum(qtd) FROM materia_prima WHERE nome = $1",
+		[nome]
+	);
+
+	let qtd = parseInt(qtd_total.sum) - qtdI;
+
+	// Retorna erro se não houver o suficiente em estoque
+	if (qtd_total.sum === null){
+		res.sendStatus(400);
+
+	} else if (parseInt(qtd_total.sum) < qtd || qtd < 0) {
+		res.sendStatus(416);
+
+	} else {
+		console.log("Operação válida");
+		try {
+
+			const data_cad = new Date();
+
+			const formatarData = (data) => {
+				const dia = String(data.getDate()).padStart(2, '0');
+				const mes = String(data.getMonth() + 1).padStart(2, '0'); // Os meses são indexados de 0 a 11
+				const ano = data.getFullYear();
+				return `${dia}/${mes}/${ano}`;
+			};
+
+			const data_cad_formatada = formatarData(data_cad);
+
+			let listaEstoque = await db.any(
+				"SELECT id, nome, qtd, data_val, preco_total FROM materia_prima WHERE nome = $1 ORDER BY data_cad ASC",
+				[nome]
+			);
+
+			let i = 0;
+			let qtd_alt = [];
+			while (qtd > 0) {
+				qtd = qtd - listaEstoque[i].qtd
+
+				if (qtd < 0) {
+					// Salva a quantidade que foi alterada
+					qtd_alt.push(listaEstoque[i].qtd + qtd);
+				} else {
+					qtd_alt.push(listaEstoque[i].qtd)
+				}
+
+				i++;
+			}
+
+			console.log(qtd_alt);
+
+			// Deleta da database
+			for (let i = 0; i < qtd_alt.length; i++) {
+
+				// Cria o reg_financeiro se não existe
+				const reg_financeiro = await db.oneOrNone(
+					"SELECT * FROM reg_financeiro WHERE data = $1",
+					[data_cad_formatada]
+				)
+
+				if (!reg_financeiro) {
+					await db.none(
+						"INSERT INTO reg_financeiro (data) VALUES ($1)",
+						[data_cad_formatada]
+					);
+				}
+				console.log(listaEstoque[i].qtd - qtd_alt[i]);
+				if (listaEstoque[i].qtd - qtd_alt[i] > 0) {
+					// Obtem o preco_alt com regra de 3
+					let preco_qtd_alt = (qtd_alt[i] * listaEstoque[i].preco_total) / listaEstoque[i].qtd;
+
+					// Insere no registro de saída
+					await db.none(
+						"INSERT INTO reg_saida (data, qtd_alt, preco_total, nome) VALUES ($1, $2, $3, $4)",
+						[data_cad_formatada, qtd_alt[i], preco_qtd_alt, listaEstoque[i].nome]
+					);
+
+					// Atualiza na tabela
+					console.log(`ID atualizado: ${listaEstoque[i].id} - Qtd: ${listaEstoque[i].qtd - qtd_alt[i]} - Preco: ${listaEstoque[i].preco_total - preco_qtd_alt}`);
+					await db.none(
+						"UPDATE materia_prima SET preco_total = $1, qtd = $2 WHERE id = $3;",
+						[listaEstoque[i].preco_total - preco_qtd_alt, listaEstoque[i].qtd - qtd_alt[i], listaEstoque[i].id]
+					);
+				} else {
+					// Insere no registro de saída
+					await db.none(
+						"INSERT INTO reg_saida (data, qtd_alt, preco_total, nome) VALUES ($1, $2, $3, $4)",
+						[data_cad_formatada, qtd_alt[i], listaEstoque[i].preco_total, listaEstoque[i].nome]
+					);
+
+					console.log(`ID deletado: ${listaEstoque[i].id} - Qtd: TOTAL`);
+					await db.none(
+						"DELETE FROM materia_prima WHERE id = $1",
+						[listaEstoque[i].id]
+					);
+
+				}
+			}
+			res.sendStatus(200);
+		} catch (error) {
+			console.log(error);
+			res.sendStatus(400);
+		}
+	}
+});
+
+// TODO: Inserir proteção a reg_saida FK 
 app.delete("/estoque", async (req, res) => {
-    const ids = req.body.idsToDelete;
-    try {
-        // Deleta da database
-        for (let i = 0; i < ids.length; i++){
-            await db.none(
-                "DELETE FROM materia_prima WHERE id = $1",
-                [ids[i]]
-            );
- 
+	const ids = req.body.idsToDelete;
+	try {
+
+		const data_cad = new Date();
+
+		const formatarData = (data) => {
+			const dia = String(data.getDate()).padStart(2, '0');
+			const mes = String(data.getMonth() + 1).padStart(2, '0'); // Os meses são indexados de 0 a 11
+			const ano = data.getFullYear();
+			return `${dia}/${mes}/${ano}`;
+		};
+
+		const data_cad_formatada = formatarData(data_cad);
+
+		// Deleta da database
+		for (let i = 0; i < ids.length; i++) {
+
+			const itemRemover = await db.one(
+				"SELECT qtd, preco_total, nome FROM materia_prima WHERE id = $1",
+				[ids[i]]
+			);
+
 			await db.none(
 				"INSERT INTO reg_saida (data, qtd_alt, preco_total, nome) VALUES ($1, $2, $3, $4)",
 				[data_cad_formatada, itemRemover.qtd, itemRemover.preco_total, itemRemover.nome]
 			);
-        }
-        console.log(`IDs deletados: ${ids}`);
-        res.sendStatus(200);
-    } catch {
-        console.log(error);
-        res.sendStatus(400);
-    }
+
+			await db.none(
+				"DELETE FROM materia_prima WHERE id = $1",
+				[ids[i]]
+			);
+
+		}
+		console.log(`IDs deletados: ${ids}`);
+		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
 });
 
-//Atualizar uma nova metéria-prima
+//Atualizar uma nova matéria-prima
 app.put("/estoque", async (req, res) => {
-    try {
+	try {
 		const id = req.body.id;
-        const nome = req.body.nome;
-        const marca = req.body.marca;
-        const qtd = req.body.qtd;
-        const data_val = req.body.data_val;
-        const preco_total = req.body.preco_total;
-        const data_cad = new Date();
+		const nome = req.body.nome;
+		const marca = req.body.marca;
+		const qtd = req.body.qtd;
+		const data_val = req.body.data_val;
+		const preco_total = req.body.preco_total;
+		const data_cad = new Date();
 
-        const formatarData = (data) => {
-            const dia = String(data.getDate()).padStart(2, '0');
-            const mes = String(data.getMonth() + 1).padStart(2, '0'); // Os meses são indexados de 0 a 11
-            const ano = data.getFullYear();
-            return `${dia}/${mes}/${ano}`;
-        };
+		const formatarData = (data) => {
+			const dia = String(data.getDate()).padStart(2, '0');
+			const mes = String(data.getMonth() + 1).padStart(2, '0'); // Os meses são indexados de 0 a 11
+			const ano = data.getFullYear();
+			return `${dia}/${mes}/${ano}`;
+		};
 
-        const data_cad_formatada = formatarData(data_cad);
+		const data_cad_formatada = formatarData(data_cad);
 
 		// Adiciona no registro de saida
 		const itemRemover = await db.one(
@@ -291,9 +530,9 @@ app.put("/estoque", async (req, res) => {
 				"INSERT INTO reg_saida (data, qtd_alt, preco_total, nome) VALUES ($1, $2, $3, $4)",
 				[data_cad_formatada, itemRemover.qtd, itemRemover.preco_total, itemRemover.nome]
 			);
-		} catch (error){
+		} catch (error) {
 			await db.none(
-				"INSERT INTO reg_financeiro (receita, data) VALUES (0, $1)",
+				"INSERT INTO reg_financeiro (data) VALUES ($1)",
 				[data_cad_formatada]
 			);
 			await db.none(
@@ -303,52 +542,95 @@ app.put("/estoque", async (req, res) => {
 		}
 
 		// Atualiza o valor
-        console.log(`Nome: ${nome} - Marca: ${marca} - DataV: ${data_val} - qtd: ${qtd} - preco_total: ${preco_total} - data_cad: ${data_cad_formatada}`);
-        await db.none(
-            "UPDATE materia_prima SET nome = $1, data_val = $2, marca = $3, preco_total = $4, data_cad = $5, qtd = $6 WHERE id = $7;",
-            [nome, data_val, marca, preco_total, data_cad_formatada, qtd, id]
-        );
-        await db.none(
-            "INSERT INTO reg_entrada (data, qtd_alt, preco_total, nome) VALUES ($1, $2, $3, $4);",
-            [data_cad_formatada, qtd, preco_total, nome]
-        );
+		console.log(`Nome: ${nome} - Marca: ${marca} - DataV: ${data_val} - qtd: ${qtd} - preco_total: ${preco_total} - data_cad: ${data_cad_formatada}`);
+		await db.none(
+			"UPDATE materia_prima SET nome = $1, data_val = $2, marca = $3, preco_total = $4, data_cad = $5, qtd = $6 WHERE id = $7;",
+			[nome, data_val, marca, preco_total, data_cad_formatada, qtd, id]
+		);
+		await db.none(
+			"INSERT INTO reg_entrada (data, qtd_alt, preco_total, nome) VALUES ($1, $2, $3, $4);",
+			[data_cad_formatada, qtd, preco_total, nome]
+		);
 
-        res.sendStatus(200);
-    } catch (error) {
-        console.log(error);
-        res.sendStatus(400);
-    }
+		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
 });
+
+
 
 //Get para obter os bens cadastrados
 app.get("/estoque/bem", async (req, res) => {
-    try {
-        const bens = await db.any("select * from bem;");
+	try {
+		const bens = await db.any("select * from bem;");
 
-        console.log(`Retornando lista de bens`);
-        
-        res.json(bens).status(200);
-    } catch (error) {
-        console.log(error);
-        res.sendStatus(400);
-    }
+		console.log(`Retornando lista de bens`);
+
+		res.json(bens).status(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
 });
 
 //Postar um novo bem
 app.post("/estoque/bem", async (req, res) => {
-    try {
-        const nome = req.body.nome;
-        const qtd_seg = req.body.qtd_seg;
-        const un_med = req.body.data_val;
+	try {
+		const nome = req.body.nome;
+		const qtd_seg = req.body.qtd_seg;
+		const un_med = req.body.un_med;
 
-        console.log(`Nome: ${nome} - qtd_seg: ${qtd_seg} - un_med: ${un_med}`);
-        db.none(
-            "INSERT INTO bem (nome, qtd_seg, un_med) VALUES ($1, $2, $3);",
-            [nome, qtd_seg, un_med]
-        );
-        res.sendStatus(200);
-    } catch (error) {
-        console.log(error);
-        res.sendStatus(400);
-    }
+		console.log(`Nome: ${nome} - qtd_seg: ${qtd_seg} - un_med: ${un_med}`);
+		await db.none(
+			"INSERT INTO bem (nome, qtd_seg, un_med) VALUES ($1, $2, $3);",
+			[nome, qtd_seg, un_med]
+		);
+		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
+// Deletar um bem
+app.delete("/estoque/bem", async (req, res) => {
+	const nomes = req.body.nomes;
+	try {
+		// Deleta da database
+		for (let i = 0; i < nomes.length; i++) {
+			await db.none(
+				"DELETE FROM bem WHERE nome = $1",
+				[nomes[i]]
+			);
+		}
+		console.log(`Bens deletados: ${nomes}`);
+		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
+//Atualizar um bem
+app.put("/estoque/bem", async (req, res) => {
+	try {
+		const pk = req.body.pk;
+		const nome = req.body.nome;
+		const qtd_seg = req.body.qtd_seg;
+		const un_med = req.body.un_med;
+
+		// Atualiza o valor: NÃO FUNCIONA POIS PRECISA DA CHAVE SEM MODIFICAÇÃO
+		console.log(`Nome: ${nome} - qtd_seg: ${qtd_seg} - un_med: ${un_med}`);
+		await db.none(
+			"UPDATE bem SET nome = $1, qtd_seg = $2, un_med = $3 WHERE nome = $4;",
+			[nome, qtd_seg, un_med, pk]
+		);
+
+		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
 });

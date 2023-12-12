@@ -35,7 +35,7 @@ create table materia_prima(
     data_cad date not null,
     nome varchar(20) not null,
     constraint pk_materia_prima primary key (id),
-    constraint fk_materia_prima_bem foreign key (nome) references bem(nome)
+    constraint fk_materia_prima_bem foreign key (nome) references bem(nome) ON UPDATE CASCADE
 );
 
 insert into materia_prima (qtd, data_val, marca, preco_total, data_cad, nome)
@@ -52,7 +52,7 @@ create table reg_entrada(
     preco_total float not null,
     nome varchar(20) not null,
     constraint pk_reg_entrada primary key (id),
-    constraint fk_reg_entrada_bem foreign key (nome) references bem(nome)
+    constraint fk_reg_entrada_bem foreign key (nome) references bem(nome) ON UPDATE CASCADE
 );
 
 insert into reg_entrada (data, qtd_alt, preco_total, nome)
@@ -63,7 +63,7 @@ insert into reg_entrada (data, qtd_alt, preco_total, nome)
               ('19/11/2023', '10', '50', 'Polvilho');
 
 create table reg_financeiro (
-    receita integer not null,
+    receita integer,
     data date,
     constraint pk_reg_financeiro primary key (data)
 );
@@ -78,7 +78,7 @@ create table reg_saida(
     preco_total float not null,
     nome varchar(20) not null,
     constraint pk_reg_saida primary key (id),
-    constraint fk_reg_saida_bem foreign key (nome) references bem(nome),
+    constraint fk_reg_saida_bem foreign key (nome) references bem(nome) ON UPDATE CASCADE,
     constraint fk_reg_saida_reg_financeiro foreign key (data) references reg_financeiro(data)
 );
 
@@ -103,7 +103,7 @@ create table ingrediente (
     qtd varchar(20) not null,
     constraint pq_ingrediente primary key (id),
     constraint fk_ingrediente_rec_produtos foreign key (idr) references rec_produtos(idr),
-    constraint fk_ingrediente_bem foreign key (nome) references bem(nome)
+    constraint fk_ingrediente_bem foreign key (nome) references bem(nome) ON UPDATE CASCADE
 );
 
 insert into ingrediente (idr, nome, qtd)

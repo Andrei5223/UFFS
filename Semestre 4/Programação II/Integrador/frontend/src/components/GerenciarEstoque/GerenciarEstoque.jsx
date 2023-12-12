@@ -1,11 +1,19 @@
 import React from "react";
 import axios from "axios";
 
-import { Alert, Box, Button, Snackbar, Stack, TextField, Autocomplete, Modal } from "@mui/material";
+import { Alert, Box, Button, Snackbar, Stack, TextField, Autocomplete } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteButton from './DeleteButton';
+import UpdateButton from "./UpdateButton";
+import SubmitButton from "./SubmitButton";
+import CancelButton from "./CancelButton";
+import RemoveButton from "./RemoveButton";
+import BetweenButton from "./BetweenButton";
 
-import UpdateM from "../UpdateM";
+import ModalUpdate from "./ModalUpdate";
+import ModalRemove from "./ModalRemove";
+import ModalBetween from "./ModalBetween";
+import GerenciarBens from "./GerenciarBens";
 
 const colunas = [
     { field: "id", headerName: "ID", width: 20 },
@@ -32,17 +40,22 @@ function CadastroEstoque() {
     const [messageText, setMessageText] = React.useState("");
     const [messageSeverity, setMessageSeverity] = React.useState("success");
 
-    // Para manipulações em relação aos bens
+    // Para manipulações em relação ao backend
     const [listaEstoque, setListaEstoque] = React.useState([]);
     const [listaBensNome, setListaBensNome] = React.useState([]);
     const [listaBens, setListaBens] = React.useState([]);
     const [bemMed, setBemMed] = React.useState([]);
     const [itemUpdate, setItemUpdate] = React.useState([]);
 
-    const [open, setOpen] = React.useState(false);
+    // Para controle dos modais
+    const [openUpdate, setOpenUpdate] = React.useState(false);
+    const [openRemove, setOpenRemove] = React.useState(false);
+    const [openBetween, setOpenBetween] = React.useState(false);
+    const [openGbens, setOpenGbens] = React.useState(false);
 
     // Para selecionar a row da dataGrid
     const [selectionModel, setSelectionModel] = React.useState([]);
+
     React.useEffect(() => {
         getData();
     }, []);
@@ -68,6 +81,9 @@ function CadastroEstoque() {
             console.log(estoque.data);
         } catch (error) {
             setListaEstoque([]);
+            setListaBens([]);
+            setListaBensNome([]);
+            setBemMed(" - ");
         }
     }
 
@@ -90,7 +106,7 @@ function CadastroEstoque() {
 
     async function handleSubmit() {
         console.log(`Nome: ${nome} - Marca: ${marca} - DataV: ${data_val} - Preco: ${preco_total} - Qtd: ${qtd}`);
-        if (nome !== "" && qtd !== "") {
+        if (nome !== "" && qtd !== "" && data_val !== "" && preco_total !== "") {
             try {
                 await axios.post("/estoque", {
                     nome: nome,
@@ -123,7 +139,7 @@ function CadastroEstoque() {
         if (selectionModel.length !== 0) {
             try {
                 await axios.delete("/estoque", {
-                    data:{ idsToDelete: selectionModel }
+                    data: { idsToDelete: selectionModel }
                 });
 
                 setMessageText("Matéria-prima deletada com sucesso!");
@@ -152,24 +168,74 @@ function CadastroEstoque() {
             try {
                 const id = selectionModel[0];
 
-                for (let i = 0; i < listaEstoque.length; i++){
-                    if(listaEstoque[i].id === id)
-                    setItemUpdate(listaEstoque[i]);
+                for (let i = 0; i < listaEstoque.length; i++) {
+                    if (listaEstoque[i].id === id)
+                        setItemUpdate(listaEstoque[i]);
                 }
 
                 setTimeout(async () => {
-                    await setOpen(true);
+                    await setOpenUpdate(true);
                 }, 100);
-                
+
             } catch (error) {
                 console.log(error);
                 setMessageText("Falha ao executar!");
                 setMessageSeverity("error");
             }
         } else {
-            setMessageText("Selecine uma matéria-prima para atualizar!");
+            setMessageText("Selecine uma matéria-prima para editar!");
             setMessageSeverity("warning");
             setOpenMessage(true);
+        }
+    }
+
+    async function handleRemove() {
+        if (selectionModel.length === 1) {
+            try {
+                const id = selectionModel[0];
+
+                for (let i = 0; i < listaEstoque.length; i++) {
+                    if (listaEstoque[i].id === id)
+                        setItemUpdate(listaEstoque[i]);
+                }
+
+                setTimeout(async () => {
+                    await setOpenRemove(true);
+                }, 100);
+
+            } catch (error) {
+                console.log(error);
+                setMessageText("Falha ao executar!");
+                setMessageSeverity("error");
+            }
+        } else {
+            setItemUpdate('');
+            setOpenRemove(true);
+        }
+    }
+
+    async function handleBetween() {
+        if (selectionModel.length === 1) {
+            try {
+                const id = selectionModel[0];
+
+                for (let i = 0; i < listaEstoque.length; i++) {
+                    if (listaEstoque[i].id === id)
+                        setItemUpdate(listaEstoque[i]);
+                }
+
+                setTimeout(async () => {
+                    await setOpenBetween(true);
+                }, 100);
+
+            } catch (error) {
+                console.log(error);
+                setMessageText("Falha ao executar!");
+                setMessageSeverity("error");
+            }
+        } else {
+            setItemUpdate('');
+            setOpenBetween(true);
         }
     }
 
@@ -232,7 +298,7 @@ function CadastroEstoque() {
                                 maxWidth: "160px",
                                 minWidth: "160px",
                             }}
-                            //onClick= abrir janela de gerenciamento de bens
+                            onClick={(e) => setOpenGbens(true)}
                             type="submit"
                             color="primary"
                         >
@@ -241,7 +307,6 @@ function CadastroEstoque() {
                     </Stack>
 
                     <TextField
-                        required
                         id="marca-input"
                         label="Marca"
                         size="small"
@@ -250,7 +315,7 @@ function CadastroEstoque() {
                     />
 
                     <Stack spacing={2} direction="row" alignItems="center">
-                        <Box flex={10}>
+                        <Box flex={1}>
                             <TextField
                                 required
                                 id="qtd-input"
@@ -261,7 +326,7 @@ function CadastroEstoque() {
                                 style={{ width: '100%' }}
                             />
                         </Box>
-                        <Box flex={1}>
+                        <Box flex={0} paddingRight={2}>
                             {bemMed}
                         </Box>
                     </Stack>
@@ -286,45 +351,17 @@ function CadastroEstoque() {
                 </Stack>
 
                 <Stack direction="row" spacing={3}>
-                    <Button
-                        variant="contained"
-                        style={{
-                            maxWidth: "100px",
-                            minWidth: "100px",
-                        }}
-                        onClick={handleSubmit}
-                        type="submit"
-                        color="primary"
-                    >
-                        Enviar
-                    </Button>
+                    <SubmitButton handleSubmit={handleSubmit} />
 
                     <DeleteButton handleDelete={handleDelete} />
 
-                    <Button
-                        variant="contained"
-                        style={{
-                            maxWidth: "100px",
-                            minWidth: "100px",
-                        }}
-                        onClick={(e) => handleUpdate()}
-                        type="submit"
-                        color="primary"
-                    >
-                        Atualizar
-                    </Button>
+                    <UpdateButton handleUpdate={handleUpdate} />
 
-                    <Button
-                        variant="outlined"
-                        style={{
-                            maxWidth: "100px",
-                            minWidth: "100px",
-                        }}
-                        onClick={handleCancelClick}
-                        color="error"
-                    >
-                        Cancelar
-                    </Button>
+                    <RemoveButton handleRemove={handleRemove} />
+
+                    <BetweenButton handleBetween={handleBetween} />
+
+                    <CancelButton handleCancelClick={handleCancelClick} />
                 </Stack>
 
                 <Snackbar
@@ -351,10 +388,59 @@ function CadastroEstoque() {
                 </Box>
 
             </Stack>
-            <UpdateM
-                open={open}
-                setOpen={setOpen}
+            <ModalUpdate
+                open={openUpdate}
+                setOpen={setOpenUpdate}
                 listaBensNome={listaBensNome}
+                listaBens={listaBens}
+                itemUpdate={itemUpdate}
+                getData={getData}
+                openMessage={openMessage}
+                setOpenMessage={setOpenMessage}
+                messageText={messageText}
+                setMessageText={setMessageText}
+                messageSeverity={messageSeverity}
+                setMessageSeverity={setMessageSeverity}
+                handleCloseMessage={handleCloseMessage}
+            />
+
+            <ModalRemove
+                open={openRemove}
+                setOpen={setOpenRemove}
+                listaBensNome={listaBensNome}
+                listaBens={listaBens}
+                itemUpdate={itemUpdate}
+                listaEstoque={listaEstoque}
+                getData={getData}
+                openMessage={openMessage}
+                setOpenMessage={setOpenMessage}
+                messageText={messageText}
+                setMessageText={setMessageText}
+                messageSeverity={messageSeverity}
+                setMessageSeverity={setMessageSeverity}
+                handleCloseMessage={handleCloseMessage}
+            />
+
+            <ModalBetween
+                open={openBetween}
+                setOpen={setOpenBetween}
+                listaBensNome={listaBensNome}
+                listaBens={listaBens}
+                itemUpdate={itemUpdate}
+                listaEstoque={listaEstoque}
+                getData={getData}
+                openMessage={openMessage}
+                setOpenMessage={setOpenMessage}
+                messageText={messageText}
+                setMessageText={setMessageText}
+                messageSeverity={messageSeverity}
+                setMessageSeverity={setMessageSeverity}
+                handleCloseMessage={handleCloseMessage}
+            />
+
+            <GerenciarBens
+                open={openGbens}
+                setOpen={setOpenGbens}
                 listaBens={listaBens}
                 itemUpdate={itemUpdate}
                 getData={getData}

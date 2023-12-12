@@ -1,4 +1,4 @@
-import { Modal, Stack, Box, Autocomplete, Button, TextField, Typography, Snackbar, Alert } from '@mui/material';
+import { Modal, Stack, Box, Autocomplete, Button, TextField, Typography } from '@mui/material';
 import React from 'react'
 import styled from "@emotion/styled";
 import axios from 'axios';
@@ -9,62 +9,54 @@ const StyledModal = styled(Modal)({
     justifyContent: "center",
 })
 
-const UpdateM = (props) => {
+const ModalRemove = (props) => {
 
     // Para ler os inputs do usuario
     const [nome, setNome] = React.useState("");
-    const [marca, setMarca] = React.useState("");
-    const [data_val, setData_val] = React.useState("");
-    const [preco_total, setPreco_total] = React.useState("");
     const [qtd, setQtd] = React.useState("");
-
-    // Para manipulação das caixas de texto
-    const [openMessage, setOpenMessage] = React.useState(false);
-    const [messageText, setMessageText] = React.useState("");
-    const [messageSeverity, setMessageSeverity] = React.useState("success");
 
     const [bemMed, setBemMed] = React.useState([]);
 
     React.useEffect(() => {
         console.log(props.itemUpdate);
         setNome(props.itemUpdate.nome);
-        setMarca(props.itemUpdate.marca);
-        setData_val(props.itemUpdate.data_val);
-        setQtd(props.itemUpdate.qtd);
-        setPreco_total(props.itemUpdate.preco_total);
     }, [props.itemUpdate]);
 
     async function handleSubmit() {
-        console.log(`Nome: ${nome} - Marca: ${marca} - DataV: ${data_val} - Preco: ${preco_total} - Qtd: ${qtd}`);
-        if (nome !== "" && props.qtd !== "") {
+        console.log(`Nome: ${nome} - Qtd: ${qtd}`);
+        if (nome !== "" && qtd !== "") {
             try {
-                await axios.put("/estoque", {
-                    id: props.itemUpdate.id,
-                    nome: nome,
-                    marca: marca,
-                    data_val: data_val,
-                    preco_total: preco_total,
-                    qtd: qtd,
+                await axios.delete("/remover", {
+                    data: {
+                        nome: nome,
+                        qtd: qtd
+                    }
                 });
 
-                props.setMessageText("Matéria-prima atualizada com sucesso!");
+                props.setMessageText("Matéria-prima removida com sucesso!");
                 props.setMessageSeverity("success");
                 props.setOpen(false);
+                clearForm();
             } catch (error) {
                 console.log(error);
-                props.setMessageText("Falha na atualização do estoque!");
+                props.setMessageText("Falha na remoção do estoque!");
                 props.setMessageSeverity("error");
             } finally {
-                setOpenMessage(true);
+                props.setOpenMessage(true);
                 setTimeout(async () => {
                     await props.getData();
                 }, 100);
             }
         } else {
-            props.setMessageText("Dados da matéria prima inválidos!");
+            props.setMessageText("Defina um bem e quantidade a ser retirada!");
             props.setMessageSeverity("warning");
             props.setOpenMessage(true);
         }
+    }
+
+    function clearForm() {
+        setNome("");
+        setQtd("");
     }
 
     React.useEffect(() => {
@@ -87,10 +79,10 @@ const UpdateM = (props) => {
             aria-describedby="modal-modal-description"
         >
             <>
-                <Box width={400} height={350} bgcolor={"background.default"} color={"text.primary"} padding={3} borderRadius={5}>
+                <Box width={400} height={190} bgcolor={"background.default"} color={"text.primary"} padding={3} borderRadius={5}>
                     <Stack spacing={2}>
 
-                        <Typography>Atualizar informações:</Typography>
+                        <Typography>Defina o bem e quantidade:</Typography>
 
                         <Autocomplete
                             disablePortal
@@ -108,17 +100,8 @@ const UpdateM = (props) => {
                             />}
                         />
 
-                        <TextField
-                            required
-                            id="marca-input"
-                            label="Marca"
-                            size="small"
-                            onChange={(e) => setMarca(e.target.value)}
-                            value={marca}
-                        />
-
                         <Stack spacing={2} direction="row" alignItems="center">
-                            <Box flex={10}>
+                            <Box flex={1}>
                                 <TextField
                                     required
                                     id="qtd-input"
@@ -129,28 +112,11 @@ const UpdateM = (props) => {
                                     style={{ width: '100%' }}
                                 />
                             </Box>
-                            <Box flex={1}>
+                            <Box flex={0} paddingRight={2}>
                                 {bemMed}
                             </Box>
                         </Stack>
 
-                        <TextField
-                            required
-                            id="data_val-input"
-                            label="Data de validade"
-                            size="small"
-                            onChange={(e) => setData_val(e.target.value)}
-                            value={data_val}
-                        />
-
-                        <TextField
-                            required
-                            id="preco_total-input"
-                            label="Preço"
-                            size="small"
-                            onChange={(e) => setPreco_total(e.target.value)}
-                            value={preco_total}
-                        />
                     </Stack>
 
                     <Stack direction="row" spacing={3} paddingTop={2}>
@@ -164,11 +130,11 @@ const UpdateM = (props) => {
                             type="submit"
                             color="primary"
                         >
-                            Enviar
+                            Retirar
                         </Button>
 
                         <Button
-                            variant="contained"
+                            variant="outlined"
                             style={{
                                 maxWidth: "100px",
                                 minWidth: "100px",
@@ -181,23 +147,9 @@ const UpdateM = (props) => {
                         </Button>
                     </Stack>
                 </Box>
-
-                <Snackbar
-                    open={openMessage}
-                    autoHideDuration={6000}
-                    onClose={props.handleCloseMessage}
-                >
-                    <Alert
-                        severity={messageSeverity}
-                        onClose={props.handleCloseMessage}
-                    >
-                        {messageText}
-                    </Alert>
-                </Snackbar>
-
             </>
         </StyledModal>
     )
 }
 
-export default UpdateM;
+export default ModalRemove;
