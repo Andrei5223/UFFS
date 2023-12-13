@@ -5,7 +5,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'r
 const LineChartPrecoHist = ({ chartBens }) => {
 
   return (
-    <LineChart width={800} height={500} data={chartBens} >
+    <LineChart width={500} height={500} data={chartBens} >
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="mes" />
       <YAxis />

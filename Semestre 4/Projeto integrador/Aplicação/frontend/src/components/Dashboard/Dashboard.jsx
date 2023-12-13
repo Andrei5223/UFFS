@@ -121,7 +121,7 @@ function Dashboard() {
         <Box>
             <h3>Registro histórico de bens:</h3>
 
-            <Stack spacing={2} direction='row'>
+            <Stack spacing={5}>
 
                 <Stack spacing={2} paddingTop={3}>
 
@@ -131,7 +131,7 @@ function Dashboard() {
                             <Typography>Valor total dos bens: {valorTotal}</Typography>
                         </Stack>
 
-                        <Box style={{ height: "650px", width: "1010px" }}>
+                        <Box style={{ height: "650px", width: "100%" }}>
                             <Typography>Bens em estoque:</Typography>
                             <DataGrid
                                 rows={listaBens}
@@ -183,8 +183,10 @@ function Dashboard() {
 
                     </Stack>
 
-                    <LineChartPrecoHist chartBens={chartBens}/>
-                    <PieChartPrecoHist chartBens={chartBens} />
+                    <Stack direction='row'>
+                        <LineChartPrecoHist chartBens={chartBens}/>
+                        <PieChartPrecoHist chartBens={chartBens} />
+                    </Stack>
 
                 </Stack>
             </Stack>

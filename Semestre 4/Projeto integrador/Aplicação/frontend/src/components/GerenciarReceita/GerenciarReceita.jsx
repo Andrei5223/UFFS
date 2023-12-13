@@ -326,8 +326,6 @@ function GereciarReceita() {
                     <Typography>Lucro total no ano: {valorTotalAno}</Typography>
 
                     <LineChartPrecoHist chartBens={chartBens} />
-
-
                 </Stack>
             </Stack>
 

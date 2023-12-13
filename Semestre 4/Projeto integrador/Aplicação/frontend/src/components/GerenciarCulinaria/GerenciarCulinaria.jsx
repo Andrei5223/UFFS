@@ -310,7 +310,7 @@ function GerenciarCulinaria() {
 
 
 
-                    <Box style={{ height: "520px", width: "1080px" }}>
+                    <Box style={{ height: "520px", width: "700px" }}>
                         <DataGrid
                             rows={listaCulinaria}
                             columns={colunasReceitas}
@@ -372,7 +372,7 @@ function GerenciarCulinaria() {
                         <DeleteButton handleDelete={handleDeleteIngrediente} />
                     </Stack>
 
-                    <Box style={{ height: "100%", width: "480px" }}>
+                    <Box style={{ height: "100%", width: "350px" }} flex={1}>
                         <DataGrid
                             rows={listaIngredientes}
                             columns={colunasIngredientes}
