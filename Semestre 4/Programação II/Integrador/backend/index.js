@@ -116,7 +116,6 @@ const requireJWTAuth = passport.authenticate("jwt", { session: false });
 
 
 
-
 app.listen(3010, () => console.log("Servidor rodando na porta 3010."));
 
 app.get("/", (req, res) => {
@@ -169,6 +168,57 @@ app.post("/novoUsuario", async (req, res) => {
 	}
 });
 
+app.get("/usuario", async (req, res) => {
+	try {
+		const usuario = await db.any(`SELECT rg, nome FROM usuario;`);
+
+		console.log(`Retornando usuarios`);
+
+		res.json(usuario).status(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
+app.put("/usuario", async (req, res) => {
+	try {
+		const rg = req.body.rg;
+		const nome = req.body.nome;
+
+		console.log(`Nome: ${nome}`);
+		await db.none(
+			"UPDATE usuario SET nome = $1 WHERE rg = $2;",
+			[nome, rg]
+		);
+
+		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
+app.delete("/usuario", async (req, res) => {
+	const ids = req.body.idsToDelete;
+	try {
+
+		// Deleta da database
+		for (let i = 0; i < ids.length; i++) {
+			await db.none(
+				"DELETE FROM usuario WHERE rg = $1",
+				[ids[i]]
+			);
+
+		}
+		console.log(`RGs deletados: ${ids}`);
+		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
 
 // Get para obter uma lista de matéria-primas
 app.get("/estoque", async (req, res) => {
@@ -214,7 +264,6 @@ app.get("/estoque", async (req, res) => {
 		res.sendStatus(400);
 	}
 });
-
 
 //Postar uma nova metéria-prima
 app.post("/estoque", async (req, res) => {
@@ -725,6 +774,245 @@ app.get("/dashboard/estoque", async (req, res) => {
 		console.log(`Retornando lista de bens`);
 
 		res.json(bens).status(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
+
+//Get para obter as receitas
+app.get("/culinaria", async (req, res) => {
+	try {
+		const receitas = await db.any("select idr, preco, modo_prep, nomer as nome from rec_produtos;");
+
+		console.log(`Retornando lista de receitas`);
+
+		res.json(receitas).status(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
+app.post("/culinaria", async (req, res) => {
+	try {
+		const nome = req.body.nome;
+		const preco = req.body.preco;
+		const modo_prep = req.body.modo_prep;
+		const ingredientes = req.body.listaIngredientes;
+
+		console.log(`Nome: ${nome} - preco: ${preco} - ModoPrep: ${modo_prep}`);
+
+		await db.none(
+			"INSERT INTO rec_produtos (nomer, preco, modo_prep) VALUES ($1, $2, $3);",
+			[nome, preco, modo_prep]
+		);
+
+		const idr = await db.one("select idr from rec_produtos where nomer = $1 and preco = $2 and modo_prep = $3;",
+			[nome, preco, modo_prep]
+		);
+
+		for (let ingrediente of ingredientes) {
+			await db.none(
+				"INSERT INTO ingrediente (idr, nome, qtd) VALUES ($1, $2, $3);",
+				[idr.idr, ingrediente.nome, ingrediente.qtd]
+			);
+		}
+
+		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
+app.delete("/culinaria", async (req, res) => {
+	const ids = req.body.idsToDelete;
+	try {
+		// Deleta da database
+		for (let i = 0; i < ids.length; i++) {
+
+			await db.none(
+				"DELETE FROM ingrediente WHERE idr = $1",
+				[ids[i]]
+			);
+
+			await db.none(
+				"DELETE FROM rec_produtos WHERE idr = $1",
+				[ids[i]]
+			);
+
+		}
+		console.log(`IDs deletados: ${ids}`);
+		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
+app.put("/culinaria", async (req, res) => {
+	try {
+		const idr = req.body.idr;
+		const nome = req.body.nome;
+		const preco = req.body.preco;
+		const modo_prep = req.body.modo_prep;
+		const ingredientes = req.body.listaIngredientes;
+
+		console.log(`Nome: ${nome} - preco: ${preco} - ModoPrep: ${modo_prep} - idr: ${idr}`);
+		await db.none(
+			"UPDATE rec_produtos SET nomer = $1, preco = $2, modo_prep = $3 WHERE idr = $4;",
+			[nome, preco, modo_prep, idr]
+		);
+
+		await db.none(
+			"DELETE FROM ingrediente WHERE idr = $1",
+			[idr]
+		);
+
+		for (let ingrediente of ingredientes) {
+			await db.none(
+				"INSERT INTO ingrediente (idr, nome, qtd) VALUES ($1, $2, $3);",
+				[idr, ingrediente.nome, ingrediente.qtd]
+			);
+		}
+
+		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
+app.get("/culinaria/ingrediente", async (req, res) => {
+	try {
+		const idr = req.query.idr;
+
+		const ingredientes = await db.any("select nome, qtd from ingrediente where idr = $1;",
+			[idr]
+		);
+
+		console.log(`Retornando lista de ingredientes para idr: ${idr}`);
+
+		res.json(ingredientes).status(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
+
+
+app.get("/financeiro", async (req, res) => {
+	try {
+		const ano = req.query.ano;
+
+		// Criação de tabelas temporárias
+		const createTempReceita = 'CREATE TEMPORARY TABLE temp_receita AS SELECT data, SUM(receita) AS receita_total FROM reg_financeiro GROUP BY data;';
+		const createTempCusto = `
+			CREATE TEMPORARY TABLE temp_custo AS
+			SELECT data, COALESCE(SUM(preco_total), 0) AS custo_total
+			FROM reg_saida
+			GROUP BY data;
+		`;
+
+
+		// Consulta final combinando as tabelas temporárias
+		const sqlQuery = `
+			SELECT
+				COALESCE(tr.data, tc.data) AS data,
+				SUM(tr.receita_total) AS receita,
+				SUM(tc.custo_total) AS custo,
+				SUM(tr.receita_total) - SUM(tc.custo_total) AS lucro
+			FROM temp_receita tr
+			LEFT JOIN temp_custo tc ON tr.data = tc.data
+			WHERE EXTRACT(YEAR FROM COALESCE(tr.data, tc.data)::DATE) = $1
+			GROUP BY COALESCE(tr.data, tc.data);
+		`;
+
+		// Execução das queries
+		await db.none(createTempReceita);
+		await db.none(createTempCusto);
+		const financeiroResult = await db.any(sqlQuery, [ano]);
+
+		// Limpeza das tabelas temporárias
+		const dropTempTables = 'DROP TABLE IF EXISTS temp_receita; DROP TABLE IF EXISTS temp_custo;';
+		await db.none(dropTempTables);
+
+		// Formatação da data
+		financeiroResult.forEach((item) => {
+			let dataCad = new Date(item.data);
+			let diaC = dataCad.getDate().toString().padStart(2, '0');
+			let mesC = (dataCad.getMonth() + 1).toString().padStart(2, '0');
+			let anoC = dataCad.getFullYear();
+			item.data = `${diaC}/${mesC}/${anoC}`;
+		});
+
+		console.log(`Retornando lista financeiro`);
+		res.json(financeiroResult).status(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
+
+app.post("/financeiro", async (req, res) => {
+	try {
+		const data = req.body.data;
+		const receita = req.body.receita;
+
+		console.log(`Data: ${data} - Receita: ${receita}`);
+
+		await db.none(
+			"INSERT INTO reg_financeiro (data, receita) VALUES ($1, $2);",
+			[data, receita]
+		);
+
+		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
+app.delete("/financeiro", async (req, res) => {
+	const ids = req.body.idsToDelete;
+	try {
+		// Deleta da database
+		for (let i = 0; i < ids.length; i++) {
+
+			await db.none(
+				"DELETE FROM reg_financeiro WHERE data = $1",
+				[ids[i]]
+			);
+
+		}
+		console.log(`Datas deletadas: ${ids}`);
+		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(400);
+	}
+});
+
+app.put("/financeiro", async (req, res) => {
+	try {
+		const data = req.body.data;
+		let receita = req.body.receita;
+		
+		if (receita === ''){
+			receita = null;
+		}
+
+		console.log(`Data: ${data} - Receita: ${receita}`);
+		await db.none(
+			"UPDATE reg_financeiro SET receita = $1 WHERE data = $2;",
+			[receita, data]
+		);
+
+		res.sendStatus(200);
 	} catch (error) {
 		console.log(error);
 		res.sendStatus(400);

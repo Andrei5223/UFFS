@@ -2,7 +2,7 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 
-const ChartPrecoHist = ({ chartBens }) => {
+const LineChartPrecoHist = ({ chartBens }) => {
 
   return (
     <LineChart width={550} height={300} data={chartBens} >
@@ -16,4 +16,4 @@ const ChartPrecoHist = ({ chartBens }) => {
   );
 };
 
-export default ChartPrecoHist;
+export default LineChartPrecoHist;

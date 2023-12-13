@@ -5,8 +5,10 @@ import dayjs from 'dayjs';
 import { Autocomplete, Box, Stack, TextField, Typography } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 
+import './classes.css';
 import ColetarData from "./ColetarData";
-import ChartPrecoHist from "./ChartPrecoHist";
+import LineChartPrecoHist from "./LineChartPrecoHist";
+import PieChartPrecoHist from "./PieChartPrecoHist";
 
 const colunas = [
     { field: "nome", headerName: "Nome", width: 180 },
@@ -14,12 +16,12 @@ const colunas = [
     { field: "qtd_seg", headerName: "Mínimo", width: 110 },
     { field: "un_med", headerName: "Medida", width: 90 },
     { field: "val_total", headerName: "Valor total (R$)", width: 140 },
-    { field: "val_un", headerName: "Valor unitario (R$)", width: 140 },
+    { field: "val_un", headerName: "Custo unitario (R$)", width: 140 },
     { field: "data_m", headerName: "Vencimento", width: 120 },
     { field: "reg_freq", headerName: "Frequência (%)", width: 110 },
 ];
 
-function RegistroFinaneiro() {
+function Dashboard() {
     // Para ler os inputs do usuario
     const [dia, setDia] = React.useState(dayjs()); // Defina o valor inicial como a data atual
     const [nome, setNome] = React.useState("");
@@ -64,11 +66,35 @@ function RegistroFinaneiro() {
         }
     }
 
+    function getRowId(row) {
+        return row.nome;
+    }
+    
+    function getRowClassName(params) {
+        const { qtd_total, qtd_seg, data_m } = params.row;
+    
+        const isQuantidadeMenor = parseFloat(qtd_total) < parseFloat(qtd_seg);
+    
+        const parts = data_m.split('/');
+        const dataValidade = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+    
+        const umMesDepois = new Date();
+        umMesDepois.setMonth(umMesDepois.getMonth() + 1);
+    
+        const menosDeUmMesRestante = dataValidade < umMesDepois;
+    
+        if (isQuantidadeMenor) {
+            return 'linha-vermelha';
+        } else if (menosDeUmMesRestante) {
+            return 'linha-vermelha-validade';
+        }
+    
+        return '';
+    }
+    
     React.useEffect(() => {
         const fetchData = async () => {
             if (ano !== '' && nome !== '') {
-                console.log('AAAAAAAAA')
-
                 let chart = [];
 
                 const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dec'];
@@ -79,10 +105,11 @@ function RegistroFinaneiro() {
                     const bens = await axios.get(`/dashboard/estoque?dia=${dia}`);
                     const bem = bens.data.find(item => item.nome === nome);
 
-                    chart.push({ mes: meses[i], val_un: bem ? bem.val_un : 0 });
+                    chart.push({ mes: meses[i], val_un: bem ? parseFloat(bem.val_un) : 0 });
                 }
 
                 setChartBens(chart);
+                console.log(chart);
             }
         };
 
@@ -104,12 +131,16 @@ function RegistroFinaneiro() {
                             <Typography>Valor total dos bens: {valorTotal}</Typography>
                         </Stack>
 
-                        <Box style={{ height: "500px", width: "1010px" }}>
+                        <Box style={{ height: "650px", width: "1010px" }}>
                             <Typography>Bens em estoque:</Typography>
                             <DataGrid
                                 rows={listaBens}
                                 columns={colunas}
-                                getRowId={(row) => row.nome}
+                                getRowId={getRowId}
+                                getRowClassName={getRowClassName}
+                                disableHover={true}
+                                checkboxSelection={false}
+                                disableSelectionOnClick={true}
                             />
                         </Box>
                     </Stack>
@@ -117,7 +148,7 @@ function RegistroFinaneiro() {
                 </Stack>
 
                 <Stack spacing={2} >
-                    Preço histórico:
+                    Custo histórico do bem:
                     <Stack direction="row" alignItems="center" spacing={2}>
                         <Box flex={1}>
                             <Autocomplete
@@ -152,7 +183,8 @@ function RegistroFinaneiro() {
 
                     </Stack>
 
-                    <ChartPrecoHist chartBens={chartBens}/> 
+                    <LineChartPrecoHist chartBens={chartBens}/>
+                    <PieChartPrecoHist chartBens={chartBens} />
 
                 </Stack>
             </Stack>
@@ -160,4 +192,4 @@ function RegistroFinaneiro() {
     );
 }
 
-export default RegistroFinaneiro;
+export default Dashboard;
