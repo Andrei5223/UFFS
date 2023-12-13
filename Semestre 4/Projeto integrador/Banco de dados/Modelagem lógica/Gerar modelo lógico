@@ -11,7 +11,7 @@ usuario
 -
 rg       PK integer
 nome     varchar(20)
-senha    varchar(20)
+senha    varchar
 adm      char
 
 materia_prima
@@ -35,7 +35,6 @@ nome varchar(20) FK >- bem.nome
 reg_financeiro
 -
 receita integer
-lucro integer
 data PK date
 
 reg_saida
@@ -49,7 +48,7 @@ nome varchar(20) FK >- bem.nome
 rec_produtos
 -
 idr PK serial
-modo_prep varchar(512)
+modo_prep varchar
 preco float
 nomer varchar(20)
 
