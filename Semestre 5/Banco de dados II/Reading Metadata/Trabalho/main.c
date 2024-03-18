@@ -1,4 +1,4 @@
-// Dupla: Andrei Camilotto e Djonatan
+// Dupla: Andrei Camilotto e Djonatan Bonelli
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
     imprimir(primeiro);
     fclose(f);
     
-    
+
     // FASE 3: IMPRIMIR DADOS
     f = fopen(arq->arquivo, "r");
 
