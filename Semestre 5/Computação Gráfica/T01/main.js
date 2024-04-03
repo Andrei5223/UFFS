@@ -45,6 +45,7 @@ let directions = [false, false, false, false, false, false, false, false, false,
 // Verifica por teclas precionadas
 document.addEventListener('keydown', function(event) {
         console.log(directions);
+        console.log(event.key);
         // Movimenta um cubo
         if (event.key == 'w'){
             directions[0] = true
@@ -63,6 +64,25 @@ document.addEventListener('keydown', function(event) {
         }
         if (event.key == 'Shift'){
             directions[5] = true
+        }
+
+        if (event.key == 'ArrowUp'){
+            directions[6] = true
+        }
+        if (event.key == 'ArrowDown'){
+            directions[7] = true
+        }
+        if (event.key == 'ArrowLeft'){
+            directions[8] = true
+        } 
+        if (event.key == 'ArrowRight'){
+            directions[9] = true
+        }
+        if (event.key == 'c'){
+            directions[10] = true
+        }
+        if (event.key == 'Shift'){
+            directions[11] = true
         } 
 });
 
@@ -88,6 +108,25 @@ document.addEventListener('keyup', function(event) {
     if (event.key == 'Shift'){
         directions[5] = false
     }
+
+    if (event.key == 'ArrowUp'){
+        directions[6] = false
+    }
+    if (event.key == 'ArrowDown'){
+        directions[7] = false
+    }
+    if (event.key == 'ArrowLeft'){
+        directions[8] = false
+    } 
+    if (event.key == 'ArrowRight'){
+        directions[9] = false
+    }
+    if (event.key == 'c'){
+        directions[10] = false
+    }
+    if (event.key == 'Shift'){
+        directions[11] = false
+    } 
 });
 
 function movement(){
@@ -103,11 +142,30 @@ function movement(){
     if (directions[3]){
         cube.position.add(RIGHT);
     }
-    if (directions[4]){
+    if (directions[4] && !directions[10]){
         cube.position.add(UP);
     }
-    if (directions[5]){
+    if (directions[5] && !directions[10]){
         cube.position.add(DOWN);
+    }
+
+    if (directions[6]){
+        sphere.position.add(FRONT);
+    }
+    if (directions[7]){
+        sphere.position.add(BACK);
+    }
+    if (directions[8]){
+        sphere.position.add(LEFT);
+    }
+    if (directions[9]){
+        sphere.position.add(RIGHT);
+    }
+    if (directions[10] && directions[4]){
+        sphere.position.add(UP);
+    }
+    if (directions[10] && directions[5]){
+        sphere.position.add(DOWN);
     }
 }
 
