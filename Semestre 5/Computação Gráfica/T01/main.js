@@ -37,39 +37,79 @@ const UP = new THREE.Vector3(0, 0.1, 0);
 const DOWN = new THREE.Vector3(0, -0.1, 0);
 const LEFT = new THREE.Vector3(-0.1, 0, 0);
 const RIGHT = new THREE.Vector3(0.1, 0, 0);
+const FRONT = new THREE.Vector3(0, 0, -0.1);
+const BACK = new THREE.Vector3(0, 0, 0.1);
+
+let directions = [false, false, false, false, false, false, false, false, false, false, false, false]
 
 // Verifica por teclas precionadas
 document.addEventListener('keydown', function(event) {
-    switch(event.key) {
+        console.log(directions);
         // Movimenta um cubo
-        case 'ArrowUp':
-            cube.position.add(UP);
-            break;
-        case 'ArrowDown':
-            cube.position.add(DOWN);
-            break;
-        case 'ArrowLeft':
-            cube.position.add(LEFT);
-            break;
-        case 'ArrowRight':
-            cube.position.add(RIGHT);
-            break;
+        if (event.key == 'w'){
+            directions[0] = true
+        }
+        if (event.key == 's'){
+            directions[1] = true
+        }
+        if (event.key == 'a'){
+            directions[2] = true
+        } 
+        if (event.key == 'd'){
+            directions[3] = true
+        }
+        if (event.key == ' '){
+            directions[4] = true
+        }
+        if (event.key == 'Shift'){
+            directions[5] = true
+        } 
+});
 
-        // Movimenta a esfera
-        case 'w':
-            sphere.position.add(UP);
-            break;
-        case 's':
-            sphere.position.add(DOWN);
-            break;
-        case 'a':
-            sphere.position.add(LEFT);
-            break;
-        case 'd':
-            sphere.position.add(RIGHT);
-            break;
+// Verifica por teclas precionadas
+document.addEventListener('keyup', function(event) {
+    console.log(directions);
+    // Movimenta um cubo
+    if (event.key == 'w'){
+        directions[0] = false
+    }
+    if (event.key == 's'){
+        directions[1] = false
+    }
+    if (event.key == 'a'){
+        directions[2] = false
+    } 
+    if (event.key == 'd'){
+        directions[3] = false
+    }
+    if (event.key == ' '){
+        directions[4] = false
+    }
+    if (event.key == 'Shift'){
+        directions[5] = false
     }
 });
+
+function movement(){
+    if (directions[0]){
+        cube.position.add(FRONT);
+    }
+    if (directions[1]){
+        cube.position.add(BACK);
+    }
+    if (directions[2]){
+        cube.position.add(LEFT);
+    }
+    if (directions[3]){
+        cube.position.add(RIGHT);
+    }
+    if (directions[4]){
+        cube.position.add(UP);
+    }
+    if (directions[5]){
+        cube.position.add(DOWN);
+    }
+}
 
 // Código para clique e arrasta copiado da internet (muito maneiro heheh)
 let isDragging = false;
@@ -112,6 +152,8 @@ function animate() {
 
     sphere.rotation.x += 0.01;
     sphere.rotation.y += 0.01;
+
+    movement();
 
 	renderer.render( scene, camera );
 }
