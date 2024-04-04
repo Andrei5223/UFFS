@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ListaSimples.c"
+#include "ListaSimples.h"
 
 struct table {
     int id;
@@ -15,7 +15,6 @@ int main(int argc, char *argv[]) {
     char *argumento = argv[1];
 
     FILE *f;
-
 
     //FASE 1: OBTER AS INFORMAÇÕES DE table.dic
     Table *arq = malloc(sizeof(Table));
@@ -30,10 +29,15 @@ int main(int argc, char *argv[]) {
     //Loop para encontrar a tabela desejada
     do {
         fread(arq, sizeof(Table), 1, f);
-    } while (strcmp(arq->nome, argumento) != 0);
+    } while (strcmp(arq->nome, argumento) != 0 && !feof(f));
+
+    if (feof(f)){
+        printf("Arquivo nao encontrado\n");
+        fclose(f);
+        return 1;
+    }
 
     fclose(f);
-
 
     //FASE 2: MONTAR LISTA COM AS COLUNAS DA TABELA
     f = fopen("att.dic", "r");

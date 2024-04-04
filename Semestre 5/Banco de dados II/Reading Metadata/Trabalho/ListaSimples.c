@@ -1,20 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
-struct att{
-    int id;
-    char nome[20];
-    char tipo;
-    char opcional;
-    int tamanho;
-} typedef Att;
-
-struct lista{
-    Att *dado;
-    struct lista *proximo;
-};
-typedef struct lista Lista;
+#include "ListaSimples.h"
 
 Lista* adiciona_fim(Lista *primeiro, Att *dado) {
     Lista *novo = malloc(sizeof(Lista)); // Aloca memória para o novo nó
