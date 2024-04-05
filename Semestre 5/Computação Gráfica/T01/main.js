@@ -32,13 +32,16 @@ sphere.position.set(-3, 0, 0);
 // Muda a posição da camera para fora de 0, 0, 0
 camera.position.z = 5;
 
+const VEL = 1;
+const ACEL = 0.1;
+const GRAV = 10;
+
+let JUMPS = 1;
+
 // Define os vetores de movimento
-const UP = new THREE.Vector3(0, 0.1, 0);
-const DOWN = new THREE.Vector3(0, -0.1, 0);
-const LEFT = new THREE.Vector3(-0.1, 0, 0);
-const RIGHT = new THREE.Vector3(0.1, 0, 0);
-const FRONT = new THREE.Vector3(0, 0, -0.1);
-const BACK = new THREE.Vector3(0, 0, 0.1);
+const VEL_Y = new THREE.Vector3(0, 0, 0);
+const VEL_X = new THREE.Vector3(0, 0, 0);
+const VEL_Z = new THREE.Vector3(0, 0, 0);
 
 let directions = [false, false, false, false, false, false, false, false, false, false, false, false]
 
@@ -48,41 +51,47 @@ document.addEventListener('keydown', function(event) {
         console.log(event.key);
         // Movimenta um cubo
         if (event.key == 'w'){
-            directions[0] = true
+            directions[0] = true;
+            VEL_Z.z += ACEL * -1;
         }
         if (event.key == 's'){
-            directions[1] = true
+            directions[1] = true;
+            VEL_Z.z += ACEL;
         }
         if (event.key == 'a'){
-            directions[2] = true
+            directions[2] = true;
+            VEL_X.x += ACEL * -1;
         } 
         if (event.key == 'd'){
-            directions[3] = true
+            directions[3] = true;
+            VEL_X.x += ACEL;
         }
         if (event.key == ' '){
-            directions[4] = true
+            directions[4] = true;
+            // VEL_Y.y += ACEL;
         }
         if (event.key == 'Shift'){
-            directions[5] = true
+            directions[5] = true;
+            VEL_Y.y += ACEL * -1;
         }
 
         if (event.key == 'ArrowUp'){
-            directions[6] = true
+            directions[6] = true;
         }
         if (event.key == 'ArrowDown'){
-            directions[7] = true
+            directions[7] = true;
         }
         if (event.key == 'ArrowLeft'){
-            directions[8] = true
+            directions[8] = true;
         } 
         if (event.key == 'ArrowRight'){
-            directions[9] = true
+            directions[9] = true;
         }
         if (event.key == 'c'){
-            directions[10] = true
+            directions[10] = true;
         }
         if (event.key == 'Shift'){
-            directions[11] = true
+            directions[11] = true;
         } 
 });
 
@@ -91,62 +100,72 @@ document.addEventListener('keyup', function(event) {
     console.log(directions);
     // Movimenta um cubo
     if (event.key == 'w'){
-        directions[0] = false
+        directions[0] = false;
+        VEL_Z.z = 0;
     }
     if (event.key == 's'){
-        directions[1] = false
+        directions[1] = false;
+        VEL_Z.z = 0;
     }
     if (event.key == 'a'){
-        directions[2] = false
+        directions[2] = false;
+        VEL_X.x = 0;
     } 
     if (event.key == 'd'){
-        directions[3] = false
+        directions[3] = false;
+        VEL_X.x = 0;
     }
     if (event.key == ' '){
-        directions[4] = false
+        directions[4] = false;
+        // VEL_Y.y = 0;
     }
     if (event.key == 'Shift'){
-        directions[5] = false
+        directions[5] = false;
+        VEL_Y.y = 0;
     }
 
     if (event.key == 'ArrowUp'){
-        directions[6] = false
+        directions[6] = false;
     }
     if (event.key == 'ArrowDown'){
-        directions[7] = false
+        directions[7] = false;
     }
     if (event.key == 'ArrowLeft'){
-        directions[8] = false
+        directions[8] = false;
     } 
     if (event.key == 'ArrowRight'){
-        directions[9] = false
+        directions[9] = false;
     }
     if (event.key == 'c'){
-        directions[10] = false
+        directions[10] = false;
     }
     if (event.key == 'Shift'){
-        directions[11] = false
+        directions[11] = false;
     } 
 });
 
 function movement(){
     if (directions[0]){
-        cube.position.add(FRONT);
+        cube.position.add(VEL_Z);
     }
     if (directions[1]){
-        cube.position.add(BACK);
+        cube.position.add(VEL_Z);
     }
     if (directions[2]){
-        cube.position.add(LEFT);
+        cube.position.add(VEL_X);
     }
     if (directions[3]){
-        cube.position.add(RIGHT);
+        cube.position.add(VEL_X);
     }
     if (directions[4] && !directions[10]){
-        cube.position.add(UP);
+        if (JUMPS > 0){
+            JUMPS -= 1;
+            VEL_Y.y = 2;
+            cube.position.add(VEL_Y);
+        }
     }
     if (directions[5] && !directions[10]){
-        cube.position.add(DOWN);
+        cube.position.add(VEL_Y);
     }
 
     if (directions[6]){
@@ -202,8 +221,14 @@ function animate() {
 	requestAnimationFrame( animate );
 
     // Adiciona a rotação
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+    // cube.rotation.x += 0.01;
+    // cube.rotation.y += 0.01;
+
+    if (cube.position.y > 0){
+        cube.position.y -= 0.01 * GRAV;
+    } else {
+        JUMPS = 1;
+    }
 
     cube2.rotation.x += 0.01;
     cube2.rotation.y += 0.01;
