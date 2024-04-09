@@ -1,0 +1,54 @@
+select left(md5(random()::text), 20);
+
+select (random()*1000)::int;
+
+--do not work
+select '1940-01-01 00:00:00'::timestamp + random() * (now() - timestamp '1940-01-01 00:00:00');
+
+do $$
+  declare
+     train_id constant train.idtr%type := 2;
+     train_name train.nametr%type;
+  begin
+select nametr into train_name from train where idtr=train_id;
+if not found then
+	raise notice 'Train id not found: %',train_id;
+else
+	raise notice 'Train name: %',train_name;
+end if;
+end; $$; 
+
+CREATE TABLE product (					CREATE TABLE sale (
+	pid integer not null primary key,				sid integer not null primary key,
+	name varchar(30) not null,					sdate date not null);
+	pqty  integer not null);
+
+CREATE TABLE sale_item (
+	sid integer not null,
+	pid integer not null,
+	sqty integer not null,
+	CONSTRAINT pk_sale_item PRIMARY KEY (sid,pid),
+	CONSTRAINT fk_sale_item_sale FOREIGN KEY (sid) REFERENCES sale(sid),
+	CONSTRAINT fk_sale_item_product FOREIGN KEY (pid) REFERENCES product(pid)
+);
+
+create or replace procedure ins_product (qttuple int) as $$
+declare
+	counter int := 0;
+	new_pid int;
+	new_name varchar(30);
+	new_pqty int;
+begin
+	loop 
+		new_pid := (random()*10000)::int;
+		new_name := left(md5(random()::text), 20);
+		new_pqty := (random()*100)::int;
+		if not exists (select 1 from product where pid=new_pid) then
+			insert into product (pid, name, pqty) values (new_pid, new_name, new_pqty);
+			counter := counter +1;
+		end if;
+	
+		exit when counter > qttuple;
+	end loop;
+end;
+$$ language plpgsql;
