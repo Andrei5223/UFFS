@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { move, onKeyDown, onKeyUp, checkCollisions } from './movement.js';
 
 //Cria a scene e a camera
 const scene = new THREE.Scene();
@@ -87,18 +86,29 @@ cone.geometry.computeBoundingBox();
 cone.geometry.boundingBox.translate(cone.position);
 
 
-// Cria e adiciona um plano para representar o chão
-// const groundGeometry = new THREE.PlaneGeometry(10, 10); // Você pode ajustar o tamanho conforme necessário
-// const groundMaterial = new THREE.MeshBasicMaterial({ color: 0x999999, side: THREE.DoubleSide }); // Ajuste a cor conforme necessário
-// const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-// ground.rotation.x = Math.PI / 2; // Rotação para que o plano fique horizontal
-// ground.position.y = -0.5;
-// scene.add(ground);
+// Set initial velocity of the cube
+var velocity = new THREE.Vector3(0, 0, 0);
+var previousPosition = new THREE.Vector3(0, 0, 0);
+var jumpVelocity = 3; // velocity when jumping
+var movVelocity = 5;
+var isJumping = false; // flag to track if the cube is jumping
 
-
-// Procura por eventos de teclado
-document.addEventListener('keydown', onKeyDown, false);
-document.addEventListener('keyup', onKeyUp, false);
+// Create a function to handle key presses
+function onKeyDown(event) {
+    var keyCode = event.keyCode;
+    if (keyCode == 32 && !isJumping) { // space key
+        velocity.y = jumpVelocity; // jump
+        isJumping = true; // set jumping flag to true
+    } else if (keyCode == 65) { // a key
+        velocity.x = -1; // move left
+    } else if (keyCode == 68) { // d key
+        velocity.x = 1; // move right
+    } else if (keyCode == 87) { // w key
+        velocity.z = -1; // move forward
+    } else if (keyCode == 83) { // s key
+        velocity.z = 1; // move backward
+    }
+}
 
 // Create a function to handle key releases
 function onKeyUp(event) {
@@ -110,6 +120,10 @@ function onKeyUp(event) {
     }
     // console.log('Bounding box do cubo:', cube.geometry.boundingBox);
 }
+
+// Add event listeners for key presses and releases
+document.addEventListener('keydown', onKeyDown, false);
+document.addEventListener('keyup', onKeyUp, false);
 
 // Função para verificar colisões
 function checkCollisions() {
@@ -171,7 +185,7 @@ function update() {
 function animate() {
 	requestAnimationFrame( animate );
 
-    move(cube, scene);
+    update();
 
 	renderer.render( scene, camera );
 }
