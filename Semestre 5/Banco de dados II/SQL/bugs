@@ -1,0 +1,49 @@
+BUG 1:
+Ao conectar a um banco utilizando \c, caso o usuário insira um ; ao final da linha de comando, ocorrerá uma duplicação na impressão do nome do banco (atual ou de destino), independentemente se a operação for válida ou não. Por exemplo:
+Considere a existência de um banco chamando 'teste'. Caso o usuário insira a linha '\c teste;' o banco imprimirá: 'teste=# teste=#'. Caso ele insira '\c teste' a impressão ocorre normalmente: 'teste=#'.
+
+BUG 2:
+Ao utilizar uma sequência de comandos SQL, ao menos que haja um caractere '\n' (me refiro à quebra de linha usando ENTER), o banco executa apenas o primeiro comando. Por exemplo:
+Considere um banco com as relações x e y. Ao executar o comando: 'select * from x; select * from y;' o banco executa apenas 'select * from x;'. No entanto, se for colado o comando:
+'select * from x;
+select * from y;'
+Com a quebra de linha, as duas operações são realizadas. Ou seja, o banco depende exclusivamente da quebra de linha para executar comandos, diferentemente do SQL convencional.
+
+BUG 3:
+O bug consiste numa falha de alocação de memória:
+free(): invalid pointer
+Aborted (core dumped)
+Para a reprodução desse bug, garanta que a pasta 'Data' esteja vazia ou inexistente. A pasta 'Data' é criada na primeira inicialização do BD, portanto, a ausência dela garante um estado inicial consistente. Execute o código abaixo (copie e cole): 
+
+create database banco;
+\c banco
+create table Funcionario (
+	rg integer primary key,
+	nome varchar(30),
+	idade integer,
+	cidade varchar(30),
+	salario double);
+
+BUG 4:
+Após a reprodução do BUG 3. Entre novamente no BD e acesse o banco 'banco'. Nos meus testes o banco e a relação 'funcionario' foi criada mesmo após o erro. Execute o código abaixo (copie e cole):
+
+insert into Funcionario values (2158750,'fLucas',20,'Xanxere',2537.00);
+insert into Funcionario values (2158751,'fRafael',23,'Chapeco',1537.00);
+
+Deverá ocorrer novamente um BUG de alocação de memória:
+free(): invalid pointer
+Aborted (core dumped)
+
+Suspeitei que o BUG 3 causou uma criação falha da relação 'funcionario', o que poderia ter causado o BUG 4, porém, essa teoria não está correta. Após a reprodução do BUG 3, acessei o banco novamente, exclui a relação funcionário e criei novamente, dessa vez não ouve erro na criação. Porém, ao executar os dois INSERT descritos acima, o BUG 4 persistiu. Essa explicação pode ser reproduzida com a execução do código abaixo, se executada imediamente ao acessar o banco após a reprodução do BUG 3:
+
+\c banco
+drop table funcionario;
+create table Funcionario (
+	rg integer primary key,
+	nome varchar(30),
+	idade integer,
+	cidade varchar(30),
+	salario double);
+insert into Funcionario values (2158750,'fLucas',20,'Xanxere',2537.00);
+insert into Funcionario values (2158751,'fRafael',23,'Chapeco',1537.00);
+
