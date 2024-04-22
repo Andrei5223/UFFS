@@ -16,32 +16,28 @@ create tablespace tbspc1 location '/tablespace/tbspc1';
 create tablespace tbspc2 location '/tablespace/tbspc2';
 
 --Crie dois usuários
-
 create user usuario1 password 'usuario1';
 create user usuario2 password 'usuario2';
 
---Crie um esquema
+--Crie um banco de dados utilizando uma das tablespaces criadas como default, no esquema criado (procure na documentação as opções de create database)
+--Altere o dono do BD para um dos usuários criados (procure na documentação as opções do alter database)
+--Acesse o BD
+create database app tablespace tbspc1;
+alter database app owner to usuario1;
+\c app usuario1
 
+--Crie um esquema
 create schema exercicio;
 
 --Aponte o esquema criado como padrão para um dos usuários
+alter database app set search_path = exercicio;
 
+\c app postgres
 alter user usuario1 set search_path to exercicio;
 
---Crie um banco de dados utilizando uma das tablespaces criadas como default, no esquema criado (procure na documentação as opções de create database)
-
-create database app tablespace tbspc1;
-
---Altere o dono do BD para um dos usuários criados (procure na documentação as opções do alter database)
-
-alter database app owner to usuario2;
-
---Acesse o BD
-
-\c app usuario2
+\c app usuario1
 
 --Crie o script do banco de dados utilizado em aulas anteriores (produto x venda) - a tabela sales foi alterada (acerte o script)
-
 DROP TABLE IF EXISTS sale_item;
 DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS sale;
@@ -68,7 +64,6 @@ CREATE TABLE sale_item (
 );
 
 --Popule o BD com os scripts implementados em sala de aula (1000 produtos, 500 cupons e +1000 produtos vendidos) - a tabela foi alterada, acerte o script
-
 create or replace procedure ins_product(qttup int ) Language plpgsql
 as $$
 declare
@@ -133,14 +128,14 @@ begin
 
    select array_agg(sid) into array_sale from sale;
    select count(sid) into qt_sale from sale;
-   raise notice 'qt_sale: %',qt_sale;
+   --raise notice 'qt_sale: %',qt_sale;
    -- executa qttup vezes
    loop
         -- seleciona um sid
         n:=floor(random() * qt_sale) + 1;
-        raise notice 'N: %',n;
+        --raise notice 'N: %',n;
         sale_item_tup.sid := array_sale[n];
-        raise notice 'sid: %', sale_item_tup.sid;
+        --raise notice 'sid: %', sale_item_tup.sid;
 
         nprod := itBySale[(random()*5 +1)::int];
 
@@ -148,12 +143,13 @@ begin
       loop
          -- seleciona um pid e um sqty
          sale_item_tup.pid := array_prod[floor(random() * qt_prod) + 1];
-         raise notice 'pid: %', sale_item_tup.pid;
+         --raise notice 'pid: %', sale_item_tup.pid;
          sale_item_tup.sqty := (random()*1000)::int;
 
          -- insere em sale item
          if (not exists (select 1 from sale_item where sid=sale_item_tup.sid and pid=sale_item_tup.pid))
             then
+            raise notice 'Sale item: %', sale_item_tup;
             insert into sale_item (sid, pid, sqty) values (sale_item_tup.sid, sale_item_tup.pid, sale_item_tup.sqty);
             counter_nprod := counter_nprod + 1;
          end if;
@@ -178,7 +174,6 @@ call call_all(1000, 500, 1000);
 
 
 --Crie uma trigger que armazene em uma tabela de auditoria todas as vezes que a quantidade vendida de um produto for alterada (ou uma venda de produto for excluída). A tabela de auditoria deverá ter a operação, o valor antigo e novo (se for o caso), data e hora da operação e usuário. Esta tabela não tem PK
-
 create table venda_item (
     op char(1),
     sid int,
@@ -217,11 +212,9 @@ for each row
 execute function changes_sale_item();
 
 --Crie um índice não único para a data da venda, neste índice, inclua o endereço.
-
 create index index_data_endereco on sale (sdate) include (address);
 
 --Para o usuário não dono do BD, dê alguns privilégios: select em product e sale, todos para sale_item.
-
 grant select on product to usuario1;
 grant select on sale to usuario1;
 grant all privileges on sale_item to usuario1;
