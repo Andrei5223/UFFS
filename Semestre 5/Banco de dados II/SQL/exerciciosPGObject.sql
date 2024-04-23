@@ -1,7 +1,9 @@
+--usuario1: psw: usuario1 | Dono do db app
+--usuario1: psq: usuario2 | Tem permição de select em product e sale. Tem todas permições para sale_item. Tem permicao de insert na autoria.
 
 --Crie duas tablespaces
-
 --Execute no terminal (fora do spql):
+
 --cd /
 --sudo mkdir tablespace
 --cd tablespace
@@ -28,12 +30,14 @@ alter database app owner to usuario1;
 
 --Crie um esquema
 create schema exercicio;
+grant usage on schema exercicio to usuario2;
 
 --Aponte o esquema criado como padrão para um dos usuários
 alter database app set search_path = exercicio;
 
 \c app postgres
 alter user usuario1 set search_path to exercicio;
+alter user usuario2 set search_path to exercicio;
 
 \c app usuario1
 
@@ -187,16 +191,12 @@ create table venda_item (
 
 create or replace function changes_sale_item() returns trigger as $$
 begin
-   if TG_OP = 'INSERT' then
-      insert into venda_item (op, sid, pid, new_qt, op_date, op_time, user_name)
-      values ('I', NEW.sid, NEW.pid, NEW.sqty, current_date, current_time, current_user);
-   
-   elsif TG_OP = 'UPDATE' then
-      insert into venda_item_audit (op, sid, pid, last_qt, new_qt, op_date, op_time, user_name)
+   if TG_OP = 'UPDATE' then
+      insert into venda_item (op, sid, pid, last_qt, new_qt, op_date, op_time, user_name)
       values ('U', OLD.sid, OLD.pid, OLD.sqty, NEW.qty, current_date, current_time, current_user);
    
    elsif TG_OP = 'DELETE' then
-      insert into venda_item_audit (op, sid, pid, last_qt, op_date, op_time, user_name)
+      insert into venda_item (op, sid, pid, last_qt, op_date, op_time, user_name)
       values ('D', OLD.sid, OLD.pid, OLD.sqty, current_date, current_time, current_user);
    end if;
    RAISE NOTICE 'Auditoria atualizada.';
@@ -206,8 +206,8 @@ end;
 $$ Language plpgsql;
 
 
-create trigger changes_sale_item_trigger
-after insert or update or delete on sale_item
+create or replace trigger changes_sale_item_trigger
+after update or delete on sale_item
 for each row
 execute function changes_sale_item();
 
@@ -215,6 +215,7 @@ execute function changes_sale_item();
 create index index_data_endereco on sale (sdate) include (address);
 
 --Para o usuário não dono do BD, dê alguns privilégios: select em product e sale, todos para sale_item.
-grant select on product to usuario1;
-grant select on sale to usuario1;
-grant all privileges on sale_item to usuario1;
+grant select on product to usuario2;
+grant select on sale to usuario2;
+grant insert on venda_item to usuario2;
+grant all privileges on sale_item to usuario2;
