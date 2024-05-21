@@ -11,11 +11,11 @@
 
 #define NUMFILO 5
 
-pthread_t filosofo [NUMFILO] ;	// threads filosofos
-sem_t     hashi    [NUMFILO] ;	// um semaforo para cada palito (iniciam em 1)
+pthread_t filosofo[NUMFILO]; // threads filosofos
+sem_t hashi[NUMFILO];        // um semaforo para cada palito (iniciam em 1)
 
 // espaços para separar as colunas de impressão
-char *space[] = {"", "\t", "\t\t", "\t\t\t", "\t\t\t\t" } ;
+char *space[] = {"", "\t", "\t\t", "\t\t\t", "\t\t\t\t"};
 
 volatile sig_atomic_t stop = 0;
 int contador[NUMFILO] = {0}; // contador para cada filósofo
@@ -69,17 +69,17 @@ void come(int f)
 }
 
 // espera um tempo aleatório entre 0 e n segundos (float)
-void espera (int n)
+void espera(int n)
 {
-  sleep (random() % n) ;		// pausa entre 0 e n segundos (inteiro)
-  usleep (random() % 10) ;	// pausa entre 0 e 1 segundo (float)
+    sleep(random() % n);     // pausa entre 0 e n segundos (inteiro)
+    usleep(random() % 10); // pausa entre 0 e 1 segundo (float)
 }
 
 // filósofo meditando
-void medita (int f)
+void medita(int f)
 {
-  printf ("%sF%d meditando\n", space[f], f) ;
-  espera (1) ;
+    printf("%sF%d meditando\n", space[f], f);
+    // espera(1);
 }
 
 // pega o hashi
@@ -98,49 +98,62 @@ void larga_hashi (int f, int h)
 }
 
 // corpo da thread filosofo
-void *threadFilosofo (void *arg)
+void *threadFilosofo(void *arg)
 {
-  int i = (long int) arg ;
-  while (1)
-  {
-    medita (i) ;
-    pega_hashi (i, i) ;
-    pega_hashi (i, (i+1) % NUMFILO) ;
-    come (i) ;
-    larga_hashi (i, i) ;
-    larga_hashi (i, (i+1) % NUMFILO) ;
-  }
-  pthread_exit (NULL) ;
+    int i = (long int)arg;
+    while (1)
+    {
+        medita(i);
+        int primeiro_hashi = i;
+        int segundo_hashi = (i + 1) % NUMFILO;
+
+        // Randomiza a ordem dos hashis a serem pegos
+        if (rand() % 2 == 0)
+        {
+            int temp = primeiro_hashi;
+            primeiro_hashi = segundo_hashi;
+            segundo_hashi = temp;
+        }
+
+        pega_hashi(i, primeiro_hashi);
+        pega_hashi(i, segundo_hashi);
+        come(i);
+        larga_hashi(i, primeiro_hashi);
+        larga_hashi(i, segundo_hashi);
+    }
+    pthread_exit(NULL);
 }
 
 // programa principal
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-  long i, status ;
+    long i, status;
 
-  // para o printf não se confundir com a threads
-  setvbuf (stdout, 0, _IONBF, 0) ;
+    // Seed para a função rand()
+    srand(time(NULL));
 
-  // inicia os hashis
-  for(i=0; i<NUMFILO; i++)
-    sem_init (&hashi[i], 0, 1) ;
+    // para o printf não se confundir com a threads
+    setvbuf(stdout, 0, _IONBF, 0);
 
-  // inicia os filosofos
-  for(i=0; i<NUMFILO; i++)
-  {
-    status = pthread_create (&filosofo[i], NULL, threadFilosofo, (void *) i) ;
-    if (status)
+    // inicia os hashis
+    for (i = 0; i < NUMFILO; i++)
+        sem_init(&hashi[i], 0, 1);
+
+    // inicia os filosofos
+    for (i = 0; i < NUMFILO; i++)
     {
-      perror ("pthread_create") ;
-      exit (1) ;
+        status = pthread_create(&filosofo[i], NULL, threadFilosofo, (void *)i);
+        if (status)
+        {
+            perror("pthread_create");
+            exit(1);
+        }
     }
-  }
 
-  signal(SIGALRM, handler);
-  time(&inicio);
-  alarm(5); //  60 segundos
+    signal(SIGALRM, handler);
+    time(&inicio);
+    alarm(5); //  60 segundos
 
-  // a main encerra aqui
-  pthread_exit (NULL) ;
+    // a main encerra aqui
+    pthread_exit(NULL);
 }
-
