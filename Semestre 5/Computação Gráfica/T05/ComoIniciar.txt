@@ -1,0 +1,5 @@
+instalar node_modules:
+npm install --save-dev vite
+
+iniciar aplicação:
+npx vite
