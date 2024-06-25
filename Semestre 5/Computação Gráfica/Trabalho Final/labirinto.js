@@ -17,20 +17,6 @@ import * as THREE from 'three';
 // 21121002202
 // 11111110110
 
-let maze = [
-	[3,1,1,1,1,1,3,1,1,1,2],
-	[2,3,1,0,2,2,1,1,2,1,2],
-	[3,1,0,3,1,2,3,2,1,2,2],
-	[2,2,3,0,2,1,2,0,2,0,2],
-	[2,1,0,3,1,2,1,2,2,2,2],
-	[2,3,2,3,2,1,2,0,2,1,2],
-	[2,2,0,0,1,2,1,3,2,2,2],
-	[3,0,3,1,2,2,1,0,1,1,2],
-	[2,2,0,2,2,2,3,2,3,2,2],
-	[2,1,1,2,1,0,0,2,2,0,2],
-	[1,1,1,1,1,1,1,0,1,1,0]
-]
-
 let walls = []
 const wall = {width: 1, height: 1, depth: 0.1};
 const textureLoader = new THREE.TextureLoader();
@@ -58,7 +44,7 @@ function addWall(x, z, dir = 0, scene){
 	walls.push({x: x, z: z, dir: dir})
 }
 
-function buildMaze(scene){
+function buildMaze(scene, maze){
     for (let i = 0; i < maze.length; i++) {
         for (let j = 0; j < maze[i].length; j++) {
             if (maze[i][j] == 3){
