@@ -1,0 +1,57 @@
+GLC:
+
+S -> Prog
+Prog -> Decl Prog
+Prog -> Cond Prog
+Prog -> Loop Prog
+Prog -> ''
+Decl -> var = Expr ;
+Expr -> Expr + Termo
+Expr -> Expr - Termo
+Expr -> Termo
+Termo -> Termo * Fator
+Termo -> Termo / Fator
+Termo -> Fator
+Fator -> ( Expr )
+Fator -> num
+Fator -> var
+Cond -> se ( Vali ) Bloco
+Cond -> se ( Vali ) Bloco senao Bloco
+Loop -> enquanto ( Vali ) Bloco
+Vali -> Expr = = Expr
+Vali -> Expr > Expr
+Vali -> Expr < Expr
+Vali -> Expr > = Expr
+Vali -> Expr < = Expr
+Vali -> Expr ! = Expr
+Vali -> ( Vali )
+Bloco -> { Prog }
+
+Conjunto de TOKENS:
+Símbolo 	| TOKEN
+
+se		| SE
+senao		| SENAO
+enquanto 	| ENQUANTO
+= 		| ATRIB
++		| MAIS
+-		| MENOS
+* 		| MULTI
+/ 		| DIV
+(		| PARE
+)		| PARD
+{		| CHAE
+}		| CHAD
+;		| PVIRGULA
+>		| MAIOR
+<		| MENOR
+!		| DIF
+var 		| VAR
+num		| NUM
+
+
+Inputs Válidos:
+
+se ( var ! = var + num ) { var = num + ( num + num ) ; } senao { enquanto ( var > = num ) { var = var + num ; } }
+se ( ( var = = ( num + num ) ) ) { var = num ; }
+
