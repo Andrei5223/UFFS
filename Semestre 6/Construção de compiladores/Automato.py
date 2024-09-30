@@ -115,8 +115,11 @@ class Automaton:
 # Exemplo de uso
 automaton = Automaton()
 
-# Testando o autômato com uma string de entrada
-input_string = 'se ( tfygh ! = var + num ) { var = num + ( num + num ) ; } senao { enquanto ( var > = num ) { var = var + num ; } }$'
+# Abrindo o arquivo input.txt e lendo a string de entrada
+with open('input.txt', 'r') as file:
+    input_string = file.read().strip()
+
+# Testando o autômato com a string de entrada
 fita = []
 fita = automaton.process(input_string, fita)
 print(fita)
