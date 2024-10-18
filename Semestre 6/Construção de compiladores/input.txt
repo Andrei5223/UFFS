@@ -1,0 +1,1 @@
+se ( ( var = = ( num + num ) ) ) { var = num ; }
