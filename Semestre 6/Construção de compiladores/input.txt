@@ -1,1 +1,8 @@
-se ( ( var = = ( num + num ) ) ) { var = num ; }
+se (var != var+dsfsdf) {    
+    var = 23 + (43+23); 
+    } senao { 
+        enquanto ( var > = 43 ) { 
+            var = var+43 ; 
+            var2 = asasd + fasdfs + fasd + 23234 - asd * 8;
+            } 
+    }
