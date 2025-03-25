@@ -1,6 +1,6 @@
 from Algorithm.Astar import Astar
 from Algorithm.BFS import BFS
-from Heuristics.Heuristica import Heuristic1, Heuristic2
+from Heuristics.Heuristica import Heuristic1, Heuristic2, HeuristicaNova, HeuristicaNova2
 from Problem.Jogo8.Complexidade import Complexidade
 from Problem.Jogo8.Jogo8 import Jogo8
 
@@ -15,7 +15,9 @@ for _ in range(1):
     print(c.name)
 
     algoritmos = [Astar(instancia.estado_inicial, instancia.estado_final, Heuristic2(instancia.estado_final)),
-                  Astar(instancia.estado_inicial, instancia.estado_final, Heuristic1(instancia.estado_final)),
+                #   Astar(instancia.estado_inicial, instancia.estado_final, Heuristic1(instancia.estado_final)),
+                  Astar(instancia.estado_inicial, instancia.estado_final, HeuristicaNova(instancia.estado_final)),
+                  Astar(instancia.estado_inicial, instancia.estado_final, HeuristicaNova2(instancia.estado_final)),
                   BFS(instancia.estado_inicial, instancia.estado_final)]
 
     for alg in algoritmos:
