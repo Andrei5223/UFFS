@@ -1,7 +1,6 @@
-if false then
-    2 + 4
-else
-    if true then
-        2 + 2
-    else
-        1 + 5
+(\b : Boolean ->
+    if b then
+        2 + 3
+    else 
+        5 + 7
+) true

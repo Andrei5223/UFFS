@@ -3,24 +3,26 @@ module Interpreter where
 import Lexer 
 
 isValue :: Expr -> Bool 
-isValue BTrue   = True 
-isValue BFalse  = True  
-isValue (Num _) = True 
-isValue _       = False 
+isValue BTrue       = True 
+isValue BFalse      = True  
+isValue (Num _)     = True 
+isValue (Lam _ _ _) = True
+isValue _           = False 
 
 subst :: String -> Expr -> Expr -> Expr
-subst v e BTrue = BTrue
-subst v e BFalse = BFalse
-subst v e (Num x) = Num x
+subst v e BTrue = BTrue 
+subst v e BFalse = BFalse 
+subst v e (Num x) = Num x 
 subst v e (Add e1 e2) = Add (subst v e e1) (subst v e e2)
 subst v e (And e1 e2) = And (subst v e e1) (subst v e e2)
 subst v e (If e1 e2 e3) = If (subst v e e1) (subst v e e2) (subst v e e3)
-subst v e (Var x) -> if v == x then 
-                       e 
-                     else
-                       Var x
-subst e (Lam x b) = Lam x (subst v e b)
-subst v (App e1 e2) = App (subst v e e1) (subst v e e2)
+subst v e (Var x) = if v == x then 
+                      e 
+                    else 
+                      Var x 
+subst v e (Lam x t b) = Lam x t (subst v e b)
+subst v e (App e1 e2) = App (subst v e e1) (subst v e e2)
+subst v e (Paren e1) = Paren (subst v e e1)
 
 
 step :: Expr -> Expr 
@@ -34,6 +36,10 @@ step (And e1 e2) = And (step e1) e2
 step (If BTrue e1 e2) = e1 
 step (If BFalse e1 e2) = e2
 step (If e e1 e2) = If (step e) e1 e2 
+step (App e1@(Lam x t b) e2) | isValue e2 = subst x e2 b
+                             | otherwise  = App e1 (step e2)
+step (App e1 e2) = App (step e1) e2
+step (Paren e) = e
 
 eval :: Expr -> Expr 
 eval e | isValue e = e 
