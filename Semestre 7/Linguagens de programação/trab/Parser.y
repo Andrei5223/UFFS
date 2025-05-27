@@ -25,6 +25,9 @@ import Lexer
     Boolean         { TokenTBool }
     '('             { TokenLParen }
     ')'             { TokenRParen }
+    let             { TokenLet }
+    '='             { TokenAtrib }
+    in              { TokenIn }
 
 %nonassoc if then else 
 %left '+' 
@@ -42,6 +45,7 @@ Exp     : num                           { Num $1 }
         | '\\' var ':' Type "->" Exp    { Lam $2 $4 $6 }
         | Exp Exp                       { App $1 $2 }
         | '(' Exp ')'                   { Paren $2 }
+        | let var '=' Exp in Exp        { Let $2 $4 $6 }
 
 Type    : Boolean                       { TBool }
         | Number                        { TNum }

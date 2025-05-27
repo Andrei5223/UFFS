@@ -37,6 +37,11 @@ typeof ctx (App e1 e2) =
     _ -> Nothing 
 typeof ctx (Paren e) = typeof ctx e
                              
+typeof ctx (Let v e1 e2) = case typeof ctx e1 of        -- tipo do e1
+                            Just t1 -> 
+                              let ctx' = (v, t1) : ctx in  -- adiciona v ao contexto
+                              typeof ctx' e2              -- tipo do e2 com o novo contexto
+                            _ -> Nothing  -- se e1 não tem tipo, retorna Nothing
 
 typecheck :: Expr -> Expr  
 typecheck e = case typeof [] e of 

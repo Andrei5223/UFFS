@@ -12,6 +12,7 @@ data Expr = BTrue
           | Lam String Ty Expr 
           | App Expr Expr 
           | Paren Expr
+          | Let String Expr Expr
           deriving Show 
 
 data Ty = TBool 
@@ -35,6 +36,9 @@ data Token = TokenTrue
            | TokenTBool
            | TokenLParen
            | TokenRParen
+           | TokenLet
+           | TokenAtrib
+           | TokenIn
            deriving Show 
 
 lexer :: String -> [Token]
@@ -46,6 +50,7 @@ lexer ('(':cs) = TokenLParen : lexer cs
 lexer (')':cs) = TokenRParen : lexer cs 
 lexer ('&':'&':cs) = TokenAnd : lexer cs
 lexer ('-':'>':cs) = TokenArrow : lexer cs 
+lexer ('=':cs) = TokenAtrib : lexer cs
 lexer (c:cs) | isSpace c = lexer cs 
              | isDigit c = lexNum (c:cs) 
              | isAlpha c = lexKW (c:cs)
@@ -63,5 +68,7 @@ lexKW cs = case span isAlpha cs of
              ("else", rest) -> TokenElse : lexer rest 
              ("Number", rest) -> TokenTNum : lexer rest
              ("Boolean", rest) -> TokenTBool : lexer rest 
+             ("let", rest) -> TokenLet : lexer rest
+             ("in", rest) -> TokenIn : lexer rest
              (var, rest) -> TokenVar var : lexer rest
  
