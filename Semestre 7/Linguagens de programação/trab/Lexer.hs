@@ -9,6 +9,7 @@ data Expr = BTrue
           | Sub Expr Expr
           | Mul Expr Expr
           | And Expr Expr 
+          | Or Expr Expr
           | If Expr Expr Expr 
           | Var String 
           | Lam String Ty Expr 
@@ -29,6 +30,7 @@ data Token = TokenTrue
            | TokenSub
            | TokenMul
            | TokenAnd 
+           | TokenOr
            | TokenIf 
            | TokenThen
            | TokenElse
@@ -47,8 +49,8 @@ data Token = TokenTrue
 
 lexer :: String -> [Token]
 lexer [] = [] 
-lexer ('+':cs) = TokenAdd : lexer cs 
 lexer ('-':'>':cs) = TokenArrow : lexer cs
+lexer ('+':cs) = TokenAdd : lexer cs 
 lexer ('-':cs) = TokenSub : lexer cs
 lexer ('*':cs) = TokenMul : lexer cs
 lexer ('\\':cs) = TokenLam : lexer cs
@@ -56,6 +58,7 @@ lexer (':':cs) = TokenColon : lexer cs
 lexer ('(':cs) = TokenLParen : lexer cs
 lexer (')':cs) = TokenRParen : lexer cs 
 lexer ('&':'&':cs) = TokenAnd : lexer cs
+lexer ('|':'|':cs) = TokenOr : lexer cs
 lexer ('=':cs) = TokenAtrib : lexer cs
 lexer (c:cs) | isSpace c = lexer cs 
              | isDigit c = lexNum (c:cs) 

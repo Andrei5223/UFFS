@@ -6,7 +6,7 @@ import Interpreter
 import TypeChecker
 
 -- Para testar o interpretador no Linux é possível rodar:
--- * runghc Main.hs < examples/ex1.hs 
+-- * runghc Main.hs < examples/ex1.txt
 -- * echo "2 + 5" | runghc Main.hs
 
 --PowerShell (Windows):

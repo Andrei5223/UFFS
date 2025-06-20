@@ -20,6 +20,9 @@ typeof ctx (Mul e1 e2) = case (typeof ctx e1, typeof ctx e2) of
 typeof ctx (And e1 e2) = case (typeof ctx e1, typeof ctx e2) of 
                        (Just TBool, Just TBool) -> Just TBool 
                        _                        -> Nothing 
+typeof ctx (Or e1 e2) = case (typeof ctx e1, typeof ctx e2) of 
+                       (Just TBool, Just TBool) -> Just TBool 
+                       _                        -> Nothing 
 typeof ctx (If e1 e2 e3) = 
     case (typeof ctx e1) of 
       Just TBool -> case (typeof ctx e2, typeof ctx e3) of 
