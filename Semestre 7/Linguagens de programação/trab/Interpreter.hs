@@ -14,6 +14,8 @@ subst v e BTrue = BTrue
 subst v e BFalse = BFalse 
 subst v e (Num x) = Num x 
 subst v e (Add e1 e2) = Add (subst v e e1) (subst v e e2)
+subst v e (Sub e1 e2) = Sub (subst v e e1) (subst v e e2)
+subst v e (Mul e1 e2) = Mul (subst v e e1) (subst v e e2)
 subst v e (And e1 e2) = And (subst v e e1) (subst v e e2)
 subst v e (If e1 e2 e3) = If (subst v e e1) (subst v e e2) (subst v e e3)
 subst v e (Var x) = if v == x then 
@@ -27,20 +29,43 @@ subst v e (Let s e1 e2) = Let s e1 (subst v e e2)
 
 
 step :: Expr -> Expr 
+-- Adição
 step (Add (Num n1) (Num n2)) = Num (n1 + n2)     -- S-Add
 step (Add (Num n1) e2) = let e2' = step e2       -- S-Add2
                            in Add (Num n1) e2' 
 step (Add e1 e2) = Add (step e1) e2              -- S-Add1
+
+-- Subtração
+step (Sub (Num n1) (Num n2)) = Num (n1 - n2)     -- S-Sub
+step (Sub (Num n1) e2) = let e2' = step e2       -- S-Sub2
+                           in Sub (Num n1) e2' 
+step (Sub e1 e2) = Sub (step e1) e2              -- S-Sub1
+
+-- Multiplicação
+step (Mul (Num n1) (Num n2)) = Num (n1 * n2)     -- S-Mul
+step (Mul (Num n1) e2) = let e2' = step e2       -- S-Mul2
+                           in Mul (Num n1) e2' 
+step (Mul e1 e2) = Mul (step e1) e2              -- S-Mul1
+
+-- Lógica
 step (And BTrue e2) = e2 
 step (And BFalse e2) = BFalse 
-step (And e1 e2) = And (step e1) e2 
+step (And e1 e2) = And (step e1) e2
+
+-- If
 step (If BTrue e1 e2) = e1 
 step (If BFalse e1 e2) = e2
-step (If e e1 e2) = If (step e) e1 e2 
+step (If e e1 e2) = If (step e) e1 e2
+
+-- Lambda
 step (App e1@(Lam x t b) e2) | isValue e2 = subst x e2 b
                              | otherwise  = App e1 (step e2)
 step (App e1 e2) = App (step e1) e2
+
+-- Parenteses
 step (Paren e) = e
+
+-- Variáveis
 step (Let v e1 e2)
     | isValue e1 = subst v e1 e2
     | otherwise  = Let v (step e1) e2
