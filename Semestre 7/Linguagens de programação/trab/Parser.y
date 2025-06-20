@@ -17,6 +17,7 @@ import Lexer
     '*'             { TokenMul }
     "&&"            { TokenAnd }
     "||"            { TokenOr }
+    '!'             { TokenNot }
     if              { TokenIf }
     then            { TokenThen }
     else            { TokenElse }
@@ -33,8 +34,11 @@ import Lexer
     in              { TokenIn }
 
 %nonassoc if then else 
-%left '+' 
+%left "||"
 %left "&&"
+%left '+' '-'
+%left '*'
+%right '!'
 
 %% 
 
@@ -46,6 +50,7 @@ Exp     : num                           { Num $1 }
         | Exp '*' Exp                   { Mul $1 $3 }
         | Exp "&&" Exp                  { And $1 $3 }
         | Exp "||" Exp                  { Or $1 $3 }
+        | '!' Exp                       { Not $2 }
         | if Exp then Exp else Exp      { If $2 $4 $6 }
         | var                           { Var $1 }
         | '\\' var ':' Type "->" Exp    { Lam $2 $4 $6 }

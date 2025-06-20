@@ -10,6 +10,7 @@ data Expr = BTrue
           | Mul Expr Expr
           | And Expr Expr 
           | Or Expr Expr
+          | Not Expr
           | If Expr Expr Expr 
           | Var String 
           | Lam String Ty Expr 
@@ -31,6 +32,7 @@ data Token = TokenTrue
            | TokenMul
            | TokenAnd 
            | TokenOr
+           | TokenNot
            | TokenIf 
            | TokenThen
            | TokenElse
@@ -59,6 +61,7 @@ lexer ('(':cs) = TokenLParen : lexer cs
 lexer (')':cs) = TokenRParen : lexer cs 
 lexer ('&':'&':cs) = TokenAnd : lexer cs
 lexer ('|':'|':cs) = TokenOr : lexer cs
+lexer ('!':cs) = TokenNot : lexer cs
 lexer ('=':cs) = TokenAtrib : lexer cs
 lexer (c:cs) | isSpace c = lexer cs 
              | isDigit c = lexNum (c:cs) 

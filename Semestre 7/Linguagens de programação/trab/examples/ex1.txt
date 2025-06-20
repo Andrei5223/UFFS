@@ -1,6 +1,6 @@
 (\b : Boolean ->
-    if b || false then
+    if (b || !true) then
         2 * 3
     else 
-        5 + 7
-) false
+        12
+) true

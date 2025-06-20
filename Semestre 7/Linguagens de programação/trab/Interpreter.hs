@@ -18,6 +18,7 @@ subst v e (Sub e1 e2) = Sub (subst v e e1) (subst v e e2)
 subst v e (Mul e1 e2) = Mul (subst v e e1) (subst v e e2)
 subst v e (And e1 e2) = And (subst v e e1) (subst v e e2)
 subst v e (Or e1 e2) = Or (subst v e e1) (subst v e e2)
+subst v e (Not e1) = Not (subst v e e1)
 subst v e (If e1 e2 e3) = If (subst v e e1) (subst v e e2) (subst v e e3)
 subst v e (Var x) = if v == x then 
                       e 
@@ -55,6 +56,9 @@ step (And e1 e2) = And (step e1) e2
 step (Or BTrue e2) = BTrue
 step (Or BFalse e2) = e2
 step (Or e1 e2) = Or (step e1) e2
+step (Not BTrue) = BFalse
+step (Not BFalse) = BTrue
+step (Not e) = Not (step e)
 
 -- If
 step (If BTrue e1 e2) = e1 
