@@ -11,6 +11,9 @@ data Expr = BTrue
           | And Expr Expr 
           | Or Expr Expr
           | Not Expr
+          | Maior Expr Expr
+          | MaiorIg Expr Expr
+          | Igual Expr Expr
           | If Expr Expr Expr 
           | Var String 
           | Lam String Ty Expr 
@@ -32,6 +35,9 @@ data Token = TokenTrue
            | TokenMul
            | TokenAnd 
            | TokenOr
+           | TokenMaior
+           | TokenMaiorIg
+           | TokenIgual
            | TokenNot
            | TokenIf 
            | TokenThen
@@ -51,6 +57,9 @@ data Token = TokenTrue
 
 lexer :: String -> [Token]
 lexer [] = [] 
+lexer ('=':'=':cs) = TokenIgual : lexer cs
+lexer ('>':'=':cs) = TokenMaiorIg : lexer cs
+lexer ('>':cs) = TokenMaior : lexer cs
 lexer ('-':'>':cs) = TokenArrow : lexer cs
 lexer ('+':cs) = TokenAdd : lexer cs 
 lexer ('-':cs) = TokenSub : lexer cs

@@ -19,6 +19,9 @@ subst v e (Mul e1 e2) = Mul (subst v e e1) (subst v e e2)
 subst v e (And e1 e2) = And (subst v e e1) (subst v e e2)
 subst v e (Or e1 e2) = Or (subst v e e1) (subst v e e2)
 subst v e (Not e1) = Not (subst v e e1)
+subst v e (Maior e1 e2) = Maior (subst v e e1) (subst v e e2)
+subst v e (MaiorIg e1 e2) = MaiorIg (subst v e e1) (subst v e e2)
+subst v e (Igual e1 e2) = Igual (subst v e e1) (subst v e e2)
 subst v e (If e1 e2 e3) = If (subst v e e1) (subst v e e2) (subst v e e3)
 subst v e (Var x) = if v == x then 
                       e 
@@ -59,6 +62,18 @@ step (Or e1 e2) = Or (step e1) e2
 step (Not BTrue) = BFalse
 step (Not BFalse) = BTrue
 step (Not e) = Not (step e)
+step (Maior (Num n1) (Num n2)) = if n1 > n2 then BTrue else BFalse
+step (Maior (Num n1) e2) = let e2' = step e2
+                           in Maior (Num n1) e2'
+step (Maior e1 e2) = Maior (step e1) e2
+step (MaiorIg (Num n1) (Num n2)) = if n1 >= n2 then BTrue else BFalse
+step (MaiorIg (Num n1) e2) = let e2' = step e2
+                           in MaiorIg (Num n1) e2'
+step (MaiorIg e1 e2) = MaiorIg (step e1) e2
+step (Igual (Num n1) (Num n2)) = if n1 == n2 then BTrue else BFalse
+step (Igual (Num n1) e2) = let e2' = step e2
+                           in Igual (Num n1) e2'
+step (Igual e1 e2) = Igual (step e1) e2
 
 -- If
 step (If BTrue e1 e2) = e1 

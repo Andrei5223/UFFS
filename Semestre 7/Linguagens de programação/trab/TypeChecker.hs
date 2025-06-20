@@ -26,6 +26,16 @@ typeof ctx (Or e1 e2) = case (typeof ctx e1, typeof ctx e2) of
 typeof ctx (Not e) = case (typeof ctx e) of 
                        Just TBool -> Just TBool
                        _          -> Nothing
+typeof ctx (Maior e1 e2) = case (typeof ctx e1, typeof ctx e2) of 
+                       (Just TNum, Just TNum) -> Just TBool
+                       _                      -> Nothing
+typeof ctx (MaiorIg e1 e2) = case (typeof ctx e1, typeof ctx e2) of 
+                       (Just TNum, Just TNum) -> Just TBool
+                       _                      -> Nothing
+typeof ctx (Igual e1 e2) = case (typeof ctx e1, typeof ctx e2) of 
+                       (Just TNum, Just TNum) -> Just TBool
+                       (Just TBool, Just TBool) -> Just TBool
+                       _                      -> Nothing
 typeof ctx (If e1 e2 e3) = 
     case (typeof ctx e1) of 
       Just TBool -> case (typeof ctx e2, typeof ctx e3) of 

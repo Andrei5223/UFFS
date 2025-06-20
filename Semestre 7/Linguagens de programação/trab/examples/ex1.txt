@@ -1,5 +1,5 @@
 (\b : Boolean ->
-    if (b || !true) then
+    if (!3 == 5) then
         2 * 3
     else 
         12
