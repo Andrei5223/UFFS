@@ -1,6 +1,6 @@
-(\b : Boolean ->
-    if (!3 == 5) then
+(\b : Number ->
+    if !(3 == b) then
         2 * 3
     else 
-        12
-) true
+        12 + head [1, 2, 3]
+) 3

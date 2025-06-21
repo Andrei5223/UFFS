@@ -7,6 +7,8 @@ isValue BTrue       = True
 isValue BFalse      = True  
 isValue (Num _)     = True 
 isValue (Lam _ _ _) = True
+isValue (ListaVazia) = True                                 -- Lista vazia é um valor
+isValue (ListaSeparador e1 e2) = isValue e1 && isValue e2   -- Lista separador é um valor se ambos os elementos forem valores
 isValue _           = False 
 
 subst :: String -> Expr -> Expr -> Expr
@@ -31,6 +33,9 @@ subst v e (Lam x t b) = Lam x t (subst v e b)
 subst v e (App e1 e2) = App (subst v e e1) (subst v e e2)
 subst v e (Paren e1) = Paren (subst v e e1)
 subst v e (Let s e1 e2) = Let s e1 (subst v e e2)
+subst v e (ListaSeparador e1 e2) = ListaSeparador (subst v e e1) (subst v e e2)
+subst v e (ListaCabeça e1) = ListaCabeça (subst v e e1)
+subst v e (ListaCauda e1) = ListaCauda (subst v e e1)
 
 
 step :: Expr -> Expr 
@@ -92,6 +97,30 @@ step (Paren e) = e
 step (Let v e1 e2)
     | isValue e1 = subst v e1 e2
     | otherwise  = Let v (step e1) e2
+
+-- Listas
+-- Avalia os elementos da lista até que ambos sejam valores.
+-- Só considera a lista como valor quando a cabeça (e1) e a cauda (e2) também forem valores.
+step (ListaSeparador e1 e2) 
+    | isValue e1 && isValue e2 = ListaSeparador e1 e2  -- Lista pronta: ambos são valores
+    | isValue e1 = ListaSeparador e1 (step e2)         -- Avalia a cauda até virar valor
+    | isValue e2 = ListaSeparador (step e1) e2         -- Avalia a cabeça até virar valor
+    | otherwise = ListaSeparador (step e1) (step e2)   -- Avalia ambos se nenhum é valor ainda
+
+-- ListaCabeça: retorna o primeiro elemento da lista (a cabeça), mas só quando a lista já está construída como ListaSeparador.
+step (ListaCabeça (ListaSeparador e1 _)) = e1
+-- Caso geral: reduz o argumento até virar um ListaSeparador, garantindo que só pega a cabeça de uma lista válida.
+step (ListaCabeça e) 
+    | isValue e = ListaCabeça e
+    | otherwise = ListaCabeça (step e)
+    
+-- ListaCauda: retorna o restante da lista (a cauda), mas só quando a lista já está construída como ListaSeparador.
+step (ListaCauda (ListaSeparador _ e2)) = e2
+-- Caso geral: reduz o argumento até virar um ListaSeparador, garantindo que só pega a cauda de uma lista válida.
+step (ListaCauda e) 
+    | isValue e = ListaCauda e
+    | otherwise = ListaCauda (step e)
+
 
 eval :: Expr -> Expr 
 eval e | isValue e = e 

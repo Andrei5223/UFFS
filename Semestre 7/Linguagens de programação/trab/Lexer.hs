@@ -20,11 +20,16 @@ data Expr = BTrue
           | App Expr Expr 
           | Paren Expr
           | Let String Expr Expr
+          | ListaVazia
+          | ListaSeparador Expr Expr
+          | ListaCabeça Expr
+          | ListaCauda Expr
           deriving Show 
 
 data Ty = TBool 
         | TNum 
         | TFun Ty Ty 
+        | TLista Ty
         deriving (Show, Eq)
 
 data Token = TokenTrue 
@@ -50,6 +55,12 @@ data Token = TokenTrue
            | TokenTBool
            | TokenLParen
            | TokenRParen
+           | TokenLColchete
+           | TokenRColchete
+           | TokenListaSeparador
+           | TokenListaCabeça
+           | TokenListaCauda
+           | TokenListaVazia
            | TokenLet
            | TokenAtrib
            | TokenIn
@@ -57,6 +68,9 @@ data Token = TokenTrue
 
 lexer :: String -> [Token]
 lexer [] = [] 
+lexer ('[':cs) = TokenLColchete : lexer cs
+lexer (']':cs) = TokenRColchete : lexer cs
+lexer (',':cs) = TokenListaSeparador : lexer cs
 lexer ('=':'=':cs) = TokenIgual : lexer cs
 lexer ('>':'=':cs) = TokenMaiorIg : lexer cs
 lexer ('>':cs) = TokenMaior : lexer cs
@@ -82,6 +96,8 @@ lexNum cs = case span isDigit cs of
 
 lexKW :: String -> [Token]
 lexKW cs = case span isAlpha cs of 
+             ("head", rest) -> TokenListaCabeça : lexer rest 
+             ("tail", rest) -> TokenListaCauda : lexer rest 
              ("true", rest) -> TokenTrue : lexer rest 
              ("false", rest) -> TokenFalse : lexer rest 
              ("if", rest) -> TokenIf : lexer rest 
@@ -92,4 +108,4 @@ lexKW cs = case span isAlpha cs of
              ("let", rest) -> TokenLet : lexer rest
              ("in", rest) -> TokenIn : lexer rest
              (var, rest) -> TokenVar var : lexer rest
- 
+
